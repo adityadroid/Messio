@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:messio/config/Palette.dart';
-import 'package:messio/pages/ConversationBottomSheet.dart';
 import 'package:messio/widgets/ChatAppBar.dart';
 import 'package:messio/widgets/ChatListWidget.dart';
-import 'package:messio/widgets/InputWidget.dart';
 
 class ConversationPage extends StatefulWidget {
   @override
