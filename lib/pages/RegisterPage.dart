@@ -153,9 +153,8 @@ class _RegisterPageState extends State<RegisterPage>
               margin: EdgeInsets.only(top: 100),
               child: ButtonTheme(
                   height: 40,
-                  child: RaisedButton.icon(
+                  child: FlatButton.icon(
                       onPressed: () => updatePageState(1),
-                      elevation: 0,
                       color: Colors.transparent,
                       icon: Image.asset(
                         Assets.google_button,

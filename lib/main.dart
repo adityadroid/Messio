@@ -10,6 +10,7 @@ class Messio extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Messio',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Palette.primaryColor,
       ),
