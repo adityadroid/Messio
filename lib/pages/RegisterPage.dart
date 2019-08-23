@@ -268,7 +268,7 @@ class _RegisterPageState extends State<RegisterPage>
   updatePageState(index) {
     if (index == 1)
       pageController.nextPage(
-          duration: Duration(milliseconds: 300), curve: Curves.linear);
+          duration: Duration(milliseconds: 300), curve: Curves.easeIn);
 
     setState(() {
       currentPage = index;
@@ -280,7 +280,7 @@ class _RegisterPageState extends State<RegisterPage>
       //go to first page if currently on second page
       pageController.previousPage(
         duration: Duration(milliseconds: 300),
-        curve: Curves.linear,
+        curve: Curves.easeOut,
       );
       return Future.value(false);
     }
