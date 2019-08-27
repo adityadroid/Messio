@@ -38,7 +38,12 @@ class _RegisterPageState extends State<RegisterPage>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    initApp();
+    super.initState();
+  }
+
+  void initApp() async {
+      WidgetsBinding.instance.addObserver(this);
     usernameFieldAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     profilePicHeightAnimation =
@@ -69,7 +74,6 @@ class _RegisterPageState extends State<RegisterPage>
         end = Alignment(1 - pageController.page, 1 - pageController.page);
       });
     });
-    super.initState();
   }
 
   @override
@@ -89,17 +93,16 @@ class _RegisterPageState extends State<RegisterPage>
                   child: Stack(
                       alignment: AlignmentDirectional.bottomCenter,
                       children: <Widget>[
-                        AnimatedContainer(
-                            duration: Duration(milliseconds: 1500),
-                            child: PageView(
+                             PageView(
                                 controller: pageController,
                                 physics: NeverScrollableScrollPhysics(),
                                 onPageChanged: (int page) =>
                                     updatePageState(page),
                                 children: <Widget>[
                                   buildPageOne(),
-                                  buildPageTwo()
-                                ])),
+                                  buildPageTwo(),
+
+                                ]),
                         Container(
                           margin: EdgeInsets.only(bottom: 30),
                           child: Row(
@@ -136,8 +139,7 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   buildPageOne() {
-    return Container(
-      child: Column(
+    return Column(
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(top: 250),
@@ -151,8 +153,7 @@ class _RegisterPageState extends State<RegisterPage>
                       fontSize: 22))),
           Container(
               margin: EdgeInsets.only(top: 100),
-              child: ButtonTheme(
-                  height: 40,
+
                   child: FlatButton.icon(
                       onPressed: () => updatePageState(1),
                       color: Colors.transparent,
@@ -165,9 +166,9 @@ class _RegisterPageState extends State<RegisterPage>
                         style: TextStyle(
                             color: Palette.primaryTextColorLight,
                             fontWeight: FontWeight.w800),
-                      ))))
+                      )))
         ],
-      ),
+
     );
   }
 
@@ -182,8 +183,7 @@ class _RegisterPageState extends State<RegisterPage>
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: profilePicHeightAnimation.value),
-              Container(
-                  child: CircleAvatar(
+                   CircleAvatar(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -204,7 +204,7 @@ class _RegisterPageState extends State<RegisterPage>
                 ),
                 backgroundImage: Image.asset(Assets.user).image,
                 radius: 60,
-              )),
+              ),
               SizedBox(
                 height: ageAnimation.value,
               ),
@@ -232,12 +232,10 @@ class _RegisterPageState extends State<RegisterPage>
               SizedBox(
                 height: usernameAnimation.value,
               ),
-              Container(
-                child: Text(
+             Text(
                   'Choose a username',
                   style: Styles.questionLight,
                 ),
-              ),
               Container(
                   margin: EdgeInsets.only(top: 20),
                   width: 120,
@@ -274,16 +272,16 @@ class _RegisterPageState extends State<RegisterPage>
     });
   }
 
-  Future<bool> onWillPop() {
+  Future<bool> onWillPop() async {
     if (currentPage == 1) {
       //go to first page if currently on second page
       pageController.previousPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
-      return Future.value(false);
+      return false;
     }
-    return Future.value(true);
+    return true;
   }
 
   @override
