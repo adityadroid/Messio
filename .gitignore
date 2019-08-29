@@ -30,5 +30,5 @@
 /build/
 
 #Platform specific
-/android/
+/android/app/google-services.json
 /ios/
