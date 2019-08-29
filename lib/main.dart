@@ -9,6 +9,7 @@ import 'pages/RegisterPage.dart';
 import 'blocs/authentication/Bloc.dart';
 
 void main() {
+  //create instances of the repositories to supply them to the app
   final AuthenticationRepository authRepository = AuthenticationRepository();
   final UserDataRepository userDataRepository = UserDataRepository();
   final StorageRepository storageRepository = StorageRepository();
@@ -19,29 +20,13 @@ void main() {
           userDataRepository: userDataRepository,
           storageRepository: storageRepository)
         ..dispatch(AppLaunched()),
-      child: Messio(
-        authenticationRepository: authRepository,
-        userDataRepository: userDataRepository,
-        storageRepository: storageRepository,
-      ),
+      child: Messio(),
     ),
   );
 }
 
 class Messio extends StatelessWidget {
-  final AuthenticationRepository authenticationRepository;
-  final UserDataRepository userDataRepository;
-  final StorageRepository storageRepository;
 
-  Messio(
-      {Key key,
-      @required this.authenticationRepository,
-      @required this.userDataRepository,
-      @required this.storageRepository})
-      : assert(authenticationRepository != null),
-        assert(userDataRepository != null),
-        assert(storageRepository != null),
-        super(key: key);
 
   @override
   Widget build(BuildContext context) {

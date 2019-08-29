@@ -24,17 +24,17 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   Future<void> signOutUser() async {
-    return Future.wait([firebaseAuth.signOut(), googleSignIn.signOut()]);
+    return Future.wait([firebaseAuth.signOut(), googleSignIn.signOut()]); // terminate the session
   }
 
   @override
   Future<FirebaseUser> getCurrentUser() async {
-    return await firebaseAuth.currentUser();
+    return await firebaseAuth.currentUser(); //retrieve the current user
   }
 
   @override
   Future<bool> isLoggedIn() async {
-    final user = await firebaseAuth.currentUser();
+    final user = await firebaseAuth.currentUser(); //check if user is logged in or not
     return user != null;
   }
 }
