@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:messio/providers/AuthenticationProvider.dart';
 import 'package:mockito/mockito.dart';
@@ -36,8 +35,9 @@ void main() {
       verify(googleSignInAccount.authentication).called(1);
     });
 
-    test('getCurrentUser returns current user',() async {
-      when(firebaseAuth.currentUser()).thenAnswer((_)=>Future<FirebaseUserMock>.value(firebaseUser));
+    test('getCurrentUser returns current user', () async {
+      when(firebaseAuth.currentUser())
+          .thenAnswer((_) => Future<FirebaseUserMock>.value(firebaseUser));
       expect(await authenticationProvider.getCurrentUser(), firebaseUser);
     });
 
