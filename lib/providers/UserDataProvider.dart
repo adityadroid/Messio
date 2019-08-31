@@ -5,14 +5,16 @@ import 'package:messio/models/User.dart';
 import 'package:messio/providers/BaseProviders.dart';
 
 class UserDataProvider extends BaseUserDataProvider {
-  final fireStoreDb = Firestore.instance;
+  Firestore fireStoreDb = Firestore.instance;
+
+  UserDataProvider({this.fireStoreDb});
 
   @override
   Future<User> saveDetailsFromGoogleAuth(FirebaseUser user) async {
     DocumentReference ref = fireStoreDb
         .collection(Paths.usersPath)
         .document(user.uid); //reference of the user's document node in database/users. This node is created using uid
-    final bool userExists = await ref.snapshots().isEmpty; // check if user exists or not
+    final bool userExists = !await ref.snapshots().isEmpty; // check if user exists or not
     var data = {
       //add details received from google auth
       'uid': user.uid,
@@ -47,7 +49,7 @@ class UserDataProvider extends BaseUserDataProvider {
     DocumentReference ref =
         fireStoreDb.collection(Paths.usersPath).document(uid);  // get reference to the user/ uid node
     final DocumentSnapshot currentDocument = await ref.get();
-    return (currentDocument.exists&&
+    return (currentDocument!=null&&currentDocument.exists&&
         currentDocument.data.containsKey('username') &&
             currentDocument.data.containsKey('age')); // check if it exists, if yes then check if username and age field are there or not. If not then profile incomplete else complete
   }
