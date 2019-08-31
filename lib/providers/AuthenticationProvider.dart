@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'BaseProviders.dart';
 
 class AuthenticationProvider extends BaseAuthenticationProvider {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  GoogleSignIn googleSignIn = GoogleSignIn();
+
+  AuthenticationProvider({this.firebaseAuth, this.googleSignIn});
 
   @override
   Future<FirebaseUser> signInWithGoogle() async {
