@@ -141,6 +141,7 @@ class _ContactListPageState extends State<ContactListPage>
   @override
   void dispose() {
     animationController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 }

@@ -102,9 +102,9 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
       return Container();
     }
     return Container(
-      decoration: new BoxDecoration(
+      decoration:  BoxDecoration(
           color: Palette.accentColor,
-          borderRadius: new BorderRadius.all(const Radius.circular(30.0))),
+          borderRadius: BorderRadius.all(const Radius.circular(30.0))),
       width: 30,
       height: 30,
       child: Center(
