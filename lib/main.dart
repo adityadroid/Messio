@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
@@ -37,10 +36,10 @@ class Messio extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Palette.primaryColor,
+        fontFamily: 'Manrope'
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          return ContactListPage();
           if (state is UnAuthenticated) {
             return RegisterPage();
           } else if (state is ProfileUpdated) {

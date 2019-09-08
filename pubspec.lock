@@ -254,6 +254,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.5"
+  speech_bubble:
+    dependency: "direct main"
+    description:
+      name: speech_bubble
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
   stack_trace:
     dependency: transitive
     description:

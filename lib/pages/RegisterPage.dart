@@ -8,7 +8,7 @@ import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
-import 'package:messio/pages/ConversationPageSlide.dart';
+import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/widgets/CircleIndicator.dart';
 import 'package:messio/widgets/NumberPicker.dart';
 import 'package:messio/blocs/authentication/Bloc.dart';
@@ -389,7 +389,7 @@ class _RegisterPageState extends State<RegisterPage>
   navigateToHome() {
     Navigator.push(
       context,
-      SlideLeftRoute(page: ConversationPageSlide()),
+      SlideLeftRoute(page: ContactListPage()),
     );
   }
 

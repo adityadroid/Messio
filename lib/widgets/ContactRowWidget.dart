@@ -1,33 +1,35 @@
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
-import 'package:messio/config/Styles.dart';
 
 class ContactRowWidget extends StatelessWidget {
+  const ContactRowWidget({
+    Key key,
+    @required this.name,
+  }) : super(key: key);
+  final String name;
+
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Palette.primaryColor,
-        padding: EdgeInsets.only(left: 30,top: 15,bottom: 15),
-        child: Row(
-          children: <Widget>[
-            RichText(
-              text:  TextSpan(
-                // Note: Styles for TextSpans must be explicitly defined.
-                // Child text spans will inherit styles from parent
-                style:  TextStyle(
+        child: Padding(
+            padding: const EdgeInsets.only(
+                left: 30, top: 10, bottom: 10),
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
                 children: <TextSpan>[
-                   TextSpan(text: 'Aditya '),
-                   TextSpan(text: 'Gurjar', style: new TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: "${name.toString().split(' ')[0]} "),
+                  TextSpan(
+                      text: name.toString().split(' ')[1],
+                      style:
+                      TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
-            )
-          ],
-        ));
+            )));
   }
 }
