@@ -4,8 +4,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:messio/providers/BaseProviders.dart';
 
 class StorageProvider extends BaseStorageProvider{
-  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  StorageProvider({this.firebaseStorage});
+  final FirebaseStorage firebaseStorage;
+  StorageProvider({FirebaseStorage firebaseStorage}): firebaseStorage = firebaseStorage ?? FirebaseStorage.instance;
   @override
   Future<String> uploadImage(File file, String path) async{
     StorageReference reference = firebaseStorage.ref().child(path); // get a reference to the path of the image directory

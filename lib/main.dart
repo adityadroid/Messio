@@ -36,6 +36,7 @@ class Messio extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Palette.primaryColor,
+        fontFamily: 'Manrope'
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
