@@ -54,7 +54,7 @@ class AuthenticationBloc
       if (isSignedIn) {
         final user = await authenticationRepository.getCurrentUser();
         bool isProfileComplete =
-            await userDataRepository.isProfileComplete(user.uid); // if he is signed in then check if his profile is complete
+            await userDataRepository.isProfileComplete(); // if he is signed in then check if his profile is complete
         print(isProfileComplete);
         if (isProfileComplete) {      //if profile is complete then redirect to the home page
           yield ProfileUpdated();
@@ -77,7 +77,7 @@ class AuthenticationBloc
       FirebaseUser firebaseUser =
           await authenticationRepository.signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
       bool isProfileComplete =
-          await userDataRepository.isProfileComplete(firebaseUser.uid); // check if the user's profile is complete
+          await userDataRepository.isProfileComplete(); // check if the user's profile is complete
       print(isProfileComplete);
       if (isProfileComplete) {
         yield ProfileUpdated(); //if profile is complete go to home page

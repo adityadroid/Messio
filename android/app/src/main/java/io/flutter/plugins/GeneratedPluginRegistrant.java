@@ -7,6 +7,7 @@ import io.flutter.plugins.firebase.core.FirebaseCorePlugin;
 import io.flutter.plugins.firebase.storage.FirebaseStoragePlugin;
 import io.flutter.plugins.googlesignin.GoogleSignInPlugin;
 import io.flutter.plugins.imagepicker.ImagePickerPlugin;
+import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
 import com.plushundred.speechbubble.SpeechBubblePlugin;
 
 /**
@@ -23,6 +24,7 @@ public final class GeneratedPluginRegistrant {
     FirebaseStoragePlugin.registerWith(registry.registrarFor("io.flutter.plugins.firebase.storage.FirebaseStoragePlugin"));
     GoogleSignInPlugin.registerWith(registry.registrarFor("io.flutter.plugins.googlesignin.GoogleSignInPlugin"));
     ImagePickerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));
+    SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
     SpeechBubblePlugin.registerWith(registry.registrarFor("com.plushundred.speechbubble.SpeechBubblePlugin"));
   }
 

@@ -11,6 +11,8 @@ class Palette{
   static Color primaryTextColorLight = Colors.white;
   static Color secondaryTextColor = Colors.black87;
   static Color secondaryTextColorLight = Colors.white70;
+  static Color hintTextColor = Colors.black54;
+  static Color hintTextColorLight = Colors.white70;
   static Color primaryBackgroundColor = Colors.white;
   static Color selfMessageBackgroundColor = Color(0xff4fc3f7);
   static Color otherMessageBackgroundColor = Colors.white;

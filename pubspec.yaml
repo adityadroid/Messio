@@ -32,7 +32,7 @@ dependencies:
   firebase_storage: ^3.0.6 #storage for storing image files
   flutter_launcher_icons: ^0.7.2+1
   speech_bubble: ^0.0.5
-
+  shared_preferences: ^0.5.3+4
 dev_dependencies:
   flutter_test:
     sdk: flutter

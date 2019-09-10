@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:messio/config/Assets.dart';
+import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
@@ -312,17 +313,8 @@ class _RegisterPageState extends State<RegisterPage>
           style: Styles.subHeadingLight,
           focusNode: usernameFocusNode,
           controller: usernameController,
-          decoration: InputDecoration(
-            hintText: '@username',
-            hintStyle: Styles.hintTextLight,
-            contentPadding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Palette.primaryColor, width: 0.1),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Palette.primaryColor, width: 0.1),
-            ),
-          ),
+          decoration: Decorations.getInputDecoration(
+              hint: '@username', isPrimary: false),
         ));
   }
 
