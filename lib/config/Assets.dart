@@ -4,4 +4,6 @@ class Assets{
   static const String app_icon_fg = 'assets/launcher/ic_foreground.png';
   static const String app_icon_bg = 'assets/launcher/ic_background.png';
   static const String google_button = 'assets/google.png';
+  static const String social = 'assets/social.jpg';
+
 }

@@ -60,7 +60,7 @@ void main() {
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(FirebaseUserMock()));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(true));
       final expectedStates = [
         Uninitialized(),
@@ -76,7 +76,7 @@ void main() {
           .thenAnswer((_) => Future.value(true));
       when(authenticationRepository.getCurrentUser())
           .thenAnswer((_) => Future.value(firebaseUser));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(false));
       final expectedStates = [
         Uninitialized(),
@@ -95,7 +95,7 @@ void main() {
     test('emits [AuthInProgress -> ProfileUpdated] when the user clicks Google Login button and after login result, the profile is complete', () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(true));
       final expectedStates = [
         Uninitialized(),
@@ -109,7 +109,7 @@ void main() {
     test('emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete', () {
       when(authenticationRepository.signInWithGoogle())
           .thenAnswer((_) => Future.value(firebaseUser));
-      when(userDataRepository.isProfileComplete(any))
+      when(userDataRepository.isProfileComplete())
           .thenAnswer((_) => Future.value(false));
       final expectedStates = [
         Uninitialized(),
