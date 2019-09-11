@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
+import 'package:messio/utils/Exceptions.dart';
 import './Bloc.dart';
 
 class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
@@ -23,24 +24,29 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     } else if (event is ClickedContactEvent) {
       yield* mapClickedContactEventToState();
     }
+
   }
 
   Stream<ContactsState> mapFetchContactsEventToState() async* {
-    List<Contact> contacts = await userDataRepository.getContacts();
-    yield FetchedContactsState(contacts);
+    try {
+      yield FetchingContactsState();
+      List<Contact> contacts = await userDataRepository.getContacts();
+      yield FetchedContactsState(contacts);
+    } on MessioException catch(exception){
+      print(exception.errorMessage());
+      yield ErrorState(exception);
+    }
   }
 
   Stream<ContactsState> mapAddContactEventToState(String username) async* {
-    yield AddContactProgressState();
     try {
+      yield AddContactProgressState();
       await userDataRepository.addContact(username);
-      await Future.delayed(Duration(milliseconds: 3000));
       yield AddContactSuccessState();
-    }catch(_,stacktrace){
-      await Future.delayed(Duration(milliseconds: 3000));
-      print(stacktrace);
-      yield AddContactFailedState();
-    }
+  } on MessioException catch(exception){
+      print(exception.errorMessage());
+  yield AddContactFailedState(exception);
+  }
   }
 
   Stream<ContactsState> mapClickedContactEventToState() async* {

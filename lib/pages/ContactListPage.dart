@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,7 +7,9 @@ import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
+import 'package:messio/models/Contact.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
+import 'package:messio/utils/Exceptions.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'package:messio/widgets/ContactRowWidget.dart';
 import 'package:messio/widgets/GradientFab.dart';
@@ -27,66 +28,14 @@ class _ContactListPageState extends State<ContactListPage>
   UserDataRepository userDataRepository;
   ScrollController scrollController;
   final TextEditingController usernameController = TextEditingController();
-  List nameList = [
-    'Anya Ostrem',
-    'Burt Hutchison',
-    'Chana Sobolik',
-    'Chasity Nutt',
-    'Deana Tenenbaum',
-    'Denae Cornelius',
-    'Elisabeth Saner',
-    'Eloise Rocca',
-    'Eloy Kallas',
-    'Esther Hobby',
-    'Euna Sulser',
-    'Florinda Convery',
-    'Franklin Nottage',
-    'Gale Nordeen',
-    'Garth Vanderlinden',
-    'Gracie Schulte',
-    'Inocencia Eaglin',
-    'Jillian Germano',
-    'Jimmy Friddle',
-    'Juliann Bigley',
-    'Kia Gallaway',
-    'Larhonda Ariza',
-    'Larissa Reichel',
-    'Lavone Beltz',
-    'Lazaro Bauder',
-    'Len Northup',
-    'Leonora Castiglione',
-    'Lynell Hanna',
-    'Madonna Heisey',
-    'Marcie Borel',
-    'Margit Krupp',
-    'Marvin Papineau',
-    'Mckinley Yocom',
-    'Melita Briones',
-    'Moses Strassburg',
-    'Nena Recalde',
-    'Norbert Modlin',
-    'Onita Sobotka',
-    'Raven Ecklund',
-    'Robert Waldow',
-    'Roxy Lovelace',
-    'Rufina Chamness',
-    'Saturnina Hux',
-    'Shelli Perine',
-    'Sherryl Routt',
-    'Soila Phegley',
-    'Tamera Strelow',
-    'Tammy Beringer',
-    'Vesta Kidd',
-    'Yan Welling'
-  ];
-
+  List<Contact> contacts;
   AnimationController animationController;
 
   Animation<double> animation;
 
-
   @override
   void initState() {
+    contacts = List();
     userDataRepository = UserDataRepository();
     contactsBloc = ContactsBloc(userDataRepository: userDataRepository);
     scrollController = ScrollController();
@@ -106,57 +55,91 @@ class _ContactListPageState extends State<ContactListPage>
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
-          child: Scaffold(
-            body: BlocProvider<ContactsBloc>(
-              builder: (context)=> contactsBloc,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Palette.primaryBackgroundColor,
+        body: BlocProvider<ContactsBloc>(
+            builder: (context) => contactsBloc,
+            child: BlocListener<ContactsBloc, ContactsState>(
+              bloc: contactsBloc,
+              listener: (bc, state) {
+                if (state is AddContactSuccessState) {
+                  Navigator.pop(context);
+                  final snackBar = SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text("Contact Added Successfully!"));
+                  Scaffold.of(bc).showSnackBar(snackBar);
+                } else if (state is ErrorState) {
+                  final snackBar = SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text(state.exception.errorMessage()));
+                  Scaffold.of(bc).showSnackBar(snackBar);
+                } else if (state is AddContactFailedState) {
+                  Navigator.pop(context);
+                  final snackBar = SnackBar(
+                      behavior: SnackBarBehavior.floating,
+                      content: Text(state.exception.errorMessage()));
+                  Scaffold.of(bc).showSnackBar(snackBar);
+                }
+              },
               child: Stack(
                 children: <Widget>[
-                  CustomScrollView(controller: scrollController, slivers: <Widget>[
-                    SliverAppBar(
-                      backgroundColor: Palette.primaryBackgroundColor,
-                      expandedHeight: 180.0,
-                      pinned: true,
-                      elevation: 0,
-                      centerTitle: true,
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        title: Text("Contacts", style: Styles.appBarTitle),
-                      ),
-                    ),
-                    BlocBuilder<ContactsBloc, ContactsState>(
-                      builder: (context, state) {
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate((context, index) {
-                            return ContactRowWidget(name: nameList[index]);
-                          }, childCount: nameList.length),
-                        );
-                      }
-                    )
-                  ]),
+                  CustomScrollView(
+                      controller: scrollController,
+                      slivers: <Widget>[
+                        SliverAppBar(
+                          backgroundColor: Palette.primaryBackgroundColor,
+                          expandedHeight: 180.0,
+                          pinned: true,
+                          elevation: 0,
+                          centerTitle: true,
+                          flexibleSpace: FlexibleSpaceBar(
+                            centerTitle: true,
+                            title: Text("Contacts", style: Styles.appBarTitle),
+                          ),
+                        ),
+                        BlocBuilder<ContactsBloc, ContactsState>(
+                            builder: (context, state) {
+                          if (state is FetchingContactsState) {
+                            return SliverToBoxAdapter(
+                              child: Container(
+                                  margin: EdgeInsets.only(top: 20),
+                                  child: Center(
+                                      child: CircularProgressIndicator())),
+                            );
+                          }
+                          if (state is FetchedContactsState)
+                            contacts = state.contacts;
+
+                          return SliverList(
+                            delegate:
+                                SliverChildBuilderDelegate((context, index) {
+                              return ContactRowWidget(contact: contacts[index]);
+                            }, childCount: contacts.length),
+                          );
+                        })
+                      ]),
                   Container(
                     margin: EdgeInsets.only(top: 190),
-                    child: BlocBuilder<ContactsBloc,ContactsState>(
-                      builder: (context, state) {
-                        return QuickScrollBar(
-                          nameList: nameList,
-                          scrollController: scrollController,
-                        );
-                      }
-                    ),
+                    child: BlocBuilder<ContactsBloc, ContactsState>(
+                        builder: (context, state) {
+                      return QuickScrollBar(
+                        nameList: contacts,
+                        scrollController: scrollController,
+                      );
+                    }),
                   ),
                 ],
               ),
-            ),
-            floatingActionButton: GradientFab(
-              child: Icon(Icons.add),
-              animation: animation,
-              vsync: this,
-              onPressed: showAddContactsBottomSheet,
-            ),
-          ),
-        );
-
+            )),
+        floatingActionButton: GradientFab(
+          child: Icon(Icons.add),
+          animation: animation,
+          vsync: this,
+          onPressed: () => showAddContactsBottomSheet(context),
+        ),
+      ),
+    );
   }
 
   //scroll listener for checking scroll direction and hide/show fab
@@ -169,14 +152,13 @@ class _ContactListPageState extends State<ContactListPage>
     }
   }
 
-  void showAddContactsBottomSheet() {
-    showModalBottomSheetApp(
+  void showAddContactsBottomSheet(parentContext) async {
+    await showModalBottomSheetApp(
         context: context,
         builder: (BuildContext bc) {
           return BlocProvider<ContactsBloc>(
-            builder: (context)=>contactsBloc,
-            child: StatefulBuilder(builder: (context, stateSetter) {
-              return Container(
+              builder: (context) => contactsBloc,
+              child: Container(
                 color: Color(0xFF737373),
                 // This line set the transparent background
                 child: Container(
@@ -215,33 +197,31 @@ class _ContactListPageState extends State<ContactListPage>
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: <Widget>[
                               Container(
-                                child: BlocBuilder<ContactsBloc,ContactsState>(
-                                  builder: (context, state) {
-                                    return GradientFab(
-                                      elevation: 0.0,
-                                      child: getButtonChild(state),
-                                      onPressed: () {
-                                            contactsBloc.dispatch(AddContactEvent(username: usernameController.text));
-                                      },
-                                    );
-                                  }
-                                ),
-                              )
+                                child: BlocBuilder<ContactsBloc, ContactsState>(
+                                    builder: (context, state) {
+                                  return GradientFab(
+                                    elevation: 0.0,
+                                    child: getButtonChild(state),
+                                    onPressed: () {
+                                      contactsBloc.dispatch(AddContactEvent(
+                                          username: usernameController.text));
+                                    },
+                                  );
+                                }),
+                              ),
                             ],
                           )
                         ],
                       ),
                     )),
-              );
-            }),
-          );
+              ));
         });
   }
 
   getButtonChild(ContactsState state) {
-    if (state is AddContactSuccessState) {
+    if (state is AddContactSuccessState || state is ErrorState) {
       return Icon(Icons.check, color: Palette.primaryColor);
-    } else if ( state is AddContactProgressState) {
+    } else if (state is AddContactProgressState) {
       return SizedBox(
         height: 9,
         width: 9,
