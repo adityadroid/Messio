@@ -20,14 +20,14 @@ class ClickedGoogleLogin extends AuthenticationEvent {
 
 class LoggedIn extends AuthenticationEvent {
   final FirebaseUser user;
-  LoggedIn(this.user);
+  LoggedIn(this.user): super([user]);
   @override
   String toString() => 'LoggedIn';
 }
 
 class PickedProfilePicture extends AuthenticationEvent{
   final File file;
-  PickedProfilePicture(this.file);
+  PickedProfilePicture(this.file): super([file]);
   @override
   String toString() => 'PickedProfilePicture';
 }
@@ -36,7 +36,7 @@ class SaveProfile extends AuthenticationEvent {
   final File profileImage;
   final int age;
   final String username;
-  SaveProfile(this.profileImage, this.age, this.username);
+  SaveProfile(this.profileImage, this.age, this.username): super([profileImage,age,username]);
   @override
   String toString() => 'SaveProfile';
 }

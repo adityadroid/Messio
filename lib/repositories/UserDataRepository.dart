@@ -18,7 +18,7 @@ class UserDataRepository {
   Future<bool> isProfileComplete() =>
       userDataProvider.isProfileComplete();
 
-  Future<List<Contact>> getContacts() =>
+  Stream<List<Contact>> getContacts() =>
       userDataProvider.getContacts();
 
   Future<void> addContact(String username) =>
