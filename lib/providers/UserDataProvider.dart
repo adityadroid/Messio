@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messio/config/Constants.dart';
@@ -76,26 +78,50 @@ class UserDataProvider extends BaseUserDataProvider {
   }
 
   @override
-  Future<List<Contact>> getContacts() async {
+  Stream<List<Contact>> getContacts() {
     CollectionReference userRef = fireStoreDb.collection(Paths.usersPath);
     DocumentReference ref =
         userRef.document(SharedObjects.prefs.get(Constants.sessionUid));
-    DocumentSnapshot documentSnapshot = await ref.get();
-    List<String> contacts;
-    if (documentSnapshot.data['contacts'] == null) {
-      ref.updateData({'contacts': []});
-      contacts = List();
-    } else {
-      contacts = List.from(documentSnapshot.data['contacts']);
-    }
-    List<Contact> contactList = List();
-    for (String username in contacts) {
-      print(username);
-      String uid = await getUidByUsername(username);
-      DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
-      contactList.add(Contact.fromFirestore(contactSnapshot));
-    }
-    return contactList;
+   // DocumentSnapshot documentSnapshot = await ref.get();
+
+
+    return ref.snapshots().transform(StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(handleData: (documentSnapshot, sink) async{
+      List<String> contacts;
+      if (documentSnapshot.data['contacts'] == null) {
+        ref.updateData({'contacts': []});
+        contacts = List();
+      } else {
+        contacts = List.from(documentSnapshot.data['contacts']);
+      }
+      List<Contact> contactList = List();
+      for (String username in contacts) {
+        print(username);
+        String uid = await getUidByUsername(username);
+        DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
+        contactList.add(Contact.fromFirestore(contactSnapshot));
+      }
+      sink.add(contactList);
+    }));
+
+
+
+
+
+//    List<String> contacts;
+//    if (documentSnapshot.data['contacts'] == null) {
+//      ref.updateData({'contacts': []});
+//      contacts = List();
+//    } else {
+//      contacts = List.from(documentSnapshot.data['contacts']);
+//    }
+//    List<Contact> contactList = List();
+//    for (String username in contacts) {
+//      print(username);
+//      String uid = await getUidByUsername(username);
+//      DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
+//      contactList.add(Contact.fromFirestore(contactSnapshot));
+//    }
+//    return contactList;
   }
 
   @override

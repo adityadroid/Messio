@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messio/pages/ContactListPage.dart';
+import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
@@ -19,14 +19,24 @@ void main() async {
   final StorageRepository storageRepository = StorageRepository();
   SharedObjects.prefs = await SharedPreferences.getInstance();
   runApp(
-    BlocProvider(
-      builder: (context) => AuthenticationBloc(
-          authenticationRepository: authRepository,
-          userDataRepository: userDataRepository,
-          storageRepository: storageRepository)
-        ..dispatch(AppLaunched()),
+    MultiBlocProvider(
+      providers:[
+        BlocProvider<AuthenticationBloc>(
+          builder: (context) => AuthenticationBloc(
+              authenticationRepository: authRepository,
+              userDataRepository: userDataRepository,
+              storageRepository: storageRepository)
+            ..dispatch(AppLaunched()),
+        ),
+        BlocProvider<ContactsBloc>(
+          builder: (context) => ContactsBloc(
+              userDataRepository: userDataRepository,
+             ),
+        )
+      ] ,
       child: Messio(),
-    ),
+    )
+
   );
 }
 
@@ -44,7 +54,6 @@ class Messio extends StatelessWidget {
       ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          return ContactListPage();
           if (state is UnAuthenticated) {
             return RegisterPage();
           } else if (state is ProfileUpdated) {
