@@ -33,6 +33,7 @@ class Styles{
     color: Palette.hintTextColorLight
   );
   static TextStyle text = TextStyle(
+    fontSize: 12,
       color: Palette.secondaryTextColor);
   static TextStyle textLight = TextStyle(
     color: Palette.secondaryTextColorLight

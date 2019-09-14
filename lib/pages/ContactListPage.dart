@@ -7,7 +7,9 @@ import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
+import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
+import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'package:messio/widgets/ContactRowWidget.dart';
 import 'package:messio/widgets/GradientFab.dart';
@@ -76,6 +78,8 @@ class _ContactListPageState extends State<ContactListPage>
                       behavior: SnackBarBehavior.floating,
                       content: Text(state.exception.errorMessage()));
                   Scaffold.of(bc).showSnackBar(snackBar);
+                }else if (state is ClickedContactState){
+                  Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: state.contact)));
                 }
               },
               child: Stack(

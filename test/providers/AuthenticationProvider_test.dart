@@ -26,6 +26,7 @@ void main() {
     test('signInWithGoogle returns a Firebase user', () async {
       //mock the method calls
       when(sharedPreferencesMock.get(any)).thenReturn('uid');
+      when(SharedObjects.prefs.setString(any, any)).thenAnswer((_)=>Future.value(true));
       when(googleSignIn.signIn()).thenAnswer(
           (_) => Future<GoogleSignInAccountMock>.value(googleSignInAccount));
       when(googleSignInAccount.authentication).thenAnswer((_) =>

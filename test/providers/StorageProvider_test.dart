@@ -26,7 +26,7 @@ void main() {
       when(fileReference.getDownloadURL())
           .thenAnswer((_) => Future<String>.value(resultUrl));
 
-      expect(await storageProvider.uploadImage(MockFile(), ''), resultUrl);
+      expect(await storageProvider.uploadFile(MockFile(), ''), resultUrl);
     });
   });
 }

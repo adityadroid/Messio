@@ -17,7 +17,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   Stream<ContactsState> mapEventToState(
     ContactsEvent event,
   ) async* {
-    print(event);
     if (event is FetchContactsEvent) {
       try {
         yield FetchingContactsState();
@@ -37,7 +36,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       yield* mapAddContactEventToState(event.username);
     }
     if (event is ClickedContactEvent) {
-      yield* mapClickedContactEventToState();
+      yield ClickedContactState(event.contact);
     }
 
   }
@@ -65,9 +64,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
   }
 
-  Stream<ContactsState> mapClickedContactEventToState() async* {
-    //TODO: Redirect to chat screen
-  }
+
 @override
   void dispose() {
     subscription.cancel();
