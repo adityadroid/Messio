@@ -174,6 +174,7 @@ void main() {
       Stream<List<Contact>> stream = streamController.stream;
       stream.listen((List<Contact> list){
         expect(list.length,1);
+        streamController.close();
       });
       userDataProvider.mapDocumentToContact(userCollection, userRef, documentSnapshot, sink);
     });
@@ -217,6 +218,7 @@ void main() {
       Stream<List<Contact>> stream = streamController.stream;
       stream.listen((List<Contact> list){
         expect(list.length,1);
+        streamController.close();
       });
       userDataProvider.mapDocumentToContact(userCollection, userRef, documentSnapshot, sink);
 
