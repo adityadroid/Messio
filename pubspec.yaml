@@ -31,8 +31,9 @@ dependencies:
   image_picker: ^0.6.1+4 #image picker used for picking images from gallery
   firebase_storage: ^3.0.6 #storage for storing image files
   flutter_launcher_icons: ^0.7.2+1
-  speech_bubble: ^0.0.5
   shared_preferences: ^0.5.3+4
+  file_picker: ^1.4.0+1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

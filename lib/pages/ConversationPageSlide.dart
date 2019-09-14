@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:messio/models/Contact.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
 import 'ConversationBottomSheet.dart';
 import 'ConversationPage.dart';
 
 class ConversationPageSlide extends StatefulWidget {
-  @override
-  _ConversationPageSlideState createState() => _ConversationPageSlideState();
+  final Contact startContact;
 
-  const ConversationPageSlide();
+  @override
+  _ConversationPageSlideState createState() =>
+      _ConversationPageSlideState(startContact);
+
+  const ConversationPageSlide({this.startContact});
 }
 
 class _ConversationPageSlideState extends State<ConversationPageSlide>
     with SingleTickerProviderStateMixin {
   var controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final Contact startContact;
+
+  _ConversationPageSlideState(this.startContact);
 
   @override
   void initState() {
@@ -31,14 +38,11 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
             key: _scaffoldKey,
             body: Column(
               children: <Widget>[
-                Expanded(
-                    child: PageView(
-                  children: <Widget>[
-                    ConversationPage(),
-                    ConversationPage(),
-                    ConversationPage()
-                  ],
-                )),
+                Expanded(child: PageView.builder(
+                    itemCount: 500,
+                    itemBuilder: (index, context) {
+                  return ConversationPage();
+                })),
                 Container(
                     child: GestureDetector(
                         child: InputWidget(),

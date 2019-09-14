@@ -73,9 +73,9 @@ class DocumentReferenceMock extends Mock implements DocumentReference{
   Stream<DocumentSnapshot> snapshots({bool includeMetadataChanges = false}) {
     if(documentSnapshotMock!=null)
     return Stream.fromFuture(Future<DocumentSnapshotMock>.value(documentSnapshotMock));
-    else
+    else {
       return Stream.empty();
-  }
+    }}
   @override
   Future<void> setData(Map<String,dynamic > data, {bool merge = false}) {
     if(this.documentSnapshotMock==null)

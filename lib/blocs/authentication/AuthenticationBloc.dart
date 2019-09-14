@@ -30,7 +30,6 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    print(event);
     if (event is AppLaunched) {
       yield* mapAppLaunchedToState();
     } else if (event is ClickedGoogleLogin) {
@@ -102,7 +101,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapSaveProfileToState(
       File profileImage, int age, String username) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
-    String profilePictureUrl = await storageRepository.uploadImage(
+    String profilePictureUrl = await storageRepository.uploadFile(
         profileImage, Paths.profilePicturePath); // upload image to firebase storage
     FirebaseUser user = await authenticationRepository.getCurrentUser(); // retrieve user from firebase
     await userDataRepository.saveProfileDetails(
