@@ -30,4 +30,6 @@ abstract class BaseChatProvider{
   Stream<List<Message>> getMessages(String chatId);
   Stream<List<Chat>> getChats();
   Future<void> sendMessage(String chatId, Message message);
+  Future<String> getChatIdByUsername(String username);
+  Future<void> createChatIdForContact(User user);
 }

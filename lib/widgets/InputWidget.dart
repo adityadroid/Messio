@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/pages/ConversationBottomSheet.dart';
 
@@ -6,7 +8,6 @@ class InputWidget extends StatelessWidget {
   final TextEditingController textEditingController = TextEditingController();
 
   InputWidget();
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -60,7 +61,7 @@ class InputWidget extends StatelessWidget {
               margin: new EdgeInsets.symmetric(horizontal: 8.0),
               child: new IconButton(
                 icon: new Icon(Icons.send),
-                onPressed: () => {},
+                onPressed: () => sendMessage(context),
                 color: Palette.accentColor,
               ),
             ),
@@ -75,5 +76,10 @@ class InputWidget extends StatelessWidget {
               top: new BorderSide(color: Palette.greyColor, width: 0.5)),
           color: Colors.white),
     ));
+  }
+  
+  void sendMessage(context){
+    BlocProvider.of<ChatBloc>(context).dispatch(SendTextMessageEvent(textEditingController.text));
+    textEditingController.clear();
   }
 }
