@@ -43,9 +43,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
         },
         child: Material(
             child: Container(
-                decoration: new BoxDecoration(boxShadow: [
+                decoration:  BoxDecoration(boxShadow: [
                   //adds a shadow to the appbar
-                  new BoxShadow(
+                   BoxShadow(
                       color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.1)
                 ]),
                 child: Container(

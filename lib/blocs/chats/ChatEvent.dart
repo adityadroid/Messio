@@ -11,11 +11,14 @@ abstract class ChatEvent extends Equatable {
   ChatEvent([List props = const <dynamic>[]]) : super(props);
 }
 
+
+//triggered to fetch list of chats
 class FetchChatListEvent extends ChatEvent {
   @override
   String toString() => 'FetchChatListEvent';
 }
 
+//triggered when stream containing list of chats has new data
 class ReceivedChatsEvent extends ChatEvent {
   final List<Chat> chatList;
 
@@ -25,6 +28,7 @@ class ReceivedChatsEvent extends ChatEvent {
   String toString() => 'ReceivedChatsEvent';
 }
 
+//triggered to get details of currently open conversation
 class FetchConversationDetailsEvent extends ChatEvent {
   final Chat chat;
 
@@ -34,6 +38,7 @@ class FetchConversationDetailsEvent extends ChatEvent {
   String toString() => 'FetchConversationDetailsEvent';
 }
 
+//triggered to fetch messages of chat
 class FetchMessagesEvent extends ChatEvent {
   final Chat chat;
 
@@ -43,6 +48,7 @@ class FetchMessagesEvent extends ChatEvent {
   String toString() => 'FetchMessagesEvent';
 }
 
+//triggered when messages stream has new data
 class ReceivedMessagesEvent extends ChatEvent {
   final List<Message> messages;
 
@@ -52,6 +58,7 @@ class ReceivedMessagesEvent extends ChatEvent {
   String toString() => 'ReceivedMessagesEvent';
 }
 
+//triggered to send new text message
 class SendTextMessageEvent extends ChatEvent {
   final String message;
 
@@ -61,6 +68,7 @@ class SendTextMessageEvent extends ChatEvent {
   String toString() => 'SendTextMessageEvent';
 }
 
+//triggered to send attachment
 class SendAttachmentEvent extends ChatEvent {
   final String chatId;
   final File file;
@@ -73,6 +81,7 @@ class SendAttachmentEvent extends ChatEvent {
   String toString() => 'SendAttachmentEvent';
 }
 
+//triggered on page change
 class PageChangedEvent extends ChatEvent {
   final int index;
   final Chat activeChat;

@@ -100,7 +100,6 @@ class _ContactListPageState extends State<ContactListPage>
                         ),
                         BlocBuilder<ContactsBloc, ContactsState>(
                             builder: (context, state) {
-                              print(state);
                           if (state is FetchingContactsState) {
                             return SliverToBoxAdapter(
                               child: Container(

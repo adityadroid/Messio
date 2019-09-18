@@ -31,7 +31,6 @@ class ChatProvider extends BaseChatProvider {
 
   void mapDocumentToChat(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
-    print(documentSnapshot.data);
     List<Chat> chats = List();
     Map data = documentSnapshot.data['chats'];
     if(data!=null){
@@ -58,7 +57,6 @@ class ChatProvider extends BaseChatProvider {
   void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
     List<Message> messages = List();
     for (DocumentSnapshot document in querySnapshot.documents) {
-      print(document.data);
       messages.add(Message.fromFireStore(document));
     }
     sink.add(messages);
@@ -66,7 +64,6 @@ class ChatProvider extends BaseChatProvider {
 
   @override
   Future<void> sendMessage(String chatId, Message message) async {
-    print('here $chatId');
     DocumentReference chatDocRef =
         fireStoreDb.collection(Paths.chatsPath).document(chatId);
     CollectionReference messagesCollection =
@@ -94,7 +91,7 @@ class ChatProvider extends BaseChatProvider {
   }
   @override
   Future<void> createChatIdForContact(User user) async {
-    String contactUid = user.uid;
+    String contactUid = user.documentId;
     String contactUsername = user.username;
     String uId = SharedObjects.prefs.getString(Constants.sessionUid);
     String selfUsername = SharedObjects.prefs.getString(Constants.sessionUsername);
@@ -102,7 +99,6 @@ class ChatProvider extends BaseChatProvider {
     DocumentReference userRef = usersCollection.document(uId);
     DocumentReference contactRef = usersCollection.document(contactUid);
     DocumentSnapshot userSnapshot = await userRef.get();
-    print(userSnapshot.data['chats']);
     if(userSnapshot.data['chats']==null|| userSnapshot.data['chats'][contactUsername]==null){
     String chatId = await createChatIdForUsers(selfUsername, contactUsername);
     await userRef.setData({

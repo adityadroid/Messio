@@ -55,8 +55,6 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                         isFirstLaunch = false;
                         for (int i = 0; i < chatList.length; i++) {
                           if (startContact.username == chatList[i].username) {
-                            print(chatList[i].toString());
-                            print(i);
                             BlocProvider.of<ChatBloc>(context)
                                 .dispatch(PageChangedEvent(i, chatList[i]));
                             pageController.jumpToPage(i);

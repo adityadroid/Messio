@@ -11,7 +11,7 @@ class ChatListWidget extends StatefulWidget {
 }
 
 class _ChatListWidgetState extends State<ChatListWidget> {
-  final ScrollController listScrollController = new ScrollController();
+  final ScrollController listScrollController =  ScrollController();
   List<Message> messages = List();
   @override
   Widget build(BuildContext context) {

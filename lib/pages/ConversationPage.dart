@@ -22,7 +22,6 @@ class _ConversationPageState extends State<ConversationPage> {
   ChatBloc chatBloc;
   @override
   void initState() {
-    print('ChatPage: $chat');
     chatBloc = BlocProvider.of<ChatBloc>(context);
     chatBloc.dispatch(FetchConversationDetailsEvent(chat));
     super.initState();

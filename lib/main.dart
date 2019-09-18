@@ -40,7 +40,7 @@ void main() async {
             userDataRepository: userDataRepository,
             storageRepository:  storageRepository,
             chatRepository:chatRepository
-          )..dispatch(FetchChatListEvent()),
+          ),
         )
       ] ,
       child: Messio(),
@@ -67,6 +67,7 @@ class Messio extends StatelessWidget {
             return RegisterPage();
           } else if (state is ProfileUpdated) {
             //TODO return home here
+            BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
             return ContactListPage();
           //  return ConversationPageSlide();
           } else {

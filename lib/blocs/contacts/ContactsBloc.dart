@@ -36,8 +36,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       }
     }
     if (event is ReceivedContactsEvent) {
-      print('Received');
-      //  yield FetchingContactsState();
       yield FetchedContactsState(event.contacts);
     }
     if (event is AddContactEvent) {
@@ -70,7 +68,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       User user = await userDataRepository.getUser(username);
       await chatRepository.createChatIdForContact(user);
       yield AddContactSuccessState();
-      //dispatch(FetchContactsEvent());
     } on MessioException catch (exception) {
       print(exception.errorMessage());
       yield AddContactFailedState(exception);

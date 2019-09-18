@@ -85,7 +85,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield InitialChatState();
       String chatId =
           await chatRepository.getChatIdByUsername(event.chat.username);
-      print(chatId);
       messagesSubscription?.cancel();
       messagesSubscription = chatRepository
           .getMessages(chatId)
