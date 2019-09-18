@@ -46,8 +46,8 @@ void main() {
     test(
         'saveDetailsFromGoogleAuth if there is not existing image write the image from firebase user',
         () async {
-          when(SharedObjects.prefs.get(any)).thenReturn('uid');
-          when(SharedObjects.prefs.get(any)).thenReturn('');
+          when(SharedObjects.prefs.getString(any)).thenReturn('uid');
+          when(SharedObjects.prefs.getString(any)).thenReturn('');
           when(SharedObjects.prefs.setString(any, any)).thenAnswer((_)=>Future.value(true));
           documentReference = DocumentReferenceMock();
       when(fireStore.collection(any)).thenReturn(collectionReference);
@@ -69,7 +69,7 @@ void main() {
           'http://www.google.com'; //create a snapshot first to mock existing user
       documentReference =
           DocumentReferenceMock(documentSnapshotMock: documentSnapshot);
-      when(SharedObjects.prefs.get(any)).thenReturn('uid');
+      when(SharedObjects.prefs.getString(any)).thenReturn('uid');
       when(SharedObjects.prefs.setString(any, any)).thenAnswer((_)=>Future.value(true));
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
@@ -85,7 +85,7 @@ void main() {
 
     test('saveProfileDetails saves the details', () async {
       when(SharedObjects.prefs.setString(any, any)).thenAnswer((_)=>Future.value(true));
-      when(sharedPreferencesMock.get(any)).thenReturn('uid');
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid');
       documentReference = DocumentReferenceMock(); //create a user
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
@@ -103,7 +103,7 @@ void main() {
       documentReference =
           DocumentReferenceMock(documentSnapshotMock: documentSnapshot);
       documentReference.setData({'username': 'johndoe', 'age': 18});
-      when(sharedPreferencesMock.get(any)).thenReturn('uid');
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid');
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
       when(documentSnapshot.exists).thenReturn(true);
@@ -121,7 +121,7 @@ void main() {
 
     test('Add Contacts fails if username already exists',() async{
       String username = 'johndoe'; //arbitrary username
-      when(sharedPreferencesMock.get(any)).thenReturn('uid'); //mock the sharedprefs
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid'); //mock the sharedprefs
       documentSnapshot = DocumentSnapshotMock();  //mock documentsnapshot
       when(documentSnapshot.exists).thenReturn(true); // this is done to pass the getUidByUsername method
       documentReference = DocumentReferenceMock(documentSnapshotMock: documentSnapshot);
@@ -136,7 +136,7 @@ void main() {
     });
 
     test('getContacts returns a empty list when there is no contact',() async{
-      when(sharedPreferencesMock.get(any)).thenReturn('uid'); //mock the sharedprefs
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid'); //mock the sharedprefs
       DocumentSnapshotMock contactSnapshot = DocumentSnapshotMock();  //mock documentsnapshot
       DocumentSnapshotMock userSnapshot = DocumentSnapshotMock();
       DocumentSnapshotMock mappingSnapshot = DocumentSnapshotMock();
@@ -180,7 +180,7 @@ void main() {
     });
 
     test('mapDocumentToContact mapping works properly',()async {
-      when(sharedPreferencesMock.get(any)).thenReturn('uid'); //mock the sharedprefs
+      when(sharedPreferencesMock.getString(any)).thenReturn('uid'); //mock the sharedprefs
       DocumentSnapshotMock contactSnapshot = DocumentSnapshotMock();  //mock documentsnapshot
       DocumentSnapshotMock userSnapshot = DocumentSnapshotMock();
       DocumentSnapshotMock mappingSnapshot = DocumentSnapshotMock();
