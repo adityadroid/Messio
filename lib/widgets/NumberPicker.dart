@@ -493,6 +493,8 @@ class NumberPicker extends StatelessWidget {
     return true;
   }
 
+
+
   ///There was a bug, when if there was small integer range, e.g. from 1 to 5,
   ///When user scrolled to the top, whole listview got displayed.
   ///To prevent this we are calculating cacheExtent by our own so it gets smaller if number of items is smaller

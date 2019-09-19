@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Palette.dart';
@@ -19,7 +22,9 @@ class _ConversationPageState extends State<ConversationPage> {
   final Chat chat;
 
   _ConversationPageState(this.chat);
+
   ChatBloc chatBloc;
+
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
@@ -29,15 +34,17 @@ class _ConversationPageState extends State<ConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-        return Column(children: <Widget>[
-          Expanded(flex: 2, child: ChatAppBar()), // Custom app bar for chat screen
-          Expanded(
-              flex: 11,
-              child: Container(
-                color: Palette.chatBackgroundColor,
-                child: ChatListWidget(),
-              ))
-        ]);
+    return Stack(
+      children: <Widget>[
+        Container(
+          color: Palette.chatBackgroundColor,
+          child: ChatListWidget(),
+        ),
+        SizedBox.fromSize(
+            size: Size.fromHeight(100),
+            child: ChatAppBar()
+        )
+      ],
+    );
   }
-
 }
