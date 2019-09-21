@@ -47,6 +47,7 @@ class InputWidget extends StatelessWidget {
                 style:
                     TextStyle(color: Palette.primaryTextColor, fontSize: 15.0),
                 controller: textEditingController,
+                autofocus: true,
                 decoration: InputDecoration.collapsed(
                   hintText: 'Type a message',
                   hintStyle: TextStyle(color: Palette.greyColor),

@@ -33,7 +33,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
-  //  chatBloc.dispatch(FetchChatListEvent());
+    //  chatBloc.dispatch(FetchChatListEvent());
     controller = RubberAnimationController(
       vsync: this,
     );
@@ -51,7 +51,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     bloc: chatBloc,
                     listener: (bc, state) {
                       print('ChatList $chatList');
-                      if (isFirstLaunch &&chatList.isNotEmpty) {
+                      if (isFirstLaunch && chatList.isNotEmpty) {
                         isFirstLaunch = false;
                         for (int i = 0; i < chatList.length; i++) {
                           if (startContact.username == chatList[i].username) {
@@ -90,5 +90,4 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
               ],
             )));
   }
-
 }
