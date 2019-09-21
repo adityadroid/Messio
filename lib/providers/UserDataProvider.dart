@@ -112,6 +112,7 @@ class UserDataProvider extends BaseUserDataProvider {
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
+    contactList.sort((a,b)=> a.name.compareTo(b.name));
     sink.add(contactList);
   }
 

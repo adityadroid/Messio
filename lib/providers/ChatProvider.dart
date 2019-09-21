@@ -33,25 +33,45 @@ class ChatProvider extends BaseChatProvider {
       DocumentSnapshot documentSnapshot, EventSink sink) async {
     List<Chat> chats = List();
     Map data = documentSnapshot.data['chats'];
-    if(data!=null){
-    data.forEach((key, value) => chats.add(Chat(key, value)));
-    sink.add(chats);
+    if (data != null) {
+      data.forEach((key, value) => chats.add(Chat(key, value)));
+      sink.add(chats);
     }
   }
 
   @override
-  Stream<List<Message>> getMessages(String chatId) {
+  Future<List<Message>> getPreviousMessages(String chatId, Message prevMessage) async {
+    print('here 222');
     DocumentReference chatDocRef =
-        fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    CollectionReference messagesCollection =
+    chatDocRef.collection(Paths.messagesPath);
+    DocumentSnapshot prevDocument;
+      prevDocument= await messagesCollection.document(prevMessage.documentId).get();
+    final querySnapshot = await messagesCollection
+        .startAfterDocument(prevDocument)
+        .orderBy('timeStamp', descending: true)
+        .limit(20)
+        .getDocuments();
+    List<Message> messageList = List();
+    querySnapshot.documents.forEach((doc)=>messageList.add(Message.fromFireStore(doc)));
+    return messageList;
+  }
+
+  @override
+  Stream<List<Message>> getMessages(String chatId,)  {
+    DocumentReference chatDocRef = fireStoreDb.collection(Paths.chatsPath).document(chatId);
     CollectionReference messagesCollection =
         chatDocRef.collection(Paths.messagesPath);
-    return messagesCollection
-        .orderBy('timeStamp', descending: true)
-        .snapshots()
-        .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
-            handleData:
-                (QuerySnapshot querySnapshot, EventSink<List<Message>> sink) =>
-                    mapDocumentToMessage(querySnapshot, sink)));
+      return messagesCollection
+          .orderBy('timeStamp', descending: true)
+          .limit(20)
+          .snapshots()
+          .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
+          handleData:
+              (QuerySnapshot querySnapshot, EventSink<List<Message>> sink) =>
+              mapDocumentToMessage(querySnapshot, sink)));
+
   }
 
   void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
@@ -89,26 +109,31 @@ class ChatProvider extends BaseChatProvider {
     }
     return chatId;
   }
+
   @override
   Future<void> createChatIdForContact(User user) async {
     String contactUid = user.documentId;
     String contactUsername = user.username;
     String uId = SharedObjects.prefs.getString(Constants.sessionUid);
-    String selfUsername = SharedObjects.prefs.getString(Constants.sessionUsername);
-    CollectionReference usersCollection = fireStoreDb.collection(Paths.usersPath);
+    String selfUsername =
+        SharedObjects.prefs.getString(Constants.sessionUsername);
+    CollectionReference usersCollection =
+        fireStoreDb.collection(Paths.usersPath);
     DocumentReference userRef = usersCollection.document(uId);
     DocumentReference contactRef = usersCollection.document(contactUid);
     DocumentSnapshot userSnapshot = await userRef.get();
-    if(userSnapshot.data['chats']==null|| userSnapshot.data['chats'][contactUsername]==null){
-    String chatId = await createChatIdForUsers(selfUsername, contactUsername);
-    await userRef.setData({
+    if (userSnapshot.data['chats'] == null ||
+        userSnapshot.data['chats'][contactUsername] == null) {
+      String chatId = await createChatIdForUsers(selfUsername, contactUsername);
+      await userRef.setData({
         'chats': {contactUsername: chatId}
-      },merge:true );
-    await contactRef.setData({
-      'chats': {selfUsername: chatId}
-    },merge: true);
+      }, merge: true);
+      await contactRef.setData({
+        'chats': {selfUsername: chatId}
+      }, merge: true);
+    }
   }
-  }
+
   Future<String> createChatIdForUsers(
       String selfUsername, String contactUsername) async {
     CollectionReference collectionReference =

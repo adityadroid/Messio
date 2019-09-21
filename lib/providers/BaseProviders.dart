@@ -28,6 +28,7 @@ abstract class BaseStorageProvider{
 
 abstract class BaseChatProvider{
   Stream<List<Message>> getMessages(String chatId);
+  Future<List<Message>> getPreviousMessages(String chatId, Message prevMessage);
   Stream<List<Chat>> getChats();
   Future<void> sendMessage(String chatId, Message message);
   Future<String> getChatIdByUsername(String username);

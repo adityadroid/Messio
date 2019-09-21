@@ -4,23 +4,28 @@ import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Styles.dart';
+import 'package:messio/models/Chat.dart';
 
 class ChatAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double height = 100;
+  final Chat chat;
+  ChatAppBar(this.chat);
 
   @override
-  _ChatAppBarState createState() => _ChatAppBarState();
+  _ChatAppBarState createState() => _ChatAppBarState(chat);
 
   @override
   Size get preferredSize => Size.fromHeight(height);
 }
 
 class _ChatAppBarState extends State<ChatAppBar> {
-  String username = "";
-  String name = "";
-  Image image = Image.asset(Assets.user);
   ChatBloc chatBloc;
+  Chat chat;
+  String _username = "";
+  String _name = "";
+  Image _image = Image.asset(Assets.user);
 
+  _ChatAppBarState(this.chat);
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
@@ -35,10 +40,17 @@ class _ChatAppBarState extends State<ChatAppBar> {
         bloc: chatBloc,
         listener: (bc, state) {
           if (state is FetchedContactDetailsState) {
+            print('Received State of Page');
             print(state.user);
-            name = state.user.name;
-            username = state.user.username;
-            image = Image.network(state.user.photoUrl);
+            if(state.username== chat.username){
+            _name = state.user.name;
+            _username = state.user.username;
+            _image = Image.network(state.user.photoUrl);
+            }
+          }
+          if(state is PageChangedState){
+            print(state.index);
+            print('$_name, $_username');
           }
         },
         child:  Material(
@@ -88,9 +100,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                                     MainAxisAlignment.center,
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
-                                                  Text(name,
+                                                  Text(_name,
                                                       style: Styles.textHeading),
-                                                  Text(username,
+                                                  Text('@$_username',
                                                       style: Styles.text)
                                                 ],
                                               );
@@ -137,7 +149,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                     builder: (context, state) {
                               return CircleAvatar(
                                 radius: 30,
-                                backgroundImage: image.image,
+                                backgroundImage: _image.image,
                               );
                             })))),
                       ])))),
