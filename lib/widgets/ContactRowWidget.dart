@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/config/Palette.dart';
+import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
+import 'package:messio/pages/ConversationPageSlide.dart';
 
 class ContactRowWidget extends StatelessWidget {
   const ContactRowWidget({
@@ -15,7 +15,7 @@ class ContactRowWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () =>
-          BlocProvider.of<ContactsBloc>(context).dispatch(ClickedContactEvent(contact)),
+          Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: contact))),
       child: Container(
           color: Palette.primaryColor,
           child: Padding(

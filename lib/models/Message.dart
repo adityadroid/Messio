@@ -8,7 +8,6 @@ abstract class Message {
   String senderUsername;
   bool isSelf;
   String documentId;
-
   Message(this.timeStamp, this.senderName, this.senderUsername);
 
   factory Message.fromFireStore(DocumentSnapshot doc) {

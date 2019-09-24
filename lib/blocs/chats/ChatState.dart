@@ -56,3 +56,12 @@ class PageChangedState extends ChatState {
   @override
   String toString() => 'PageChangedState';
 }
+
+class ToggleEmojiKeyboardState extends ChatState{
+  final bool showEmojiKeyboard;
+
+  ToggleEmojiKeyboardState(this.showEmojiKeyboard): super([showEmojiKeyboard]);
+
+  @override
+  String toString() => 'ToggleEmojiKeyboardState';
+}

@@ -29,7 +29,6 @@ class _ChatListWidgetState extends State<ChatListWidget> {
       double maxScroll = listScrollController.position.maxScrollExtent;
       double currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
-        print('scrolledtoTop');
         BlocProvider.of<ChatBloc>(context)
             .dispatch(FetchPreviousMessagesEvent(this.chat,messages.last));
       }
