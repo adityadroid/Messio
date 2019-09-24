@@ -28,7 +28,7 @@ class UserDataProvider extends BaseUserDataProvider {
       'email': user.email,
       'name': user.displayName,
     };
-    if (!userExists) {
+    if (!userExists && user.photoUrl!=null) {
       // if user entry exists then we would not want to override the photo url with the one received from googel auth
       data['photoUrl'] = user.photoUrl;
     }
@@ -104,12 +104,15 @@ class UserDataProvider extends BaseUserDataProvider {
       ref.updateData({'contacts': []});
       contacts = List();
     } else {
+      print(documentSnapshot.data);
       contacts = List.from(documentSnapshot.data['contacts']);
     }
     List<Contact> contactList = List();
     for (String username in contacts) {
       String uid = await getUidByUsername(username);
+      print('received uid $uid');
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
+      print(contactSnapshot.data);
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
     contactList.sort((a,b)=> a.name.compareTo(b.name));
@@ -119,6 +122,7 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<void> addContact(String username) async {
     User contactUser = await getUser(username);
+    print(contactUser);
     //create a node with the username provided in the contacts collection
     CollectionReference collectionReference =
         fireStoreDb.collection(Paths.usersPath);
@@ -154,9 +158,11 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<User> getUser(String username) async {
     String uid = await getUidByUsername(username);
+    print('uid $uid');
     DocumentReference ref =
         fireStoreDb.collection(Paths.usersPath).document(uid);
     DocumentSnapshot snapshot = await ref.get();
+    print(snapshot.data);
     if (snapshot.exists) {
       return User.fromFirestore(snapshot);
     } else {

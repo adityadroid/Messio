@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Constants.dart';
@@ -55,7 +56,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield* mapFetchPreviousMessagesEventToState(event);
     }
     if (event is ReceivedMessagesEvent) {
-      yield FetchedMessagesState(event.messages, event.username, isPrevious: false);
+      yield FetchedMessagesState(event.messages, event.username,
+          isPrevious: false);
     }
     if (event is SendTextMessageEvent) {
       Message message = TextMessage(
@@ -67,6 +69,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
     if (event is SendAttachmentEvent) {
       await mapPickedAttachmentEventToState(event);
+    }
+
+    if (event is ToggleEmojiKeyboardEvent) {
+      yield ToggleEmojiKeyboardState(event.showEmojiKeyboard);
     }
   }
 
@@ -89,8 +95,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield InitialChatState();
       String chatId =
           await chatRepository.getChatIdByUsername(event.chat.username);
-    //  print('mapFetchMessagesEventToState');
-    //  print('MessSubMap: $messagesSubscriptionMap');
+      //  print('mapFetchMessagesEventToState');
+      //  print('MessSubMap: $messagesSubscriptionMap');
       StreamSubscription messagesSubscription = messagesSubscriptionMap[chatId];
       messagesSubscription?.cancel();
       messagesSubscription = chatRepository.getMessages(chatId).listen(
@@ -106,7 +112,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> mapFetchPreviousMessagesEventToState(
       FetchPreviousMessagesEvent event) async* {
     try {
-      String chatId = await chatRepository.getChatIdByUsername(event.chat.username);
+      String chatId =
+          await chatRepository.getChatIdByUsername(event.chat.username);
       final messages =
           await chatRepository.getPreviousMessages(chatId, event.lastMessage);
       yield FetchedMessagesState(messages, event.chat.username,
@@ -125,11 +132,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Future mapPickedAttachmentEventToState(SendAttachmentEvent event) async {
     String url = await storageRepository.uploadFile(
-        event.file, Paths.imageAttachmentsPath);
+        event.file, Paths.getAttachmentPathByFileType(event.fileType));
     String username = SharedObjects.prefs.getString(Constants.sessionUsername);
     String name = SharedObjects.prefs.getString(Constants.sessionName);
-    Message message = VideoMessage(
-        url, DateTime.now().millisecondsSinceEpoch, name, username);
+    Message message;
+    if (event.fileType == FileType.IMAGE)
+      message = ImageMessage(url, DateTime.now().millisecondsSinceEpoch, name, username);
+    else if (event.fileType == FileType.VIDEO)
+      message = VideoMessage(url, DateTime.now().millisecondsSinceEpoch, name, username);
+    else
+      message = FileMessage(url, DateTime.now().millisecondsSinceEpoch, name, username);
     await chatRepository.sendMessage(event.chatId, message);
   }
 
