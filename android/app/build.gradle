@@ -48,6 +48,10 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+        debug {
+            minifyEnabled false
+            useProguard false
+        }
     }
 }
 
@@ -60,5 +64,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'androidx.multidex:multidex:2.0.1'
+
 }
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

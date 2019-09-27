@@ -99,7 +99,7 @@ class PageChangedEvent extends ChatEvent {
   String toString() => 'PageChangedEvent {index: $index, activeChat: $activeChat}';
 }
 
-// hide emojikeyboard
+// hide/show emojikeyboard
 class ToggleEmojiKeyboardEvent extends ChatEvent{
   final bool showEmojiKeyboard;
 

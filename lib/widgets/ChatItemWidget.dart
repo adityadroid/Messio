@@ -1,13 +1,11 @@
-import 'dart:io';
 
-import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:intl/intl.dart';
 import 'package:messio/config/Styles.dart';
 import 'package:messio/models/Message.dart';
+import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'VideoPlayerWidget.dart';
 
@@ -127,7 +125,6 @@ class ChatItemWidget extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               children: <Widget>[
                 Container(
-                  width: 130,
                   color: Palette.secondaryColor,
                   height: 80,
                 ),
@@ -141,9 +138,9 @@ class ChatItemWidget extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      'File',
+                      message.fileName,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 14,
                           color: isSelf
                               ? Palette.selfMessageColor
                               : Palette.otherMessageColor),
@@ -161,7 +158,7 @@ class ChatItemWidget extends StatelessWidget {
                           ? Palette.selfMessageColor
                           : Palette.otherMessageColor,
                     ),
-                    onPressed: () => downloadFile(message.fileUrl)))
+                    onPressed: () => SharedObjects.downloadFile(message.fileUrl,message.fileName)))
           ],
         ),
       );
@@ -196,19 +193,7 @@ class ChatItemWidget extends StatelessWidget {
         });
   }
 
-  /*
-  Supporting only for android for now
-   */
-  downloadFile(String fileUrl) async {
-    final Directory downloadsDirectory = await DownloadsPathProvider.downloadsDirectory;
-    final String downloadsPath = downloadsDirectory.path;
-    await FlutterDownloader.enqueue(
-      url: fileUrl,
-      savedDir: downloadsPath,
-      showNotification: true, // show download progress in status bar (for Android)
-      openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-    );
-  }
+
 
 
 }

@@ -11,6 +11,7 @@ import io.flutter.plugins.firebase.storage.FirebaseStoragePlugin;
 import vn.hunghd.flutterdownloader.FlutterDownloaderPlugin;
 import io.flutter.plugins.googlesignin.GoogleSignInPlugin;
 import io.flutter.plugins.imagepicker.ImagePickerPlugin;
+import io.flutter.plugins.pathprovider.PathProviderPlugin;
 import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
 import io.flutter.plugins.videoplayer.VideoPlayerPlugin;
 
@@ -32,6 +33,7 @@ public final class GeneratedPluginRegistrant {
     FlutterDownloaderPlugin.registerWith(registry.registrarFor("vn.hunghd.flutterdownloader.FlutterDownloaderPlugin"));
     GoogleSignInPlugin.registerWith(registry.registrarFor("io.flutter.plugins.googlesignin.GoogleSignInPlugin"));
     ImagePickerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));
+    PathProviderPlugin.registerWith(registry.registrarFor("io.flutter.plugins.pathprovider.PathProviderPlugin"));
     SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
     VideoPlayerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.videoplayer.VideoPlayerPlugin"));
   }

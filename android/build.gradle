@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'com.google.gms:google-services:3.2.1'
     }
 }
@@ -25,17 +25,7 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 subprojects {
-    project.configurations.all {
-        resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'androidx.lifecycle' &&
-                    !details.requested.name.contains('androidx')) {
-                details.useVersion "2.0.0"
-            }else  if (details.requested.group == 'androidx.core' &&
-                    !details.requested.name.contains('androidx')) {
-                details.useVersion "1.0.2"
-            }
-        }
-    }
+
 }
 
 task clean(type: Delete) {

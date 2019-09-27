@@ -30,6 +30,26 @@ class ChatProvider extends BaseChatProvider {
                 mapDocumentToChat(documentSnapshot, sink)));
   }
 
+  @override
+  Future<List<Message>> getAttachments(String chatId, int type) async{
+    print('for chat id $chatId $type');
+
+    DocumentReference chatDocRef =
+    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    CollectionReference messagesCollection =
+    chatDocRef.collection(Paths.messagesPath);
+    final querySnapshot = await messagesCollection
+        .where('type',isEqualTo: type)
+        .orderBy('timeStamp', descending: true) // order them by timestamp
+        .getDocuments();
+    List<Message> messageList = List();
+    querySnapshot.documents
+        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
+    print('ret8urning messagelist ${messageList.length} for $type');
+    return messageList;
+  }
+
+
   void mapDocumentToChat(
       DocumentSnapshot documentSnapshot, EventSink sink) async {
     List<Chat> chats = List();
