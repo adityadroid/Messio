@@ -44,6 +44,7 @@ Part of Medium Series [60 days of Flutter](https://medium.com/@adityadroid/60-da
 [60 Days of Flutter : Day 36–38 : Seamlessly Upload Files to Firebase Storage](https://medium.com/@adityadroid/60-days-of-flutter-building-a-messenger-day-36-38-chat-attachments-seamlessly-upload-and-8d334a4e52b5)
 
 [60 Days of Flutter : Day 39–41 : One UI Inspired Attachments Showcase Page](https://medium.com/@adityadroid/60-days-of-flutter-building-a-messenger-day-39-41-one-ui-inspired-attachments-showcase-page-5962af007ab4)
+
 [60 Days of Flutter : Day 42–44 : Creating the Home Page & Quick Peek BottomSheet for Messages](https://medium.com/@adityadroid/60-days-of-flutter-building-a-messenger-day-42-45-creating-the-home-page-quick-peek-7264bc68e86d)
 
 Happy learning. :+1:
