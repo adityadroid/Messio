@@ -5,8 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/attachments/AttachmentsBloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
+import 'package:messio/blocs/home/Bloc.dart';
 import 'package:messio/config/Constants.dart';
-import 'package:messio/pages/ContactListPage.dart';
+import 'package:messio/pages/HomePage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/ChatRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
@@ -26,7 +27,6 @@ void main() async {
   SharedObjects.prefs = await CachedSharedPreferences.getInstance();
   Constants.cacheDirPath = (await getTemporaryDirectory()).path;
   Constants.downloadsDirPath = (await DownloadsPathProvider.downloadsDirectory).path;
-
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
@@ -49,6 +49,9 @@ void main() async {
       ),
       BlocProvider<AttachmentsBloc>(
         builder: (context) => AttachmentsBloc(chatRepository: chatRepository),
+      ),
+      BlocProvider<HomeBloc>(
+        builder: (context) => HomeBloc(chatRepository: chatRepository),
       )
     ],
     child: Messio(),
@@ -71,7 +74,7 @@ class Messio extends StatelessWidget {
           } else if (state is ProfileUpdated) {
             //TODO return home here
             BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
-            return ContactListPage();
+            return HomePage();
             //  return ConversationPageSlide();
           } else {
             return RegisterPage();

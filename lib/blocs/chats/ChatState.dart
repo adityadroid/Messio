@@ -19,6 +19,11 @@ class FetchedChatListState extends ChatState {
   @override
   String toString() => 'FetchedChatListState';
 }
+class FetchingMessageState extends ChatState{
+  @override
+  String toString() => 'FetchingMessageState';
+}
+
 
 class FetchedMessagesState extends ChatState {
   final List<Message> messages;

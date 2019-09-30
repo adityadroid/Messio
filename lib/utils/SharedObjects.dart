@@ -72,7 +72,8 @@ class CachedSharedPreferences {
 
   Future<bool> setString(String key, String value) async {
     bool result = await sharedPreferences.setString(key, value);
-    if (result) map[key] = value;
+    if (result)
+      map[key] = value;
     return result;
   }
 }

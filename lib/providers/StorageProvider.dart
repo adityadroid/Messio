@@ -18,4 +18,7 @@ class StorageProvider extends BaseStorageProvider{
     String url = await result.ref.getDownloadURL(); //retrieve the download link and return it
     return url;
   }
+
+  @override
+  void dispose() {}
 }

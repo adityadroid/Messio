@@ -47,7 +47,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield PageChangedState(event.index, event.activeChat);
     }
     if (event is FetchConversationDetailsEvent) {
-      dispatch(FetchMessagesEvent(event.chat));
       yield* mapFetchConversationDetailsEventToState(event);
     }
     if (event is FetchMessagesEvent) {
@@ -57,6 +56,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       yield* mapFetchPreviousMessagesEventToState(event);
     }
     if (event is ReceivedMessagesEvent) {
+      print('dispatching received messages');
       yield FetchedMessagesState(event.messages, event.username,
           isPrevious: false);
     }
@@ -93,7 +93,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> mapFetchMessagesEventToState(
       FetchMessagesEvent event) async* {
     try {
-      yield InitialChatState();
+      yield FetchingMessageState();
       String chatId =
           await chatRepository.getChatIdByUsername(event.chat.username);
       //  print('mapFetchMessagesEventToState');
@@ -129,6 +129,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       FetchConversationDetailsEvent event) async* {
     User user = await userDataRepository.getUser(event.chat.username);
     yield FetchedContactDetailsState(user, event.chat.username);
+    dispatch(FetchMessagesEvent(event.chat));
   }
 
   Future mapSendAttachmentEventToState(SendAttachmentEvent event) async {

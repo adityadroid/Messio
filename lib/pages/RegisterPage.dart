@@ -11,6 +11,7 @@ import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/pages/ContactListPage.dart';
 import 'package:messio/widgets/CircleIndicator.dart';
+import 'package:messio/widgets/GradientSnackBar.dart';
 import 'package:messio/widgets/NumberPicker.dart';
 import 'package:messio/blocs/authentication/Bloc.dart';
 
@@ -29,6 +30,7 @@ class _RegisterPageState extends State<RegisterPage>
   //fields for the form
   File profileImageFile;
   ImageProvider profileImage;
+  ImageProvider placeHolderImage = Image.asset(Assets.user).image;
   int age = 18;
   final TextEditingController usernameController = TextEditingController();
 
@@ -220,11 +222,12 @@ class _RegisterPageState extends State<RegisterPage>
     }, child: Container(
       child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
-          profileImage = Image.asset(Assets.user).image;
+          profileImage = placeHolderImage;
           if (state is PreFillData) {
             age = state.user.age != null ? state.user.age : 18;
-            if(state.user.photoUrl!=null)
+            if (state.user.photoUrl != null) {
               profileImage = Image.network(state.user.photoUrl).image;
+            }
           } else if (state is ReceivedProfilePicture) {
             profileImageFile = state.file;
             profileImage = Image.file(profileImageFile).image;
@@ -398,8 +401,18 @@ class _RegisterPageState extends State<RegisterPage>
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 FloatingActionButton(
-                  onPressed: () => authenticationBloc.dispatch(SaveProfile(
-                      profileImageFile, age, usernameController.text)),
+                  onPressed: () => {
+
+                    if ((profileImageFile != null || profileImage != placeHolderImage) &&
+                        age != null &&
+                        usernameController.text.isNotEmpty){
+                        authenticationBloc.dispatch(SaveProfile(
+                            profileImageFile, age, usernameController.text))
+                      }
+                    else {
+                        GradientSnackBar.showError(context, 'Please fill all details')
+                      }
+                  },
                   elevation: 0,
                   backgroundColor: Palette.primaryColor,
                   child: Icon(

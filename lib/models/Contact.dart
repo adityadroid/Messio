@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:messio/models/Conversation.dart';
 
 class Contact {
   String username;
@@ -19,8 +20,13 @@ class Contact {
 
   String getFirstName() => name.split(' ')[0];
 
-  String getLastName(){
+  String getLastName() {
     List names = name.split(' ');
-    return names.length>1?names[1]:'';
+    return names.length > 1 ? names[1] : '';
+  }
+
+  factory Contact.fromConversation(Conversation conversation) {
+    return Contact(conversation.chatId, conversation.user.username,
+        conversation.user.name);
   }
 }
