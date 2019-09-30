@@ -33,7 +33,6 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
                       ),
                     ]),
                 onVerticalDragEnd: (details) {
-                  print('Dragged Down');
                   if (details.primaryVelocity > 50) {
                     Navigator.pop(context);
                   }

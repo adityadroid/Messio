@@ -31,7 +31,7 @@ class ChatRowWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
                     Container(
-                        child:  CircleAvatar(
+                        child: CircleAvatar(
                           radius: 30,
                           backgroundImage: Image.network(
                             conversation.user.photoUrl,
@@ -43,15 +43,13 @@ class ChatRowWidget extends StatelessWidget {
                         decoration: new BoxDecoration(
                           color: Palette.accentColor, // border color
                           shape: BoxShape.circle,
-                        )
-                    )
-                   ,
+                        )),
                     SizedBox(
                       width: 15,
                     ),
                     Container(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(conversation.user.name, style: Styles.subHeading),
                         messageContent(conversation.latestMessage)
@@ -106,10 +104,10 @@ class ChatRowWidget extends StatelessWidget {
         children: <Widget>[
           latestMessage.isSelf
               ? Icon(
-            Icons.done,
-            size: 12,
-            color: Palette.greyColor,
-          )
+                  Icons.done,
+                  size: 12,
+                  color: Palette.greyColor,
+                )
               : Container(),
           SizedBox(
             width: 2,
@@ -135,10 +133,10 @@ class ChatRowWidget extends StatelessWidget {
         children: <Widget>[
           latestMessage.isSelf
               ? Icon(
-            Icons.done,
-            size: 12,
-            color: Palette.greyColor,
-          )
+                  Icons.done,
+                  size: 12,
+                  color: Palette.greyColor,
+                )
               : Container(),
           SizedBox(
             width: 2,
@@ -161,10 +159,10 @@ class ChatRowWidget extends StatelessWidget {
         children: <Widget>[
           latestMessage.isSelf
               ? Icon(
-            Icons.done,
-            size: 12,
-            color: Palette.greyColor,
-          )
+                  Icons.done,
+                  size: 12,
+                  color: Palette.greyColor,
+                )
               : Container(),
           SizedBox(
             width: 2,
