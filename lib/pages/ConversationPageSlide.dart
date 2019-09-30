@@ -5,7 +5,7 @@ import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import 'package:rubber/rubber.dart';
-import 'ConversationBottomSheet.dart';
+import '../widgets/ConversationBottomSheet.dart';
 import 'ConversationPage.dart';
 
 class ConversationPageSlide extends StatefulWidget {
@@ -80,7 +80,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                     child: GestureDetector(
                         child: InputWidget(),
                         onPanUpdate: (details) {
-                          if (details.delta.dy < 0) {
+                          if (details.delta.dy < 100) {
                             _scaffoldKey.currentState
                                 .showBottomSheet<Null>((BuildContext context) {
                               return ConversationBottomSheet();

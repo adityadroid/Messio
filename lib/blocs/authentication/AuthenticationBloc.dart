@@ -77,7 +77,7 @@ class AuthenticationBloc
           await authenticationRepository.signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
       bool isProfileComplete =
           await userDataRepository.isProfileComplete(); // check if the user's profile is complete
-      print(isProfileComplete);
+      print('isProfileComplete $isProfileComplete');
       if (isProfileComplete) {
         yield ProfileUpdated(); //if profile is complete go to home page
       } else {
@@ -113,4 +113,5 @@ class AuthenticationBloc
     yield UnAuthenticated(); // redirect to login page
     authenticationRepository.signOutUser(); // terminate session
   }
+
 }

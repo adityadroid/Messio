@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 // Color palette for the app

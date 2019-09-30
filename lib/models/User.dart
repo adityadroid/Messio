@@ -19,8 +19,18 @@ class User{
       photoUrl: data['photoUrl']
     );
   }
+  factory User.fromMap(Map data) {
+    return User(
+        documentId: data['uid'],
+        name: data['name'],
+        username: data['username'],
+        age: data['age'],
+        photoUrl: data['photoUrl']
+    );
+  }
   @override
   String toString() {
    return '{ documentId: $documentId, name: $name, age: $age, username: $username, photoUrl: $photoUrl }';
   }
+
 }

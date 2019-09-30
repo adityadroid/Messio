@@ -25,7 +25,8 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
     await firebaseAuth.signInWithCredential(
         credential); //sign in to firebase using the generated credentials
     FirebaseUser firebaseUser = await firebaseAuth.currentUser();
-    SharedObjects.prefs.setString(Constants.sessionUid, firebaseUser.uid);
+    await SharedObjects.prefs.setString(Constants.sessionUid, firebaseUser.uid);
+    print('Session UID1 ${SharedObjects.prefs.getString(Constants.sessionUid)}');
     return firebaseUser; //return the firebase user created
   }
 
@@ -44,4 +45,7 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
     final user = await firebaseAuth.currentUser(); //check if user is logged in or not
     return user != null;
   }
+
+  @override
+  void dispose() {}
 }

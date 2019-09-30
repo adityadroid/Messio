@@ -94,10 +94,10 @@ class _ContactListPageState extends State<ContactListPage>
                             builder: (context, state) {
                           if (state is FetchingContactsState) {
                             return SliverToBoxAdapter(
-                              child: Container(
-                                  margin: EdgeInsets.only(top: 20),
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              child: SizedBox(
+                                height: (MediaQuery.of(context).size.height),
+                                child: Center(child: CircularProgressIndicator()),
+                              ),
                             );
                           }
 
@@ -167,7 +167,7 @@ class _ContactListPageState extends State<ContactListPage>
                         children: <Widget>[
                           Padding(
                               padding: EdgeInsets.only(left: 20, right: 20),
-                              child: Image.asset(Assets.social)),
+                              child: Container(constraints: BoxConstraints(minHeight: 100),child: Image.asset(Assets.social))),
                           Container(
                             margin: EdgeInsets.only(top: 40),
                             child: Text(

@@ -35,7 +35,7 @@ class UserDataProvider extends BaseUserDataProvider {
     ref.setData(data, merge: true); // set the data
     final DocumentSnapshot currentDocument =
         await ref.get(); // get updated data reference
-    SharedObjects.prefs.setString(Constants.sessionUsername, user.displayName);
+    await SharedObjects.prefs.setString(Constants.sessionUsername, user.displayName);
     return User.fromFirestore(
         currentDocument); // create a user object and return
   }
@@ -61,7 +61,7 @@ class UserDataProvider extends BaseUserDataProvider {
     ref.setData(data, merge: true); // set the photourl, age and username
     final DocumentSnapshot currentDocument =
         await ref.get(); // get updated data back from firestore
-    SharedObjects.prefs.setString(Constants.sessionUsername, username);
+    await SharedObjects.prefs.setString(Constants.sessionUsername, username);
     return User.fromFirestore(
         currentDocument); // create a user object and return it
   }
@@ -74,13 +74,14 @@ class UserDataProvider extends BaseUserDataProvider {
     final DocumentSnapshot currentDocument = await ref.get();
     final bool isProfileComplete = currentDocument != null &&
         currentDocument.exists &&
+        currentDocument.data.containsKey('photoUrl')&&
         currentDocument.data.containsKey('username') &&
         currentDocument.data.containsKey(
             'age'); // check if it exists, if yes then check if username and age field are there or not. If not then profile incomplete else complete
     if (isProfileComplete) {
-      SharedObjects.prefs.setString(
+      await SharedObjects.prefs.setString(
           Constants.sessionUsername, currentDocument.data['username']);
-      SharedObjects.prefs
+      await SharedObjects.prefs
           .setString(Constants.sessionName, currentDocument.data['name']);
     }
     return isProfileComplete;
@@ -104,15 +105,12 @@ class UserDataProvider extends BaseUserDataProvider {
       ref.updateData({'contacts': []});
       contacts = List();
     } else {
-      print(documentSnapshot.data);
       contacts = List.from(documentSnapshot.data['contacts']);
     }
     List<Contact> contactList = List();
     for (String username in contacts) {
       String uid = await getUidByUsername(username);
-      print('received uid $uid');
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
-      print(contactSnapshot.data);
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
     contactList.sort((a,b)=> a.name.compareTo(b.name));
@@ -122,7 +120,6 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<void> addContact(String username) async {
     User contactUser = await getUser(username);
-    print(contactUser);
     //create a node with the username provided in the contacts collection
     CollectionReference collectionReference =
         fireStoreDb.collection(Paths.usersPath);
@@ -158,11 +155,9 @@ class UserDataProvider extends BaseUserDataProvider {
   @override
   Future<User> getUser(String username) async {
     String uid = await getUidByUsername(username);
-    print('uid $uid');
     DocumentReference ref =
         fireStoreDb.collection(Paths.usersPath).document(uid);
     DocumentSnapshot snapshot = await ref.get();
-    print(snapshot.data);
     if (snapshot.exists) {
       return User.fromFirestore(snapshot);
     } else {
@@ -185,4 +180,8 @@ class UserDataProvider extends BaseUserDataProvider {
       throw UsernameMappingUndefinedException();
     }
   }
+
+  @override
+  void dispose() {}
+
 }

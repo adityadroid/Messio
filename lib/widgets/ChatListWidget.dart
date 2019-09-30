@@ -39,9 +39,9 @@ class _ChatListWidgetState extends State<ChatListWidget> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
-      print('chatlist');
       print(state);
       if (state is FetchedMessagesState) {
+        print('Received Messages');
         if (state.username == chat.username) {
           print(state.messages);
           if (state.isPrevious)
