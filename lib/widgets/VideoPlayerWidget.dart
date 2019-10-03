@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:messio/config/Palette.dart';
 import 'package:video_player/video_player.dart';
 
 import 'GradientFab.dart';
@@ -46,12 +45,12 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       color: Color(0xFF737373),
       // This line set the transparent background
       child: Container(
-          color: Palette.primaryBackgroundColor,
+          color: Theme.of(context).backgroundColor,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
-                color: Palette.secondaryColor,
+                color: Theme.of(context).primaryColor,
                 constraints: BoxConstraints(maxHeight: 400),
                 child: videoPlayerController.value.initialized
                     ? AspectRatio(
@@ -60,7 +59,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                       )
                     : Container(
                         height: 200,
-                        color: Palette.secondaryColor,
+                        color: Theme.of(context).primaryColor,
                       ),
               ),
               Slider(
@@ -77,6 +76,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                       videoPlayerController.value.isPlaying
                           ? Icons.pause
                           : Icons.play_arrow,
+                      color: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
                       setState(() {

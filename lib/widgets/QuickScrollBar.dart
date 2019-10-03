@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:messio/config/Palette.dart';
 
 class QuickScrollBar extends StatefulWidget {
   final List nameList;
@@ -103,17 +102,14 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
     }
     return Container(
       decoration:  BoxDecoration(
-          color: Palette.accentColor,
+          color: Theme.of(context).accentColor,
           borderRadius: BorderRadius.all(const Radius.circular(30.0))),
       width: 30,
       height: 30,
       child: Center(
         child: Text(
           "${scrollBarText ?? "${alphabetList.first}"}",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 14.0,
-          ),
+          style:Theme.of(context).textTheme.body1,
         ),
       ),
     );

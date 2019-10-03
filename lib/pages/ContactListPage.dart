@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
-import 'package:messio/config/Palette.dart';
-import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
@@ -55,7 +53,7 @@ class _ContactListPageState extends State<ContactListPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Palette.primaryBackgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         body: BlocProvider<ContactsBloc>(
             builder: (context) => contactsBloc,
             child: BlocListener<ContactsBloc, ContactsState>(
@@ -80,14 +78,13 @@ class _ContactListPageState extends State<ContactListPage>
                       controller: scrollController,
                       slivers: <Widget>[
                         SliverAppBar(
-                          backgroundColor: Palette.primaryBackgroundColor,
                           expandedHeight: 180.0,
                           pinned: true,
                           elevation: 0,
                           centerTitle: true,
                           flexibleSpace: FlexibleSpaceBar(
                             centerTitle: true,
-                            title: Text("Contacts", style: Styles.appBarTitle),
+                            title: Text("Contacts", style: Theme.of(context).textTheme.title),
                           ),
                         ),
                         BlocBuilder<ContactsBloc, ContactsState>(
@@ -126,7 +123,7 @@ class _ContactListPageState extends State<ContactListPage>
               ),
             )),
         floatingActionButton: GradientFab(
-          child: Icon(Icons.add),
+          child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
           animation: animation,
           vsync: this,
           onPressed: () => showAddContactsBottomSheet(context),
@@ -151,16 +148,15 @@ class _ContactListPageState extends State<ContactListPage>
         builder: (BuildContext bc) {
           return BlocBuilder<ContactsBloc, ContactsState>(
               builder: (context,state){
-             return Container(
-                color: Color(0xFF737373),
-                // This line set the transparent background
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40.0),
-                            topRight: Radius.circular(40.0))),
-                    child: Padding(
+             return  Card(
+               margin: EdgeInsets.all(0),
+                    shape: RoundedRectangleBorder(borderRadius: new BorderRadius.only(topLeft: Radius.circular(40.5),topRight:Radius.circular(40.0))),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color:Theme.of(context).backgroundColor,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40.0),
+                              topRight: Radius.circular(40.0))),
                       padding: const EdgeInsets.all(24.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -172,7 +168,7 @@ class _ContactListPageState extends State<ContactListPage>
                             margin: EdgeInsets.only(top: 40),
                             child: Text(
                               'Add by Username',
-                              style: Styles.textHeading,
+                              style: Theme.of(context).textTheme.title,
                             ),
                           ),
                           Container(
@@ -180,9 +176,9 @@ class _ContactListPageState extends State<ContactListPage>
                             child: TextField(
                               controller: usernameController,
                               textAlign: TextAlign.center,
-                              style: Styles.subHeading,
+                              style: Theme.of(context).textTheme.subhead,
                               decoration: Decorations.getInputDecoration(
-                                  hint: '@username', isPrimary: true),
+                                  hint: '@username', context: parentContext),
                             ),
                           ),
                           Row(
@@ -206,7 +202,7 @@ class _ContactListPageState extends State<ContactListPage>
                           )
                         ],
                       ),
-                    )),
+                    ),
               );
               });
         });
@@ -214,18 +210,18 @@ class _ContactListPageState extends State<ContactListPage>
 
   getButtonChild(ContactsState state) {
     if (state is AddContactSuccessState || state is ErrorState) {
-      return Icon(Icons.check, color: Palette.primaryColor);
+      return Icon(Icons.check, color: Theme.of(context).primaryColor);
     } else if (state is AddContactProgressState) {
       return SizedBox(
         height: 9,
         width: 9,
         child: CircularProgressIndicator(
           value: null,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
         ),
       );
     } else {
-      return Icon(Icons.done, color: Palette.primaryColor);
+      return Icon(Icons.done, color: Theme.of(context).primaryColor);
     }
   }
 

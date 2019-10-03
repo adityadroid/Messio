@@ -16,6 +16,8 @@ import 'package:messio/widgets/NumberPicker.dart';
 import 'package:messio/blocs/authentication/Bloc.dart';
 
 class RegisterPage extends StatefulWidget {
+  RegisterPage();
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -37,8 +39,8 @@ class _RegisterPageState extends State<RegisterPage>
   var isKeyboardOpen =
       false; //this variable keeps track of the keyboard, when its shown and when its hidden
 
-  PageController pageController =
-      PageController(); // this is the controller of the page. This is used to navigate back and forth between the pages
+  PageController
+      pageController; // this is the controller of the page. This is used to navigate back and forth between the pages
 
   //Fields related to animation of the gradient
   Alignment begin = Alignment.center;
@@ -59,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage>
 
   void initApp() async {
     WidgetsBinding.instance.addObserver(this);
+    pageController = PageController();
     usernameFieldAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     profilePicHeightAnimation =
@@ -89,7 +92,6 @@ class _RegisterPageState extends State<RegisterPage>
         end = Alignment(1 - pageController.page, 1 - pageController.page);
       });
     });
-
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
     authenticationBloc.state.listen((state) {
       if (state is Authenticated) {
@@ -317,8 +319,8 @@ class _RegisterPageState extends State<RegisterPage>
           style: Styles.subHeadingLight,
           focusNode: usernameFocusNode,
           controller: usernameController,
-          decoration: Decorations.getInputDecoration(
-              hint: '@username', isPrimary: false),
+          decoration: Decorations.getInputDecorationLight(
+              hint: '@username', context: context),
         ));
   }
 
@@ -402,22 +404,25 @@ class _RegisterPageState extends State<RegisterPage>
               children: <Widget>[
                 FloatingActionButton(
                   onPressed: () => {
-
-                    if ((profileImageFile != null || profileImage != placeHolderImage) &&
+                    if ((profileImageFile != null ||
+                            profileImage != placeHolderImage) &&
                         age != null &&
-                        usernameController.text.isNotEmpty){
+                        usernameController.text.isNotEmpty)
+                      {
                         authenticationBloc.dispatch(SaveProfile(
                             profileImageFile, age, usernameController.text))
                       }
-                    else {
-                        GradientSnackBar.showError(context, 'Please fill all details')
+                    else
+                      {
+                        GradientSnackBar.showError(
+                            context, 'Please fill all details')
                       }
                   },
                   elevation: 0,
                   backgroundColor: Palette.primaryColor,
                   child: Icon(
                     Icons.done,
-                    color: Palette.accentColor,
+                    color:Theme.of(context).accentColor,
                   ),
                 )
               ],

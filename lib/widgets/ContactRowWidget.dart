@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:messio/config/Palette.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
 import 'package:messio/pages/ConversationPageSlide.dart';
@@ -17,15 +16,12 @@ class ContactRowWidget extends StatelessWidget {
       onTap: () =>
           Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: contact))),
       child: Container(
-          color: Palette.primaryColor,
+          color: Theme.of(context).primaryColor,
           child: Padding(
               padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
               child: RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.black,
-                  ),
+                  style: Theme.of(context).textTheme.body2,
                   children: <TextSpan>[
                     TextSpan(text: contact.getFirstName()),
                     TextSpan(

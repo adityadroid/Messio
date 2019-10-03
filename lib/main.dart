@@ -1,12 +1,13 @@
-
 import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/attachments/AttachmentsBloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
+import 'package:messio/blocs/config/Bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/blocs/home/Bloc.dart';
 import 'package:messio/config/Constants.dart';
+import 'package:messio/config/Themes.dart';
 import 'package:messio/pages/HomePage.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/ChatRepository.dart';
@@ -15,7 +16,6 @@ import 'package:messio/repositories/UserDataRepository.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:path_provider/path_provider.dart';
 import 'blocs/authentication/Bloc.dart';
-import 'config/Palette.dart';
 import 'pages/RegisterPage.dart';
 
 void main() async {
@@ -26,7 +26,8 @@ void main() async {
   final ChatRepository chatRepository = ChatRepository();
   SharedObjects.prefs = await CachedSharedPreferences.getInstance();
   Constants.cacheDirPath = (await getTemporaryDirectory()).path;
-  Constants.downloadsDirPath = (await DownloadsPathProvider.downloadsDirectory).path;
+  Constants.downloadsDirPath =
+      (await DownloadsPathProvider.downloadsDirectory).path;
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
@@ -52,35 +53,49 @@ void main() async {
       ),
       BlocProvider<HomeBloc>(
         builder: (context) => HomeBloc(chatRepository: chatRepository),
+      ),
+      BlocProvider<ConfigBloc>(
+        builder: (context) => ConfigBloc(),
       )
     ],
     child: Messio(),
   ));
 }
 
+// ignore: must_be_immutable
 class Messio extends StatelessWidget {
+  ThemeData theme;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Messio',
-      debugShowCheckedModeBanner: false,
-      theme:
-          ThemeData(primaryColor: Palette.primaryColor, fontFamily: 'Manrope'),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          // return AttachmentPage();
-          if (state is UnAuthenticated) {
-            return RegisterPage();
-          } else if (state is ProfileUpdated) {
-            //TODO return home here
-            BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
-            return HomePage();
-            //  return ConversationPageSlide();
-          } else {
-            return RegisterPage();
-          }
-        },
-      ),
-    );
+    return BlocBuilder<ConfigBloc, ConfigState>(builder: (context, state) {
+      if (state is UnConfigState) {
+        theme = SharedObjects.prefs.getBool(Constants.configDarkMode)
+            ? Themes.dark
+            : Themes.light;
+      }
+      if (state is ConfigChangeState && state.key == Constants.configDarkMode) {
+        theme = state.value ? Themes.dark : Themes.light;
+      }
+      return MaterialApp(
+        title: 'Messio',
+        theme: theme,
+        debugShowCheckedModeBanner: false,
+        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            // return AttachmentPage();
+            if (state is UnAuthenticated) {
+              return RegisterPage();
+            } else if (state is ProfileUpdated) {
+              BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
+              return HomePage();
+              //  return ConversationPageSlide();
+            } else {
+              return RegisterPage();
+            }
+          },
+        ),
+      );
+    });
   }
 }

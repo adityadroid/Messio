@@ -3,8 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:messio/config/Palette.dart';
-import 'package:messio/config/Styles.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/blocs/attachments/Bloc.dart';
 import 'package:messio/models/VideoWrapper.dart';
@@ -61,7 +59,7 @@ class _AttachmentPageState extends State<AttachmentPage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Palette.primaryBackgroundColor,
+        backgroundColor: Theme.of(context).primaryColor,
         body: DefaultTabController(
           length: 3,
           child: NestedScrollView(
@@ -69,22 +67,19 @@ class _AttachmentPageState extends State<AttachmentPage>
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  backgroundColor: Palette.primaryBackgroundColor,
+                  backgroundColor: Theme.of(context).primaryColor,
                   expandedHeight: 180.0,
                   pinned: true,
                   elevation: 0,
                   centerTitle: true,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
-                    title: Text("Attachments", style: Styles.appBarTitle),
+                    title: Text("Attachments", style: Theme.of(context).textTheme.title),
                   ),
                 ),
               SliverToBoxAdapter(child:
               TabBar(
                 controller: tabController,
-                indicatorColor: Palette.accentColor,
-                labelColor: Palette.accentColor,
-                unselectedLabelColor: Palette.primaryTextColor,
                 tabs: [
                   Tab(icon: Icon(Icons.photo), text: "Photos"),
                   Tab(icon: Icon(Icons.videocam), text: "Videos"),
@@ -126,7 +121,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Photos',
-          style: Styles.hintText,
+          style: Theme.of(context).textTheme.body2,
         ));
       }
       return GridView.count( //otherwise show a grid of photos
@@ -153,7 +148,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Videos',
-          style: Styles.hintText,
+              style: Theme.of(context).textTheme.body2,
         ));
       }
       return GridView.count( //else show a grid of videos using their thumbnails
@@ -184,7 +179,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Files',
-          style: Styles.hintText,
+              style: Theme.of(context).textTheme.body2,
         ));
       }
       return ListView.separated( // show the list of files
@@ -234,7 +229,7 @@ class _AttachmentPageState extends State<AttachmentPage>
                     children: <Widget>[
                       Text(
                         fileMessage.fileName,
-                        style: Styles.subHeading,
+                        style: Theme.of(context).textTheme.subtitle,
                       ),
                       SizedBox(
                         height: 8,
@@ -243,14 +238,13 @@ class _AttachmentPageState extends State<AttachmentPage>
                         DateFormat('dd MMM kk:mm').format(
                             DateTime.fromMillisecondsSinceEpoch(
                                 fileMessage.timeStamp)),
-                        style: Styles.date,
+                        style: Theme.of(context).textTheme.caption,
                       ),
                     ],
                   ),
                   IconButton(
                       icon: Icon(
                         Icons.file_download,
-                        color: Palette.otherMessageColor,
                       ),
                       onPressed: () => SharedObjects.downloadFile(
                           fileMessage.fileUrl, fileMessage.fileName))
