@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
-import 'package:messio/config/Palette.dart';
 import 'package:messio/models/Chat.dart';
 import 'package:messio/widgets/ChatAppBar.dart';
 import 'package:messio/widgets/ChatListWidget.dart';
@@ -41,7 +40,7 @@ class _ConversationPageState extends State<ConversationPage> with AutomaticKeepA
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(top: 100),
-          color: Palette.chatBackgroundColor,
+          color: Theme.of(context).backgroundColor,
           child: ChatListWidget(chat),
         ),
         SizedBox.fromSize(

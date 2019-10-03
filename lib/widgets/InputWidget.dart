@@ -2,7 +2,6 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
-import 'package:messio/config/Palette.dart';
 class InputWidget extends StatefulWidget {
   @override
   _InputWidgetState createState() => _InputWidgetState();
@@ -31,26 +30,25 @@ class _InputWidgetState extends State<InputWidget>{
                       margin: EdgeInsets.symmetric(horizontal: 1.0),
                       child: IconButton(
                         icon: Icon(Icons.face),
-                        color: Palette.accentColor,
+                        color: Theme.of(context).accentColor,
                         onPressed: () =>chatBloc.dispatch(ToggleEmojiKeyboardEvent(!showEmojiKeyboard)),
                       ),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
 
                   // Text input
                   Flexible(
                     child: Material(
                         child: Container(
-                          color: Palette.primaryBackgroundColor,
+                          color: Theme.of(context).primaryColor,
                       child: TextField(
-                        style: TextStyle(
-                            color: Palette.primaryTextColor, fontSize: 15.0),
+                        style: Theme.of(context).textTheme.body2,
                         controller: textEditingController,
                         autofocus: true,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Type a message',
-                          hintStyle: TextStyle(color: Palette.greyColor),
+                          hintStyle: TextStyle(color: Theme.of(context).hintColor),
                         ),
                       ),
                     )),
@@ -63,10 +61,10 @@ class _InputWidgetState extends State<InputWidget>{
                       child: IconButton(
                         icon: Icon(Icons.send),
                         onPressed: () => sendMessage(context),
-                        color: Palette.accentColor,
+                        color:Theme.of(context).accentColor,
                       ),
                     ),
-                    color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),
@@ -80,8 +78,8 @@ class _InputWidgetState extends State<InputWidget>{
                 return EmojiPicker(
                   rows: 4,
                   columns: 7,
-                  bgColor: Palette.primaryBackgroundColor,
-                  indicatorColor: Palette.accentColor,
+                  bgColor: Theme.of(context).backgroundColor,
+                  indicatorColor: Theme.of(context).accentColor,
                   onEmojiSelected: (emoji, category) {
                     textEditingController.text = textEditingController.text+ emoji.emoji;
                   },
@@ -92,8 +90,9 @@ class _InputWidgetState extends State<InputWidget>{
           width: double.infinity,
           decoration: BoxDecoration(
               border:
-                  Border(top: BorderSide(color: Palette.greyColor, width: 0.5)),
-              color: Colors.white),
+                  Border(top: BorderSide(color: Theme.of(context).hintColor, width: 0.5)),
+              color: Theme.of(context).primaryColor,
+        ),
         ));
   }
 

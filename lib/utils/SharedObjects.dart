@@ -48,16 +48,27 @@ class CachedSharedPreferences {
   static SharedPreferences sharedPreferences;
   static CachedSharedPreferences instance;
   static final cachedKeyList = {
+    Constants.firstRun,
     Constants.sessionUid,
     Constants.sessionUsername,
-    Constants.sessionName
+    Constants.sessionName,
+    Constants.configDarkMode,
+    Constants.configMessagePaging,
+    Constants.configMessagePeek,
   };
   static Map<String, dynamic> map = Map();
 
   static Future<CachedSharedPreferences> getInstance() async {
     sharedPreferences = await SharedPreferences.getInstance();
+    if(sharedPreferences.getBool(Constants.firstRun)==null || sharedPreferences.get(Constants.firstRun)){
+      await sharedPreferences.setBool(Constants.configDarkMode, false);
+      await sharedPreferences.setBool(Constants.configMessagePaging, true);
+      await sharedPreferences.setBool(Constants.configImageCompression, true);
+      await sharedPreferences.setBool(Constants.configMessagePeek, true);
+      await sharedPreferences.setBool(Constants.firstRun, false);
+    }
     for (String key in cachedKeyList) {
-      map[key] = sharedPreferences.getString(key);
+      map[key] = sharedPreferences.get(key);
     }
     if (instance == null) instance = CachedSharedPreferences();
     return instance;
@@ -70,8 +81,20 @@ class CachedSharedPreferences {
     return sharedPreferences.getString(key);
   }
 
+  bool getBool(String key) {
+    if (cachedKeyList.contains(key)) {
+      return map[key];
+    }
+    return sharedPreferences.getBool(key);
+  }
   Future<bool> setString(String key, String value) async {
     bool result = await sharedPreferences.setString(key, value);
+    if (result)
+      map[key] = value;
+    return result;
+  }
+  Future<bool> setBool(String key, bool value) async {
+    bool result = await sharedPreferences.setBool(key, value);
     if (result)
       map[key] = value;
     return result;

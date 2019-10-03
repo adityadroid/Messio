@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Assets.dart';
-import 'package:messio/config/Palette.dart';
-import 'package:messio/config/Styles.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Chat.dart';
 import 'package:messio/pages/AttachmentPage.dart';
@@ -32,7 +30,6 @@ class _ChatAppBarState extends State<ChatAppBar> {
   String _name = "";
   Image _image = Image.asset(
     Assets.user,
-    color: Palette.accentColor,
   );
 
   _ChatAppBarState(this.chat);
@@ -69,11 +66,11 @@ class _ChatAppBarState extends State<ChatAppBar> {
               decoration: BoxDecoration(boxShadow: [
                 //adds a shadow to the appbar
                 BoxShadow(
-                    color: Colors.grey, blurRadius: 2.0, spreadRadius: 0.1)
+                    color: Theme.of(context).hintColor, blurRadius: 2.0, spreadRadius: 0.1)
               ]),
               child: Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
-                  color: Palette.primaryBackgroundColor,
+                  color: Theme.of(context).primaryColor,
                   child: Row(children: <Widget>[
                     Expanded(
                         //we're dividing the appbar into 7 : 3 ratio. 7 is for content and 3 is for the display picture.
@@ -94,7 +91,6 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                             child: IconButton(
                                                 icon: Icon(
                                                   Icons.attach_file,
-                                                  color: Palette.secondaryColor,
                                                 ),
                                                 onPressed: () =>
                                                     showAttachmentBottomSheet(
@@ -112,9 +108,11 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Text(_name,
-                                                  style: Styles.textHeading),
+                                                  style: Theme.of(context).textTheme.title),
                                               Text(_username,
-                                                  style: Styles.text)
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .subtitle)
                                             ],
                                           );
                                         }))),
@@ -134,7 +132,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                         GestureDetector(
                                           child: Text(
                                             'Photos',
-                                            style: Styles.text,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button,
                                           ),
                                           onTap: () => Navigator.push(
                                               context,
@@ -145,12 +145,16 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                         ),
                                         VerticalDivider(
                                           width: 30,
-                                          color: Palette.primaryTextColor,
+                                          color:Theme.of(context)
+                                              .textTheme
+                                              .button.color,
                                         ),
                                         GestureDetector(
                                           child: Text(
                                             'Videos',
-                                            style: Styles.text,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button,
                                           ),
                                           onTap: () => Navigator.push(
                                               context,
@@ -161,11 +165,17 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                         ),
                                         VerticalDivider(
                                           width: 30,
-                                          color: Palette.primaryTextColor,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .button.color,
                                         ),
                                         GestureDetector(
-                                          child:
-                                              Text('Files', style: Styles.text),
+                                          child: Text(
+                                            'Files',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button,
+                                          ),
                                           onTap: () => Navigator.push(
                                               context,
                                               SlideLeftRoute(
@@ -197,6 +207,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
+            color: Theme.of(context).backgroundColor,
             child: Wrap(
               children: <Widget>[
                 ListTile(
