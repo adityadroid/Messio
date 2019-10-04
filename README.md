@@ -47,14 +47,14 @@ Part of Medium Series [60 days of Flutter](https://medium.com/@adityadroid/60-da
 
 [60 Days of Flutter : Day 42–44 : Creating the Home Page & Quick Peek BottomSheet for Messages](https://medium.com/@adityadroid/60-days-of-flutter-building-a-messenger-day-42-45-creating-the-home-page-quick-peek-7264bc68e86d)
 
+
 Happy learning. :+1:
 
 ### Show some :heart: and star the repo to support the project
 
+
 [![GitHub stars](https://img.shields.io/github/stars/adityadroid/messio.svg?style=social&label=Star)](https://github.com/adityadroid/messio) [![GitHub forks](https://img.shields.io/github/forks/adityadroid/messio.svg?style=social&label=Fork)](https://github.com/adityadroid/messio/fork) [![GitHub watchers](https://img.shields.io/github/watchers/adityadroid/messio.svg?style=social&label=Watch)](https://github.com/adityadroid/messio) [![GitHub followers](https://img.shields.io/github/followers/adityadroid.svg?style=social&label=Follow)](https://github.com/adityadroid/messio)
 [![Twitter Follow](https://img.shields.io/twitter/follow/adityadroid.svg?style=social)](https://twitter.com/adityadroid)
-
-
 
 ### :heart: Found this project useful?
 
@@ -63,7 +63,6 @@ If you found this project useful, then please consider giving it a :star: on Git
 ## Project Created & Maintained By
 
 ### Aditya Gurjar
-
 
 <a href="https://play.google.com/store/apps/developer?id=Aditya+Gurjar"><img src="https://github.com/aritraroy/social-icons/blob/master/play-store-icon.png?raw=true" width="60"></a> <a href="https://medium.com/@adityadroid"><img src="https://github.com/aritraroy/social-icons/blob/master/medium-icon.png?raw=true" width="60"></a>
 <a href="https://twitter.com/adityadroid"><img src="https://github.com/aritraroy/social-icons/blob/master/twitter-icon.png?raw=true" width="60"></a>
