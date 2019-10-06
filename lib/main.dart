@@ -17,7 +17,6 @@ import 'package:messio/utils/SharedObjects.dart';
 import 'package:path_provider/path_provider.dart';
 import 'blocs/authentication/Bloc.dart';
 import 'pages/RegisterPage.dart';
-
 void main() async {
   //create instances of the repositories to supply them to the app
   final AuthenticationRepository authRepository = AuthenticationRepository();
@@ -26,8 +25,11 @@ void main() async {
   final ChatRepository chatRepository = ChatRepository();
   SharedObjects.prefs = await CachedSharedPreferences.getInstance();
   Constants.cacheDirPath = (await getTemporaryDirectory()).path;
+  Constants.dbDirPath = (await getApplicationDocumentsDirectory()).path;
   Constants.downloadsDirPath =
       (await DownloadsPathProvider.downloadsDirectory).path;
+  initSembast();
+  
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
@@ -61,6 +63,10 @@ void main() async {
     child: Messio(),
   ));
 }
+
+void initSembast() {
+}
+
 
 // ignore: must_be_immutable
 class Messio extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,9 +29,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
   Chat chat;
   String _username = "";
   String _name = "";
-  Image _image = Image.asset(
+  ImageProvider _image = Image.asset(
     Assets.user,
-  );
+  ).image;
 
   _ChatAppBarState(this.chat);
 
@@ -53,7 +54,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
           if (state.username == chat.username) {
             _name = state.user.name;
             _username = '@' + state.user.username;
-            _image = Image.network(state.user.photoUrl);
+            _image =
+                CachedNetworkImageProvider(state.user.photoUrl);
+
           }
         }
         if (state is PageChangedState) {
@@ -66,7 +69,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
               decoration: BoxDecoration(boxShadow: [
                 //adds a shadow to the appbar
                 BoxShadow(
-                    color: Theme.of(context).hintColor, blurRadius: 2.0, spreadRadius: 0.1)
+                    color: Theme.of(context).hintColor,
+                    blurRadius: 2.0,
+                    spreadRadius: 0.1)
               ]),
               child: Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -108,7 +113,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[
                                               Text(_name,
-                                                  style: Theme.of(context).textTheme.title),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .title),
                                               Text(_username,
                                                   style: Theme.of(context)
                                                       .textTheme
@@ -145,9 +152,10 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                         ),
                                         VerticalDivider(
                                           width: 30,
-                                          color:Theme.of(context)
+                                          color: Theme.of(context)
                                               .textTheme
-                                              .button.color,
+                                              .button
+                                              .color,
                                         ),
                                         GestureDetector(
                                           child: Text(
@@ -167,7 +175,8 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                           width: 30,
                                           color: Theme.of(context)
                                               .textTheme
-                                              .button.color,
+                                              .button
+                                              .color,
                                         ),
                                         GestureDetector(
                                           child: Text(
@@ -193,9 +202,10 @@ class _ChatAppBarState extends State<ChatAppBar> {
                         child: Container(child: Center(child:
                             BlocBuilder<ChatBloc, ChatState>(
                                 builder: (context, state) {
+
                           return CircleAvatar(
                             radius: 30,
-                            backgroundImage: _image.image,
+                            backgroundImage: _image,
                           );
                         })))),
                   ])))),

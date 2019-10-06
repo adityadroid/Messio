@@ -101,8 +101,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       StreamSubscription messagesSubscription = messagesSubscriptionMap[chatId];
       messagesSubscription?.cancel();
       messagesSubscription = chatRepository.getMessages(chatId).listen(
-          (messages) =>
-              dispatch(ReceivedMessagesEvent(messages, event.chat.username)));
+          (messages){
+              print('size is ${messages.length}');
+              for(int i=0;i<messages.length;i++)
+              print('type is $i ${messages[i].runtimeType}');
+          dispatch(ReceivedMessagesEvent(messages, event.chat.username));});
       messagesSubscriptionMap[chatId] = messagesSubscription;
     } on MessioException catch (exception) {
       print(exception.errorMessage());

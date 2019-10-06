@@ -9,4 +9,5 @@ class Constants{
   static const configImageCompression = 'configImageCompression';
   static String downloadsDirPath;
   static String cacheDirPath;
+  static String dbDirPath;
 }

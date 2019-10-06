@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messio/config/Constants.dart';
 import 'package:messio/utils/SharedObjects.dart';
 
-abstract class Message {
+
+abstract class Message  {
   int timeStamp;
   String senderName;
   String senderUsername;
@@ -57,7 +58,6 @@ abstract class Message {
 
 class TextMessage extends Message {
   String text;
-
   TextMessage(this.text, timeStamp, senderName, senderUsername)
       : super(timeStamp, senderName, senderUsername);
 
@@ -82,6 +82,7 @@ class TextMessage extends Message {
 
   @override
   String toString() => '{ senderName : $senderName, senderUsername : $senderUsername, isSelf : $isSelf , timeStamp : $timeStamp, type : 3, text: $text }';
+
 
 }
 
@@ -117,10 +118,10 @@ class ImageMessage extends Message {
 
 }
 
+
 class VideoMessage extends Message {
   String videoUrl;
   String fileName;
-
   VideoMessage(this.videoUrl,this.fileName, timeStamp, senderName, senderUsername)
       : super(timeStamp, senderName, senderUsername);
 
@@ -146,6 +147,7 @@ class VideoMessage extends Message {
   }
   @override
   String toString() => '{ senderName : $senderName, senderUsername : $senderUsername, isSelf : $isSelf , timeStamp : $timeStamp, type : 3, fileName: $fileName, videoUrl : $videoUrl  }';
+
 
 }
 
@@ -178,4 +180,5 @@ class FileMessage extends Message {
 
   @override
   String toString() => '{ senderName : $senderName, senderUsername : $senderUsername, isSelf : $isSelf , timeStamp : $timeStamp, type : 3, fileName: $fileName, fileUrl : $fileUrl  }';
+
 }

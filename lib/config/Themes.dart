@@ -19,7 +19,7 @@ class Themes{
     bottomSheetTheme:  BottomSheetThemeData(
         backgroundColor: Colors.black.withOpacity(0))
   );
-  static final  dark = ThemeData(
+  static final dark = ThemeData(
     accentColor: Palette.accentColor,
       primaryColor: Colors.black,
       primarySwatch: Colors.blue,
@@ -29,7 +29,6 @@ class Themes{
     backgroundColor:Color(0xff191919),
     scaffoldBackgroundColor: Colors.black,
     brightness: Brightness.dark,
-    primaryColorDark: Colors.white,
     primaryColorBrightness: Brightness.dark,
     buttonColor: Palette.accentColor,
     appBarTheme: AppBarTheme(elevation: 0.0),

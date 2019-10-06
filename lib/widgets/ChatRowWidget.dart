@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:messio/config/Palette.dart';
@@ -33,9 +34,7 @@ class ChatRowWidget extends StatelessWidget {
                     Container(
                         child: CircleAvatar(
                           radius: 30,
-                          backgroundImage: Image.network(
-                            conversation.user.photoUrl,
-                          ).image,
+                          backgroundImage: CachedNetworkImageProvider(conversation.user.photoUrl),
                         ),
                         width: 61.0,
                         height: 61.0,

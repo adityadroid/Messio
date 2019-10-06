@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Palette.dart';
@@ -65,7 +66,7 @@ class ChatItemWidget extends StatelessWidget {
     } else if (message is ImageMessage) {
       return ClipRRect(
           borderRadius: BorderRadius.circular(8.0),
-          child: FadeInImage(placeholder: AssetImage(Assets.placeholder), image: NetworkImage(message.imageUrl)));
+          child: CachedNetworkImage(imageUrl:message.imageUrl, placeholder: (_,url)=>Image.asset(Assets.placeholder)));
     } else if (message is VideoMessage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
