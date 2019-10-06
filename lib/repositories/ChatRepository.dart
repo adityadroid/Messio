@@ -14,8 +14,7 @@ class ChatRepository extends BaseRepository{
   BaseChatProvider chatProvider = ChatProvider();
   Stream<List<Conversation>> getConversations() => chatProvider.getConversations();
   Stream<List<Chat>> getChats() => chatProvider.getChats();
-  Stream<List<Message>> getMessages(String chatId)=> chatProvider.getMessages(chatId);
-
+  Stream<List<Message>> getMessages(String chatId) => chatProvider.getMessages(chatId);
   Future<List<Message>> getPreviousMessages(
           String chatId, Message prevMessage) =>
       chatProvider.getPreviousMessages(chatId, prevMessage);

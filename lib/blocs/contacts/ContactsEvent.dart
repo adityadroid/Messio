@@ -29,10 +29,3 @@ class AddContactEvent extends ContactsEvent {
   String toString() => 'AddContactEvent';
 }
 
-// CLicked a contact
-class ClickedContactEvent extends ContactsEvent {
-  final Contact contact;
-  ClickedContactEvent(this.contact): super([contact]);
-  @override
-  String toString() => 'ClickedContactEvent';
-}

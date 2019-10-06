@@ -43,7 +43,8 @@ class _ChatListWidgetState extends State<ChatListWidget> {
       if (state is FetchedMessagesState) {
         print('Received Messages');
         if (state.username == chat.username) {
-          print(state.messages);
+          print(state.messages.length);
+          print(state.isPrevious);
           if (state.isPrevious)
             messages.addAll(state.messages);
           else

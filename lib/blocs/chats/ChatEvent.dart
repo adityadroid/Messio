@@ -18,6 +18,7 @@ class FetchChatListEvent extends ChatEvent {
   String toString() => 'FetchChatListEvent';
 }
 
+
 //triggered when stream containing list of chats has new data
 class ReceivedChatsEvent extends ChatEvent {
   final List<Chat> chatList;
@@ -97,6 +98,13 @@ class PageChangedEvent extends ChatEvent {
 
   @override
   String toString() => 'PageChangedEvent {index: $index, activeChat: $activeChat}';
+}
+
+class RegisterActiveChatEvent extends ChatEvent{
+  final String activeChatId;
+  RegisterActiveChatEvent(this.activeChatId);
+  @override
+  String toString() => 'RegisterActiveChatEvent { activeChatId : $activeChatId }';
 }
 
 // hide/show emojikeyboard

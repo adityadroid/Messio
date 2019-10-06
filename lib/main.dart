@@ -17,7 +17,6 @@ import 'package:messio/utils/SharedObjects.dart';
 import 'package:path_provider/path_provider.dart';
 import 'blocs/authentication/Bloc.dart';
 import 'pages/RegisterPage.dart';
-
 void main() async {
   //create instances of the repositories to supply them to the app
   final AuthenticationRepository authRepository = AuthenticationRepository();
@@ -55,12 +54,14 @@ void main() async {
         builder: (context) => HomeBloc(chatRepository: chatRepository),
       ),
       BlocProvider<ConfigBloc>(
-        builder: (context) => ConfigBloc(),
+        builder: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
       )
     ],
     child: Messio(),
   ));
 }
+
+
 
 // ignore: must_be_immutable
 class Messio extends StatelessWidget {
@@ -87,7 +88,8 @@ class Messio extends StatelessWidget {
             if (state is UnAuthenticated) {
               return RegisterPage();
             } else if (state is ProfileUpdated) {
-              BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
+              if(SharedObjects.prefs.getBool(Constants.configMessagePaging))
+                BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
               return HomePage();
               //  return ConversationPageSlide();
             } else {

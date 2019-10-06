@@ -28,14 +28,15 @@ class UserDataProvider extends BaseUserDataProvider {
       'email': user.email,
       'name': user.displayName,
     };
-    if (!userExists && user.photoUrl!=null) {
+    if (!userExists && user.photoUrl != null) {
       // if user entry exists then we would not want to override the photo url with the one received from googel auth
       data['photoUrl'] = user.photoUrl;
     }
     ref.setData(data, merge: true); // set the data
     final DocumentSnapshot currentDocument =
         await ref.get(); // get updated data reference
-    await SharedObjects.prefs.setString(Constants.sessionUsername, user.displayName);
+    await SharedObjects.prefs
+        .setString(Constants.sessionUsername, user.displayName);
     return User.fromFirestore(
         currentDocument); // create a user object and return
   }
@@ -58,14 +59,26 @@ class UserDataProvider extends BaseUserDataProvider {
       'age': age,
       'username': username,
     };
-    ref.setData(data, merge: true); // set the photourl, age and username
+    await ref.setData(data, merge: true); // set the photourl, age and username
     final DocumentSnapshot currentDocument =
         await ref.get(); // get updated data back from firestore
     await SharedObjects.prefs.setString(Constants.sessionUsername, username);
+    await SharedObjects.prefs.setString(
+        Constants.sessionProfilePictureUrl, currentDocument.data['photoUrl']);
     return User.fromFirestore(
         currentDocument); // create a user object and return it
   }
 
+  @override
+  Future<void> updateProfilePicture(String profilePictureUrl) async {
+    String uid = SharedObjects.prefs.getString(Constants.sessionUid);
+    DocumentReference ref = fireStoreDb.collection(Paths.usersPath).document(
+        uid); //reference of the user's document node in database/users. This node is created using uid
+    var data = {
+      'photoUrl': profilePictureUrl,
+    };
+    await ref.setData(data, merge: true); // set the photourl
+  }
   @override
   Future<bool> isProfileComplete() async {
     DocumentReference ref = fireStoreDb.collection(Paths.usersPath).document(
@@ -74,7 +87,7 @@ class UserDataProvider extends BaseUserDataProvider {
     final DocumentSnapshot currentDocument = await ref.get();
     final bool isProfileComplete = currentDocument != null &&
         currentDocument.exists &&
-        currentDocument.data.containsKey('photoUrl')&&
+        currentDocument.data.containsKey('photoUrl') &&
         currentDocument.data.containsKey('username') &&
         currentDocument.data.containsKey(
             'age'); // check if it exists, if yes then check if username and age field are there or not. If not then profile incomplete else complete
@@ -83,6 +96,8 @@ class UserDataProvider extends BaseUserDataProvider {
           Constants.sessionUsername, currentDocument.data['username']);
       await SharedObjects.prefs
           .setString(Constants.sessionName, currentDocument.data['name']);
+      await SharedObjects.prefs.setString(
+          Constants.sessionProfilePictureUrl, currentDocument.data['photoUrl']);
     }
     return isProfileComplete;
   }
@@ -101,19 +116,24 @@ class UserDataProvider extends BaseUserDataProvider {
   void mapDocumentToContact(CollectionReference userRef, DocumentReference ref,
       DocumentSnapshot documentSnapshot, Sink sink) async {
     List<String> contacts;
-    if (documentSnapshot.data['contacts'] == null) {
+
+    if (documentSnapshot.data['contacts'] == null ||
+        documentSnapshot.data['chats'] == null) {
       ref.updateData({'contacts': []});
       contacts = List();
     } else {
       contacts = List.from(documentSnapshot.data['contacts']);
     }
     List<Contact> contactList = List();
+    Map chats = documentSnapshot.data['chats'];
     for (String username in contacts) {
       String uid = await getUidByUsername(username);
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
+      print(contactSnapshot.data);
+      contactSnapshot.data['chatId'] = chats[username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
-    contactList.sort((a,b)=> a.name.compareTo(b.name));
+    contactList.sort((a, b) => a.name.compareTo(b.name));
     sink.add(contactList);
   }
 
@@ -125,7 +145,6 @@ class UserDataProvider extends BaseUserDataProvider {
         fireStoreDb.collection(Paths.usersPath);
     DocumentReference ref = collectionReference
         .document(SharedObjects.prefs.getString(Constants.sessionUid));
-
 
     //await to fetch user details of the username provided and set data
     final documentSnapshot = await ref.get();
@@ -139,9 +158,11 @@ class UserDataProvider extends BaseUserDataProvider {
     contacts.add(username);
     await ref.setData({'contacts': contacts}, merge: true);
     //contact should be added in the contactlist of both the users. Adding to the second user here
-    String sessionUsername = SharedObjects.prefs.getString(Constants.sessionUsername);
-    DocumentReference contactRef = collectionReference.document(contactUser.documentId);
-    final  contactSnapshot = await contactRef.get();
+    String sessionUsername =
+        SharedObjects.prefs.getString(Constants.sessionUsername);
+    DocumentReference contactRef =
+        collectionReference.document(contactUser.documentId);
+    final contactSnapshot = await contactRef.get();
     contacts = contactSnapshot.data['contacts'] != null
         ? List.from(contactSnapshot.data['contacts'])
         : List();
@@ -183,5 +204,6 @@ class UserDataProvider extends BaseUserDataProvider {
 
   @override
   void dispose() {}
+
 
 }
