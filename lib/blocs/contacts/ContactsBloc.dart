@@ -42,9 +42,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       userDataRepository.getUser(event.username);
       yield* mapAddContactEventToState(event.username);
     }
-    if (event is ClickedContactEvent) {
-      yield ClickedContactState(event.contact);
-    }
+  
   }
 
   Stream<ContactsState> mapFetchContactsEventToState() async* {

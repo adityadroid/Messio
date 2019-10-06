@@ -25,11 +25,8 @@ void main() async {
   final ChatRepository chatRepository = ChatRepository();
   SharedObjects.prefs = await CachedSharedPreferences.getInstance();
   Constants.cacheDirPath = (await getTemporaryDirectory()).path;
-  Constants.dbDirPath = (await getApplicationDocumentsDirectory()).path;
   Constants.downloadsDirPath =
       (await DownloadsPathProvider.downloadsDirectory).path;
-  initSembast();
-  
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
@@ -57,15 +54,13 @@ void main() async {
         builder: (context) => HomeBloc(chatRepository: chatRepository),
       ),
       BlocProvider<ConfigBloc>(
-        builder: (context) => ConfigBloc(),
+        builder: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
       )
     ],
     child: Messio(),
   ));
 }
 
-void initSembast() {
-}
 
 
 // ignore: must_be_immutable
@@ -93,7 +88,8 @@ class Messio extends StatelessWidget {
             if (state is UnAuthenticated) {
               return RegisterPage();
             } else if (state is ProfileUpdated) {
-              BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
+              if(SharedObjects.prefs.getBool(Constants.configMessagePaging))
+                BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
               return HomePage();
               //  return ConversationPageSlide();
             } else {

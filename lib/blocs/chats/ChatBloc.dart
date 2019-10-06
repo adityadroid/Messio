@@ -36,8 +36,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ChatEvent event,
   ) async* {
     print(event);
+
     if (event is FetchChatListEvent) {
       yield* mapFetchChatListEventToState(event);
+    }
+    if(event is RegisterActiveChatEvent){
+      activeChatId = event.activeChatId;
     }
     if (event is ReceivedChatsEvent) {
       yield FetchedChatListState(event.chatList);
@@ -100,12 +104,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       //  print('MessSubMap: $messagesSubscriptionMap');
       StreamSubscription messagesSubscription = messagesSubscriptionMap[chatId];
       messagesSubscription?.cancel();
-      messagesSubscription = chatRepository.getMessages(chatId).listen(
-          (messages){
-              print('size is ${messages.length}');
-              for(int i=0;i<messages.length;i++)
-              print('type is $i ${messages[i].runtimeType}');
-          dispatch(ReceivedMessagesEvent(messages, event.chat.username));});
+      messagesSubscription = chatRepository.getMessages(chatId).listen((messages) => dispatch(ReceivedMessagesEvent(messages, event.chat.username)));
+
       messagesSubscriptionMap[chatId] = messagesSubscription;
     } on MessioException catch (exception) {
       print(exception.errorMessage());
@@ -130,6 +130,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   Stream<ChatState> mapFetchConversationDetailsEventToState(
       FetchConversationDetailsEvent event) async* {
+    print('fetching details fro ${event.chat.username}');
     User user = await userDataRepository.getUser(event.chat.username);
     yield FetchedContactDetailsState(user, event.chat.username);
     dispatch(FetchMessagesEvent(event.chat));

@@ -4,21 +4,26 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
 import 'package:messio/config/Assets.dart';
+import 'package:messio/config/Constants.dart';
 import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Chat.dart';
+import 'package:messio/models/Contact.dart';
 import 'package:messio/pages/AttachmentPage.dart';
+import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/GradientSnackBar.dart';
 
 class ChatAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double height = 100;
+  final Contact contact;
   final Chat chat;
 
-  ChatAppBar(this.chat);
+  ChatAppBar({this.contact, this.chat});
 
   @override
-  _ChatAppBarState createState() => _ChatAppBarState(chat);
+  _ChatAppBarState createState() => _ChatAppBarState(this.contact, this.chat);
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -26,18 +31,28 @@ class ChatAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _ChatAppBarState extends State<ChatAppBar> {
   ChatBloc chatBloc;
+  Contact contact;
   Chat chat;
+  String receivedUsername;
   String _username = "";
   String _name = "";
   ImageProvider _image = Image.asset(
     Assets.user,
   ).image;
 
-  _ChatAppBarState(this.chat);
+  _ChatAppBarState(this.contact, this.chat);
 
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
+    if (contact != null) {
+      _name = contact.name;
+      _username = contact.username;
+      _image = CachedNetworkImageProvider(contact.photoUrl);
+      chat = Chat(contact.username, contact.chatId);
+    } else {
+      _username = chat.username;
+    }
     super.initState();
   }
 
@@ -51,12 +66,9 @@ class _ChatAppBarState extends State<ChatAppBar> {
         if (state is FetchedContactDetailsState) {
           print('Received State of Page');
           print(state.user);
-          if (state.username == chat.username) {
+          if (state.username == _username) {
             _name = state.user.name;
-            _username = '@' + state.user.username;
-            _image =
-                CachedNetworkImageProvider(state.user.photoUrl);
-
+            _image = CachedNetworkImageProvider(state.user.photoUrl);
           }
         }
         if (state is PageChangedState) {
@@ -116,7 +128,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .title),
-                                              Text(_username,
+                                              Text("@" + _username,
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .subtitle)
@@ -147,7 +159,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               context,
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
-                                                      this.chat.chatId,
+                                                      this.contact.chatId,
                                                       FileType.IMAGE))),
                                         ),
                                         VerticalDivider(
@@ -168,7 +180,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               context,
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
-                                                      this.chat.chatId,
+                                                      this.contact.chatId,
                                                       FileType.VIDEO))),
                                         ),
                                         VerticalDivider(
@@ -189,7 +201,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               context,
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
-                                                      this.chat.chatId,
+                                                      this.contact.chatId,
                                                       FileType.ANY))),
                                         )
                                       ],
@@ -202,7 +214,6 @@ class _ChatAppBarState extends State<ChatAppBar> {
                         child: Container(child: Center(child:
                             BlocBuilder<ChatBloc, ChatState>(
                                 builder: (context, state) {
-
                           return CircleAvatar(
                             radius: 30,
                             backgroundImage: _image,
@@ -213,7 +224,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
   }
 
   showAttachmentBottomSheet(context) {
-    showModalBottomSheet(
+    showModalBottomSheet<Null>(
         context: context,
         builder: (BuildContext bc) {
           return Container(
@@ -240,7 +251,14 @@ class _ChatAppBarState extends State<ChatAppBar> {
   }
 
   showFilePicker(FileType fileType) async {
-    File file = await FilePicker.getFile(type: fileType);
+    File file;
+    if (fileType == FileType.IMAGE && SharedObjects.prefs.getBool(Constants.configImageCompression))
+      file = await ImagePicker.pickImage(
+          source: ImageSource.gallery, imageQuality: 70);
+    else
+      file = await FilePicker.getFile(type: fileType);
+    
+    if (file == null) return;
     chatBloc.dispatch(SendAttachmentEvent(chat.chatId, file, fileType));
     Navigator.pop(context);
     GradientSnackBar.showMessage(context, 'Sending attachment..');

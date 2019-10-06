@@ -52,6 +52,7 @@ class CachedSharedPreferences {
     Constants.sessionUid,
     Constants.sessionUsername,
     Constants.sessionName,
+    Constants.sessionProfilePictureUrl,
     Constants.configDarkMode,
     Constants.configMessagePaging,
     Constants.configMessagePeek,
@@ -62,7 +63,7 @@ class CachedSharedPreferences {
     sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getBool(Constants.firstRun)==null || sharedPreferences.get(Constants.firstRun)){ // if first run, then set these values
       await sharedPreferences.setBool(Constants.configDarkMode, false);
-      await sharedPreferences.setBool(Constants.configMessagePaging, true);
+      await sharedPreferences.setBool(Constants.configMessagePaging, false);
       await sharedPreferences.setBool(Constants.configImageCompression, true);
       await sharedPreferences.setBool(Constants.configMessagePeek, true);
       await sharedPreferences.setBool(Constants.firstRun, false);

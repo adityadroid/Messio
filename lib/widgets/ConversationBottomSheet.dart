@@ -15,7 +15,7 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return SafeArea(
         child: Scaffold(
             backgroundColor: Theme.of(context).primaryColor,
             body: ListView(children: <Widget>[

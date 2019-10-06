@@ -5,9 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/contacts/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Decorations.dart';
-import 'package:messio/config/Transitions.dart';
 import 'package:messio/models/Contact.dart';
-import 'package:messio/pages/ConversationPageSlide.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'package:messio/widgets/ContactRowWidget.dart';
 import 'package:messio/widgets/GradientFab.dart';
@@ -54,10 +52,7 @@ class _ContactListPageState extends State<ContactListPage>
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: BlocProvider<ContactsBloc>(
-            builder: (context) => contactsBloc,
-            child: BlocListener<ContactsBloc, ContactsState>(
-              bloc: contactsBloc,
+        body: BlocListener<ContactsBloc, ContactsState>(
               listener: (bc, state) {
                 print(state);
                 if (state is AddContactSuccessState) {
@@ -68,8 +63,6 @@ class _ContactListPageState extends State<ContactListPage>
                 } else if (state is AddContactFailedState) {
                   Navigator.pop(context);
                   GradientSnackBar.showError(context, state.exception.errorMessage());
-                }else if (state is ClickedContactState){
-                  Navigator.push(context,SlideLeftRoute(page: ConversationPageSlide(startContact: state.contact)));
                 }
               },
               child: Stack(
@@ -121,7 +114,7 @@ class _ContactListPageState extends State<ContactListPage>
                   ),
                 ],
               ),
-            )),
+            ),
         floatingActionButton: GradientFab(
           child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
           animation: animation,

@@ -13,3 +13,10 @@ class ConfigChangeState extends ConfigState{
   ConfigChangeState(this.key,this.value): super([key,value]);
 }
 class UnConfigState extends ConfigState{}
+class UpdatingProfilePictureState extends ConfigState{}
+class ProfilePictureChangedState extends ConfigState{
+  final String profilePictureUrl;
+  ProfilePictureChangedState(this.profilePictureUrl):super([profilePictureUrl]);
+  @override
+  String toString()=> 'ProfilePictureChangedState {profilePictureUrl: $profilePictureUrl}';
+}

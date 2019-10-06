@@ -196,7 +196,7 @@ class _AttachmentPageState extends State<AttachmentPage>
 
   imageItem(BuildContext context, int index) {
     return GestureDetector(
-      onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_) => ImageFullScreen(index,photos[index].imageUrl))),
+      onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_) => ImageFullScreen('AttachmentImage_$index',photos[index].imageUrl))),
       child: Hero(
               tag: 'AttachmentImage_$index',
               child:  Image.network(photos[index].imageUrl,fit: BoxFit.cover)),

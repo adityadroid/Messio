@@ -97,7 +97,9 @@ class _InputWidgetState extends State<InputWidget>{
   }
 
   void sendMessage(context) {
-       chatBloc.dispatch(SendTextMessageEvent(textEditingController.text));
+    if(textEditingController.text.isEmpty)
+      return;
+    chatBloc.dispatch(SendTextMessageEvent(textEditingController.text));
     textEditingController.clear();
   }
 }

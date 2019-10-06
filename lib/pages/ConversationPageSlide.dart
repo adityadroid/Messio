@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/chats/Bloc.dart';
+import 'package:messio/blocs/config/Bloc.dart';
+import 'package:messio/config/Constants.dart';
 import 'package:messio/models/Chat.dart';
 import 'package:messio/models/Contact.dart';
+import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
 import 'package:messio/widgets/InputWidget.dart';
 import '../widgets/ConversationBottomSheet.dart';
@@ -26,7 +29,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
   ChatBloc chatBloc;
   List<Chat> chatList = List();
   bool isFirstLaunch = true;
-  var navigator;
+  bool configMessagePeek = true;
   _ConversationPageSlideState(this.startContact);
 
   @override
@@ -38,7 +41,6 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
 
   @override
   Widget build(BuildContext context) {
-    navigator = Navigator.of(context);
     return SafeArea(
         child: Scaffold(
             key: _scaffoldKey,
@@ -47,7 +49,6 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                   BlocListener<ChatBloc, ChatState>(
                       bloc: chatBloc,
                       listener: (bc, state) {
-                        print('ChatList $chatList');
                         if (isFirstLaunch && chatList.isNotEmpty) {
                           isFirstLaunch = false;
                           for (int i = 0; i < chatList.length; i++) {
@@ -70,17 +71,26 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                                   BlocProvider.of<ChatBloc>(context).dispatch(
                                       PageChangedEvent(index, chatList[index])),
                               itemBuilder: (bc, index) =>
-                                  ConversationPage(chatList[index]));
+                                  ConversationPage(chat:chatList[index]));
                         },
                       ))),
-                  Container(
-                      child: GestureDetector(
-                          child: InputWidget(),
-                          onPanUpdate: (details) {
-                            if (details.delta.dy < 100) {
-                            showModalBottomSheetApp(context: context, builder: (context)=>ConversationBottomSheet());
-                            }
-                          }))
+                  BlocBuilder<ConfigBloc,ConfigState>(
+                    builder: (context, state) {
+                      if(state is UnConfigState)
+                        configMessagePeek = SharedObjects.prefs.getBool(Constants.configMessagePeek);
+                      if(state is ConfigChangeState)
+                        if(state.key == Constants.configMessagePeek) configMessagePeek = state.value;
+                      return GestureDetector(
+                              child: InputWidget(),
+                              onPanUpdate: (details) {
+                                if(!configMessagePeek)
+                                  return;
+                                if (details.delta.dy < 100) {
+                                showModalBottomSheetApp(context: context, builder: (context)=>ConversationBottomSheet());
+                                }
+                              });
+                    }
+                  )
                 ],
               ),
             ));

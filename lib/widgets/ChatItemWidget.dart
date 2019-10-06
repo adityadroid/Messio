@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:messio/widgets/BottomSheetFixed.dart';
+import 'package:messio/widgets/ImageFullScreenWidget.dart';
 import 'VideoPlayerWidget.dart';
 
 class ChatItemWidget extends StatelessWidget {
@@ -64,9 +65,15 @@ class ChatItemWidget extends StatelessWidget {
                 isSelf ? Palette.selfMessageColor : Palette.otherMessageColor),
       );
     } else if (message is ImageMessage) {
-      return ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: CachedNetworkImage(imageUrl:message.imageUrl, placeholder: (_,url)=>Image.asset(Assets.placeholder)));
+      return GestureDetector(
+        onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (_) => ImageFullScreen('ImageMessage_${message.documentId}',message.imageUrl))),
+        child: Hero(
+          tag: 'ImageMessage_${message.documentId}',
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: CachedNetworkImage(imageUrl:message.imageUrl, placeholder: (_,url)=>Image.asset(Assets.placeholder))),
+        ),
+      );
     } else if (message is VideoMessage) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(8.0),

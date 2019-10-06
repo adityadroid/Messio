@@ -23,9 +23,11 @@ class UserDataRepository extends BaseRepository {
       userDataProvider.addContact(username);
 
   Future<User> getUser(String username) => userDataProvider.getUser(username);
+  Future<void> updateProfilePicture(String profilePictureUrl)=> userDataProvider.updateProfilePicture(profilePictureUrl);
 
   @override
   void dispose() {
     userDataProvider.dispose();
   }
+
 }

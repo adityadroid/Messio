@@ -24,6 +24,7 @@ abstract class BaseUserDataProvider extends BaseProvider{
   Future<void> addContact(String username);
   Future<User> getUser(String username);
   Future<String> getUidByUsername(String username);
+  Future<void> updateProfilePicture(String profilePictureUrl);
 }
 
 abstract class BaseStorageProvider extends BaseProvider{
