@@ -59,6 +59,8 @@ class StorageTaskSnapshotMock extends Mock implements StorageTaskSnapshot{}
 UserDataProvider Mocks
  */
 class FireStoreMock extends Mock implements Firestore{}
+
+
 class DocumentReferenceMock extends Mock implements DocumentReference{
   DocumentSnapshotMock documentSnapshotMock;
 
@@ -80,20 +82,40 @@ class DocumentReferenceMock extends Mock implements DocumentReference{
   Future<void> setData(Map<String,dynamic > data, {bool merge = false}) {
     if(this.documentSnapshotMock==null)
       this.documentSnapshotMock = DocumentSnapshotMock();
+    if(this.documentSnapshotMock.data==null){
+      documentSnapshotMock.data = Map<String,dynamic>();
+    }
     data.forEach((k,v){
-      if(!documentSnapshotMock.mockData.containsKey(k))
         documentSnapshotMock.mockData[k]=v;
+    });
+     return null;
+  }
+
+  @override
+  Future<void> updateData(Map<String, dynamic> data) {
+    if(this.documentSnapshotMock==null)
+      this.documentSnapshotMock = DocumentSnapshotMock();
+     if(this.documentSnapshotMock.data==null){
+       documentSnapshotMock.data = Map<String,dynamic>();
+     }
+    data.forEach((k,v){
+      documentSnapshotMock.mockData[k]=v;
     });
     return null;
   }
-
 }
 class DocumentSnapshotMock extends Mock implements DocumentSnapshot{
   Map mockData = Map<String,dynamic>();
-
+  DocumentSnapshotMock({this.mockData});
   set data(Map data)  => this.mockData = data;
   @override
   Map<String,dynamic > get data => mockData;
+  @override
+  bool get exists => true;
 }
 
 class CollectionReferenceMock extends Mock implements CollectionReference{}
+
+class QuerySnapshotMock extends Mock implements QuerySnapshot{}
+
+class QueryMock extends Mock implements Query{}

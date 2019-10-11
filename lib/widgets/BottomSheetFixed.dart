@@ -1,6 +1,3 @@
-//Flutter Modal Bottom Sheet
-//Modified by Suvadeep Das
-//Based on https://gist.github.com/andrelsmoraes/9e4af0133bff8960c1feeb0ead7fd749
 
 import 'dart:async';
 

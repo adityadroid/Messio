@@ -4,11 +4,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:messio/blocs/authentication/Bloc.dart';
 import 'package:messio/blocs/config/Bloc.dart';
 import 'package:messio/config/Assets.dart';
 import 'package:messio/config/Constants.dart';
 import 'package:messio/config/Palette.dart';
 import 'package:messio/utils/SharedObjects.dart';
+
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -294,8 +296,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         'SIGN OUT',
                         style: Theme.of(context).textTheme.button,
                       ),
-                      onPressed: () {
-                        //TODO: Implement sign out
+                      onPressed: ()  => {BlocProvider.of<AuthenticationBloc>(context).dispatch(ClickedLogout()),
+                      configBloc.dispatch(RestartApp())
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),

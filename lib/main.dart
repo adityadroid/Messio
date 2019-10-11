@@ -64,9 +64,14 @@ void main() async {
 
 
 // ignore: must_be_immutable
-class Messio extends StatelessWidget {
-  ThemeData theme;
+class Messio extends StatefulWidget {
+  @override
+  _MessioState createState() => _MessioState();
+}
 
+class _MessioState extends State<Messio> {
+  ThemeData theme;
+  Key key = UniqueKey();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ConfigBloc, ConfigState>(builder: (context, state) {
@@ -75,23 +80,25 @@ class Messio extends StatelessWidget {
             ? Themes.dark
             : Themes.light;
       }
+      if(state is RestartedAppState){
+        key = UniqueKey();
+      }
       if (state is ConfigChangeState && state.key == Constants.configDarkMode) {
         theme = state.value ? Themes.dark : Themes.light;
       }
       return MaterialApp(
         title: 'Messio',
         theme: theme,
+        key: key,
         debugShowCheckedModeBanner: false,
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
-            // return AttachmentPage();
             if (state is UnAuthenticated) {
               return RegisterPage();
             } else if (state is ProfileUpdated) {
               if(SharedObjects.prefs.getBool(Constants.configMessagePaging))
                 BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
               return HomePage();
-              //  return ConversationPageSlide();
             } else {
               return RegisterPage();
             }

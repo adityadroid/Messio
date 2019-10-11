@@ -30,18 +30,24 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
+    print(event);
     if (event is AppLaunched) {
       yield* mapAppLaunchedToState();
-    } else if (event is ClickedGoogleLogin) {
+    }
+    if (event is ClickedGoogleLogin) {
       yield* mapClickedGoogleLoginToState();
-    } else if (event is LoggedIn) {
+    }
+    if (event is LoggedIn) {
       yield* mapLoggedInToState(event.user);
-    } else if (event is PickedProfilePicture) {
+    }
+    if (event is PickedProfilePicture) {
       yield ReceivedProfilePicture(event.file);
-    } else if (event is SaveProfile) {
+    }
+    if (event is SaveProfile) {
       yield* mapSaveProfileToState(
           event.profileImage, event.age, event.username);
-    } else if (event is ClickedLogout) {
+    }
+    if (event is ClickedLogout) {
       yield* mapLoggedOutToState();
     }
   }

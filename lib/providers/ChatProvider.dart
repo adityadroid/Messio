@@ -33,6 +33,7 @@ class ChatProvider extends BaseChatProvider {
             EventSink<List<Conversation>> sink) =>
             mapQueryToConversation(querySnapshot, sink)));
   }
+
     void mapQueryToConversation(QuerySnapshot querySnapshot,EventSink<List<Conversation>> sink){
     List<Conversation> conversations = List();
     querySnapshot.documents.forEach((document){
@@ -54,26 +55,6 @@ class ChatProvider extends BaseChatProvider {
             EventSink<List<Chat>> sink) =>
             mapDocumentToChat(documentSnapshot, sink)));
   }
-
-  @override
-  Future<List<Message>> getAttachments(String chatId, int type) async {
-    print('for chat id $chatId $type');
-
-    DocumentReference chatDocRef =
-    fireStoreDb.collection(Paths.chatsPath).document(chatId);
-    CollectionReference messagesCollection =
-    chatDocRef.collection(Paths.messagesPath);
-    final querySnapshot = await messagesCollection
-        .where('type', isEqualTo: type)
-        .orderBy('timeStamp', descending: true) // order them by timestamp
-        .getDocuments();
-    List<Message> messageList = List();
-    querySnapshot.documents
-        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
-    print('ret8urning messagelist ${messageList.length} for $type');
-    return messageList;
-  }
-
   void mapDocumentToChat(DocumentSnapshot documentSnapshot,
       EventSink sink) async {
     List<Chat> chats = List();
@@ -82,6 +63,31 @@ class ChatProvider extends BaseChatProvider {
       data.forEach((key, value) => chats.add(Chat(key, value)));
       sink.add(chats);
     }
+  }
+
+
+  @override
+  Stream<List<Message>> getMessages(String chatId) {
+    DocumentReference chatDocRef =
+    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    CollectionReference messagesCollection =
+    chatDocRef.collection(Paths.messagesPath);
+    return messagesCollection
+        .orderBy('timeStamp', descending: true)
+        .limit(20)
+        .snapshots()
+        .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
+        handleData:
+            (QuerySnapshot querySnapshot, EventSink<List<Message>> sink) =>
+            mapDocumentToMessage(querySnapshot, sink)));
+  }
+
+  void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
+    List<Message> messages = List();
+    for (DocumentSnapshot document in querySnapshot.documents) {
+      messages.add(Message.fromFireStore(document));
+    }
+    sink.add(messages);
   }
 
   /*
@@ -111,28 +117,24 @@ class ChatProvider extends BaseChatProvider {
   }
 
   @override
-  Stream<List<Message>> getMessages(String chatId) {
+  Future<List<Message>> getAttachments(String chatId, int type) async {
+    print('for chat id $chatId $type');
+
     DocumentReference chatDocRef =
     fireStoreDb.collection(Paths.chatsPath).document(chatId);
     CollectionReference messagesCollection =
     chatDocRef.collection(Paths.messagesPath);
-    return messagesCollection
-        .orderBy('timeStamp', descending: true)
-        .limit(20)
-        .snapshots()
-        .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
-        handleData:
-            (QuerySnapshot querySnapshot, EventSink<List<Message>> sink) =>
-            mapDocumentToMessage(querySnapshot, sink)));
+    final querySnapshot = await messagesCollection
+        .where('type', isEqualTo: type)
+        .orderBy('timeStamp', descending: true) // order them by timestamp
+        .getDocuments();
+    List<Message> messageList = List();
+    querySnapshot.documents
+        .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
+    print('returning messagelist ${messageList.length} for $type');
+    return messageList;
   }
 
-  void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
-    List<Message> messages = List();
-    for (DocumentSnapshot document in querySnapshot.documents) {
-      messages.add(Message.fromFireStore(document));
-    }
-    sink.add(messages);
-  }
 
   @override
   Future<void> sendMessage(String chatId, Message message) async {
