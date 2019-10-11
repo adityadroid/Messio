@@ -28,6 +28,9 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
     if (event is UpdateProfilePicture) {
       yield* mapUpdateProfilePictureToState(event);
     }
+    if (event is RestartApp){
+      yield RestartedAppState();
+    }
   }
 
   Stream<ConfigState> mapUpdateProfilePictureToState(

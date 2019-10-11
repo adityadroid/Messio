@@ -79,6 +79,7 @@ class UserDataProvider extends BaseUserDataProvider {
     };
     await ref.setData(data, merge: true); // set the photourl
   }
+
   @override
   Future<bool> isProfileComplete() async {
     DocumentReference ref = fireStoreDb.collection(Paths.usersPath).document(
@@ -129,7 +130,6 @@ class UserDataProvider extends BaseUserDataProvider {
     for (String username in contacts) {
       String uid = await getUidByUsername(username);
       DocumentSnapshot contactSnapshot = await userRef.document(uid).get();
-      print(contactSnapshot.data);
       contactSnapshot.data['chatId'] = chats[username];
       contactList.add(Contact.fromFirestore(contactSnapshot));
     }
@@ -179,7 +179,7 @@ class UserDataProvider extends BaseUserDataProvider {
     DocumentReference ref =
         fireStoreDb.collection(Paths.usersPath).document(uid);
     DocumentSnapshot snapshot = await ref.get();
-    if (snapshot.exists) {
+    if (snapshot!=null && snapshot.exists) {
       return User.fromFirestore(snapshot);
     } else {
       throw UserNotFoundException();

@@ -32,7 +32,9 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
 
   @override
   Future<void> signOutUser() async {
-    return Future.wait([firebaseAuth.signOut(), googleSignIn.signOut()]); // terminate the session
+    print('firebaseauth $firebaseAuth');
+    await SharedObjects.prefs.clearSession();
+    await Future.wait([firebaseAuth.signOut(), googleSignIn.signOut()]); // terminate the session
   }
 
   @override

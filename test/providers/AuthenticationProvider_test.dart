@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:messio/config/Constants.dart';
 import 'package:messio/providers/AuthenticationProvider.dart';
 import 'package:messio/utils/SharedObjects.dart';
 import 'package:mockito/mockito.dart';
@@ -55,5 +56,22 @@ void main() {
           .thenAnswer((_) => Future<FirebaseUserMock>.value(null));
       expect(await authenticationProvider.isLoggedIn(), false);
     });
-  });
+
+    test('signOutUser clears the session', () async {
+      when(sharedPreferencesMock.getString(Constants.sessionUsername)).thenReturn('username');
+      expect(SharedObjects.prefs.getString(Constants.sessionUsername),'username');
+
+      //mocking all the methods use by signOutUser
+      when(firebaseAuth.signOut()).thenAnswer((_)=>Future<void>(null));
+      when(googleSignIn.signOut()).thenAnswer((_)=>Future.value(googleSignInAccount));
+      when(sharedPreferencesMock.clearSession()).thenAnswer((_){
+        when(sharedPreferencesMock.getString(Constants.sessionUsername)).thenReturn(null);
+        return;
+      });
+      authenticationProvider.signOutUser();
+      expect(SharedObjects.prefs.getString(Constants.sessionUsername),null);
+    });
+
+});
 }
+
