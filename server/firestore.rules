@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{document=**}  {
+    
+	    //Allow creating a new user to anyone who is authenticated
+        allow create:  if isSignedIn();
+
+		//Allow read if signed in
+		allow read: if isSignedIn();
+      
+  		//Allow write if isSignedIn() cannot check for uid matching here because other users can also edit to add new contact. Will add validation to it later
+        allow write: if isSignedIn();
+
+        // Allow update only if the uid matches  (same user)
+        allow update: if isSignedIn() && request.auth.uid == resource.data.uid;
+
+        // Allow delete only if the uid matches  (same user)
+        allow delete: if isSignedIn() && request.auth.uid == resource.data.uid;
+
+  }
+  
+  match /username_uid_map/{document=**}  {
+  
+      allow create, read : if isSignedIn();  //Once a uid mapping is created it cannot be deleted or updated from the app
+  
+  }
+  
+  match /chats/{document=**}  {
+      //Allow users to only create and read chats. Delete and update not available right now
+	  allow create,read : if isSignedIn();
+  
+  }
+}
+}
+
+function isSignedIn() {
+    return request.auth.uid != null;
+}

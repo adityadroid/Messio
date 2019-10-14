@@ -133,7 +133,6 @@ void main() {
     when(messagesCollection.where("type", isEqualTo: 1)).thenReturn(query);
     when(query.orderBy('timeStamp', descending: true)).thenReturn(query);
     when(query.getDocuments()).thenAnswer((_) => Future.value(querySnapshot));
-
     when(querySnapshot.documents).thenReturn(messageDataMock  //mock the message DocumentSnapshots
         .where((mapItem) => mapItem['type'] == 1)
         .map((data) => DocumentSnapshotMock(mockData: data))
