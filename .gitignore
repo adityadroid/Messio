@@ -32,3 +32,6 @@
 #Platform specific
 /android/app/google-services.json
 /ios/
+
+#Firebase setup related
+/server/.firebaserc
