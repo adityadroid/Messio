@@ -80,6 +80,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                     ),
                     onPressed: () {
                       setState(() {
+                        if (videoPlayerController.value.buffered.length != 0 &&
+                            videoPlayerController.value.position ==
+                                videoPlayerController.value.buffered[0].end) {
+                          videoPlayerController.seekTo(Duration(seconds: 0));
+                        }
                         videoPlayerController.value.isPlaying
                             ? videoPlayerController.pause()
                             : videoPlayerController.play();
