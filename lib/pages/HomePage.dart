@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
-    homeBloc.dispatch(FetchHomeChatsEvent());
+    homeBloc.add(FetchHomeChatsEvent());
     super.initState();
   }
 

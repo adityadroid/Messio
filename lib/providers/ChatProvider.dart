@@ -105,9 +105,9 @@ class ChatProvider extends BaseChatProvider {
         .document(prevMessage.documentId)
         .get(); // gets a reference to the last message in the existing list
     final querySnapshot = await messagesCollection
+        .orderBy('timeStamp', descending: true) // order them by timestamp
         .startAfterDocument(
         prevDocument) // Start reading documents after the specified document
-        .orderBy('timeStamp', descending: true) // order them by timestamp
         .limit(20) // limit the read to 20 items
         .getDocuments();
     List<Message> messageList = List();

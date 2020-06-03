@@ -28,7 +28,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         subscription?.cancel();
         subscription = userDataRepository.getContacts().listen((contacts) => {
               print('dispatching $contacts'),
-              dispatch(ReceivedContactsEvent(contacts))
+              add(ReceivedContactsEvent(contacts))
             });
       } on MessioException catch (exception) {
         print(exception.errorMessage());
@@ -51,7 +51,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) => {
             print('dispatching $contacts'),
-            dispatch(ReceivedContactsEvent(contacts))
+            add(ReceivedContactsEvent(contacts))
           });
     } on MessioException catch (exception) {
       print(exception.errorMessage());
@@ -75,6 +75,6 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   @override
   void dispose() {
     subscription.cancel();
-    super.dispose();
+    super.close();
   }
 }

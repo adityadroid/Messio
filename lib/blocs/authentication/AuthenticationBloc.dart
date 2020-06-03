@@ -65,7 +65,7 @@ class AuthenticationBloc
           yield ProfileUpdated();
         } else {
           yield Authenticated(user); // else yield the authenticated state and redirect to profile page to complete profile.
-          dispatch(LoggedIn(user)); // also disptach a login event so that the data from gauth can be prefilled
+          add(LoggedIn(user)); // also disptach a login event so that the data from gauth can be prefilled
         }
       } else {
         yield UnAuthenticated(); // is not signed in then show the home page
@@ -88,7 +88,7 @@ class AuthenticationBloc
         yield ProfileUpdated(); //if profile is complete go to home page
       } else {
         yield Authenticated(firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
-        dispatch(LoggedIn(firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
+        add(LoggedIn(firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
       }
     } catch (_, stacktrace) {
       print(stacktrace);

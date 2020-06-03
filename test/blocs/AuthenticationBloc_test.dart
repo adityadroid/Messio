@@ -53,7 +53,7 @@ void main() {
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
-      authenticationBloc.dispatch(AppLaunched());
+      authenticationBloc.add(AppLaunched());
     });
     test('emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete', () {
       when(authenticationRepository.isLoggedIn())
@@ -69,7 +69,7 @@ void main() {
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
-      authenticationBloc.dispatch(AppLaunched());
+      authenticationBloc.add(AppLaunched());
     });
     test('emits [Uninitialized -> AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when user is logged in and profile is not complete', () {
       when(authenticationRepository.isLoggedIn())
@@ -87,7 +87,7 @@ void main() {
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
-      authenticationBloc.dispatch(AppLaunched());
+      authenticationBloc.add(AppLaunched());
     });
   });
 
@@ -103,7 +103,7 @@ void main() {
         ProfileUpdated()
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
-      authenticationBloc.dispatch(ClickedGoogleLogin());
+      authenticationBloc.add(ClickedGoogleLogin());
     });
 
     test('emits [AuthInProgress -> Authenticated -> ProfileUpdateInProgress -> PreFillData] when the user clicks Google Login button and after login result, the profile is found to be incomplete', () {
@@ -119,7 +119,7 @@ void main() {
         PreFillData(user)
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
-      authenticationBloc.dispatch(ClickedGoogleLogin());
+      authenticationBloc.add(ClickedGoogleLogin());
     });
   });
 
@@ -134,7 +134,7 @@ void main() {
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
-      authenticationBloc.dispatch(LoggedIn(firebaseUser));
+      authenticationBloc.add(LoggedIn(firebaseUser));
     });
   });
 
@@ -142,7 +142,7 @@ void main() {
     test('emits [ReceivedProfilePicture] everytime', () {
       final expectedStates = [Uninitialized(), ReceivedProfilePicture(file)];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
-      authenticationBloc.dispatch(PickedProfilePicture(file));
+      authenticationBloc.add(PickedProfilePicture(file));
     });
   });
 
@@ -160,7 +160,7 @@ void main() {
         ProfileUpdated()
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
-      authenticationBloc.dispatch(SaveProfile(file, age, username));
+      authenticationBloc.add(SaveProfile(file, age, username));
     });
   });
 
@@ -168,7 +168,7 @@ void main() {
     test('emits [UnAuthenticated] when clicked logout', () {
       final expectedStates = [Uninitialized(), UnAuthenticated()];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
-      authenticationBloc.dispatch(ClickedLogout());
+      authenticationBloc.add(ClickedLogout());
     });
   });
 
@@ -177,6 +177,6 @@ void main() {
       authenticationBloc.state,
       emitsInOrder([]),
     );
-    authenticationBloc.dispose();
+    authenticationBloc.close();
   });
 }

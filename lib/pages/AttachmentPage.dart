@@ -46,13 +46,13 @@ class _AttachmentPageState extends State<AttachmentPage>
     tabController.addListener(() {
       int index = tabController.index;
       if (index == 0 && photos == null) // if photos are not initialized and we're on the first tab then trigger a fetch event for photos
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.IMAGE));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.IMAGE));
       else if (index == 1 && videos == null) // if videos are not initialized and we're on the second tab then  trigger a fetch event for videos
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.VIDEO));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.VIDEO));
       else if (index == 2 && files == null) //if files are not initialized and we're on the third tab then trigger a fetch event for files
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.ANY));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.ANY));
     });
-    attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, initialFileType)); // triggers at the very start.
+    attachmentsBloc.add(FetchAttachmentsEvent(chatId, initialFileType)); // triggers at the very start.
   }
 
   @override

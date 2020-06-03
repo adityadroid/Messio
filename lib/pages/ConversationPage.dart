@@ -32,7 +32,7 @@ class _ConversationPageState extends State<ConversationPage> with AutomaticKeepA
     if(contact!=null)
       chat = Chat(contact.username,contact.chatId);
     chatBloc = BlocProvider.of<ChatBloc>(context);
-    chatBloc.dispatch(FetchConversationDetailsEvent(chat));
+    chatBloc.add(FetchConversationDetailsEvent(chat));
      }
   @override
   Widget build(BuildContext context) {

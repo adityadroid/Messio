@@ -43,7 +43,7 @@ class _ContactListPageState extends State<ContactListPage>
       curve: Curves.linear,
     );
     animationController.forward();
-    contactsBloc.dispatch(FetchContactsEvent());
+    contactsBloc.add(FetchContactsEvent());
     super.initState();
   }
 
@@ -185,7 +185,7 @@ class _ContactListPageState extends State<ContactListPage>
                                     elevation: 0.0,
                                     child: getButtonChild(state),
                                     onPressed: () {
-                                      contactsBloc.dispatch(AddContactEvent(
+                                      contactsBloc.add(AddContactEvent(
                                           username: usernameController.text));
                                     },
                                   );

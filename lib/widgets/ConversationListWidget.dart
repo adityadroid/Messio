@@ -16,7 +16,7 @@ class _ConversationListWidgetState extends State<ConversationListWidget> {
   @override
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
-    homeBloc.dispatch(FetchHomeChatsEvent());
+    homeBloc.add(FetchHomeChatsEvent());
     super.initState();
   }
 

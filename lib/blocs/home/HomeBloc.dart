@@ -18,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is FetchHomeChatsEvent) {
       yield FetchingHomeChatsState();
       chatRepository.getConversations().listen(
-            (conversations) => dispatch(ReceivedChatsEvent(conversations)));
+            (conversations) => add(ReceivedChatsEvent(conversations)));
     }
     if (event is ReceivedChatsEvent) {
       yield FetchingHomeChatsState();

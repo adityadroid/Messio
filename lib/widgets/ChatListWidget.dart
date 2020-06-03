@@ -30,7 +30,7 @@ class _ChatListWidgetState extends State<ChatListWidget> {
       double currentScroll = listScrollController.position.pixels;
       if (maxScroll == currentScroll) {
         BlocProvider.of<ChatBloc>(context)
-            .dispatch(FetchPreviousMessagesEvent(this.chat,messages.last));
+            .add(FetchPreviousMessagesEvent(this.chat,messages.last));
       }
     });
   }

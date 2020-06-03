@@ -259,7 +259,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
       file = await FilePicker.getFile(type: fileType);
     
     if (file == null) return;
-    chatBloc.dispatch(SendAttachmentEvent(chat.chatId, file, fileType));
+    chatBloc.add(SendAttachmentEvent(chat.chatId, file, fileType));
     Navigator.pop(context);
     GradientSnackBar.showMessage(context, 'Sending attachment..');
   }

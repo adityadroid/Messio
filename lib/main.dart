@@ -30,31 +30,31 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
-        builder: (context) => AuthenticationBloc(
+        create: (context) => AuthenticationBloc(
             authenticationRepository: authRepository,
             userDataRepository: userDataRepository,
             storageRepository: storageRepository)
-          ..dispatch(AppLaunched()),
+          ..add(AppLaunched()),
       ),
       BlocProvider<ContactsBloc>(
-        builder: (context) => ContactsBloc(
+        create: (context) => ContactsBloc(
             userDataRepository: userDataRepository,
             chatRepository: chatRepository),
       ),
       BlocProvider<ChatBloc>(
-        builder: (context) => ChatBloc(
+        create: (context) => ChatBloc(
             userDataRepository: userDataRepository,
             storageRepository: storageRepository,
             chatRepository: chatRepository),
       ),
       BlocProvider<AttachmentsBloc>(
-        builder: (context) => AttachmentsBloc(chatRepository: chatRepository),
+        create: (context) => AttachmentsBloc(chatRepository: chatRepository),
       ),
       BlocProvider<HomeBloc>(
-        builder: (context) => HomeBloc(chatRepository: chatRepository),
+        create: (context) => HomeBloc(chatRepository: chatRepository),
       ),
       BlocProvider<ConfigBloc>(
-        builder: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
+        create: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
       )
     ],
     child: Messio(),
@@ -97,7 +97,7 @@ class _MessioState extends State<Messio> {
               return RegisterPage();
             } else if (state is ProfileUpdated) {
               if(SharedObjects.prefs.getBool(Constants.configMessagePaging))
-                BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
+                BlocProvider.of<ChatBloc>(context).add(FetchChatListEvent());
               return HomePage();
             } else {
               return RegisterPage();
