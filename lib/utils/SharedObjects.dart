@@ -36,9 +36,9 @@ class SharedObjects {
   }
 
   static int getTypeFromFileType(FileType fileType) {
-    if (fileType == FileType.IMAGE)
+    if (fileType == FileType.image)
       return 1;
-    else if (fileType == FileType.VIDEO)
+    else if (fileType == FileType.video)
       return 2;
     else
       return 3;
