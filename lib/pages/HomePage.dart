@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
-    homeBloc.dispatch(FetchHomeChatsEvent());
+    homeBloc.add(FetchHomeChatsEvent());
     super.initState();
   }
 
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 ],
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
-                  title: Text("Chats", style: Theme.of(context).textTheme.title),
+                  title: Text("Chats", style: Theme.of(context).textTheme.headline6),
                 ),
               ),
               BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {

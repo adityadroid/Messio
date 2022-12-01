@@ -31,7 +31,7 @@ class _SingleConversationPageState extends State<SingleConversationPage>
   @override
   void initState() {
     chatBloc = BlocProvider.of<ChatBloc>(context);
-    chatBloc.dispatch(RegisterActiveChatEvent(contact.chatId));
+    chatBloc.add(RegisterActiveChatEvent(contact.chatId));
     super.initState();
   }
 

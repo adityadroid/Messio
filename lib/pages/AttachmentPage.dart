@@ -46,13 +46,13 @@ class _AttachmentPageState extends State<AttachmentPage>
     tabController.addListener(() {
       int index = tabController.index;
       if (index == 0 && photos == null) // if photos are not initialized and we're on the first tab then trigger a fetch event for photos
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.IMAGE));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.image));
       else if (index == 1 && videos == null) // if videos are not initialized and we're on the second tab then  trigger a fetch event for videos
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.VIDEO));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.video));
       else if (index == 2 && files == null) //if files are not initialized and we're on the third tab then trigger a fetch event for files
-        attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, FileType.ANY));
+        attachmentsBloc.add(FetchAttachmentsEvent(chatId, FileType.any));
     });
-    attachmentsBloc.dispatch(FetchAttachmentsEvent(chatId, initialFileType)); // triggers at the very start.
+    attachmentsBloc.add(FetchAttachmentsEvent(chatId, initialFileType)); // triggers at the very start.
   }
 
   @override
@@ -74,7 +74,7 @@ class _AttachmentPageState extends State<AttachmentPage>
                   centerTitle: true,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
-                    title: Text("Attachments", style: Theme.of(context).textTheme.title),
+                    title: Text("Attachments", style: Theme.of(context).textTheme.headline6),
                   ),
                 ),
               SliverToBoxAdapter(child:
@@ -107,7 +107,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         builder: (context, state) {
       print('Received $state');
       if (state is FetchedAttachmentsState &&
-          state.fileType == FileType.IMAGE) {
+          state.fileType == FileType.image) {
         photos = List();
         state.attachments.forEach((msg) {
           if (msg is ImageMessage) {
@@ -121,7 +121,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Photos',
-          style: Theme.of(context).textTheme.body2,
+          style: Theme.of(context).textTheme.bodyText1,
         ));
       }
       return GridView.count( //otherwise show a grid of photos
@@ -148,7 +148,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Videos',
-              style: Theme.of(context).textTheme.body2,
+              style: Theme.of(context).textTheme.bodyText1,
         ));
       }
       return GridView.count( //else show a grid of videos using their thumbnails
@@ -165,7 +165,7 @@ class _AttachmentPageState extends State<AttachmentPage>
     return BlocBuilder<AttachmentsBloc, AttachmentsState>(
         builder: (context, state) {
       print('Received $state in ui');
-      if (state is FetchedAttachmentsState && state.fileType == FileType.ANY) {
+      if (state is FetchedAttachmentsState && state.fileType == FileType.any) {
         files = List();
         state.attachments.forEach((msg) {
           if (msg is FileMessage) {
@@ -179,7 +179,7 @@ class _AttachmentPageState extends State<AttachmentPage>
         return Center(
             child: Text(
           'No Files',
-              style: Theme.of(context).textTheme.body2,
+              style: Theme.of(context).textTheme.bodyText1,
         ));
       }
       return ListView.separated( // show the list of files
@@ -229,7 +229,7 @@ class _AttachmentPageState extends State<AttachmentPage>
                     children: <Widget>[
                       Text(
                         fileMessage.fileName,
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       SizedBox(
                         height: 8,

@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage>
       });
     });
     authenticationBloc = BlocProvider.of<AuthenticationBloc>(context);
-    authenticationBloc.state.listen((state) {
+    authenticationBloc.stream.listen((state) {
       if (state is Authenticated) {
         updatePageState(1);
       }
@@ -105,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage>
     return WillPopScope(
         onWillPop: onWillPop, //user to override the back button press
         child: Scaffold(
-          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
           //  avoids the bottom overflow warning when keyboard is shown
           body: SafeArea(
               child: Stack(
@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage>
         margin: EdgeInsets.only(top: 100),
         child: FlatButton.icon(
             onPressed: () => BlocProvider.of<AuthenticationBloc>(context)
-                .dispatch(ClickedGoogleLogin()),
+                .add(ClickedGoogleLogin()),
             color: Colors.transparent,
             icon: Image.asset(
               Assets.google_button,
@@ -336,8 +336,9 @@ class _RegisterPageState extends State<RegisterPage>
   }
 
   Future pickImage() async {
-    profileImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    authenticationBloc.dispatch(PickedProfilePicture(profileImageFile));
+    final pickedFile = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    profileImageFile = File(pickedFile.path);
+    authenticationBloc.add(PickedProfilePicture(profileImageFile));
   }
 
   Future<bool> onWillPop() async {
@@ -409,7 +410,7 @@ class _RegisterPageState extends State<RegisterPage>
                         age != null &&
                         usernameController.text.isNotEmpty)
                       {
-                        authenticationBloc.dispatch(SaveProfile(
+                        authenticationBloc.add(SaveProfile(
                             profileImageFile, age, usernameController.text))
                       }
                     else

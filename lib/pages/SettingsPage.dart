@@ -179,13 +179,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Text(
                                       'Image Compression',
                                       style:
-                                          Theme.of(context).textTheme.subhead,
+                                          Theme.of(context).textTheme.subtitle1,
                                     ),
                                   ],
                                 ),
                                 Switch(
                                   value: configImageCompression,
-                                  onChanged: (value) => configBloc.dispatch(
+                                  onChanged: (value) => configBloc.add(
                                       ConfigValueChanged(
                                           Constants.configImageCompression,
                                           value)),
@@ -208,13 +208,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Text(
                                       'Messages Peek',
                                       style:
-                                          Theme.of(context).textTheme.subhead,
+                                          Theme.of(context).textTheme.subtitle1,
                                     )
                                   ],
                                 ),
                                 Switch(
                                   value: configMessagesPeek,
-                                  onChanged: (value) => configBloc.dispatch(
+                                  onChanged: (value) => configBloc.add(
                                       ConfigValueChanged(
                                           Constants.configMessagePeek, value)),
                                 ),
@@ -236,13 +236,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Text(
                                       'Message Paging',
                                       style:
-                                          Theme.of(context).textTheme.subhead,
+                                          Theme.of(context).textTheme.subtitle1,
                                     )
                                   ],
                                 ),
                                 Switch(
                                   value: configMessagePaging,
-                                  onChanged: (value) => configBloc.dispatch(
+                                  onChanged: (value) => configBloc.add(
                                       ConfigValueChanged(
                                           Constants.configMessagePaging,
                                           value)),
@@ -265,12 +265,12 @@ class _SettingsPageState extends State<SettingsPage> {
                                       Text(
                                         'Dark Mode',
                                         style:
-                                            Theme.of(context).textTheme.subhead,
+                                            Theme.of(context).textTheme.subtitle1,
                                       )
                                     ]),
                                 Switch(
                                   value: configDarkMode,
-                                  onChanged: (value) => configBloc.dispatch(
+                                  onChanged: (value) => configBloc.add(
                                       ConfigValueChanged(
                                           Constants.configDarkMode, value)),
                                 ),
@@ -296,8 +296,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         'SIGN OUT',
                         style: Theme.of(context).textTheme.button,
                       ),
-                      onPressed: ()  => {BlocProvider.of<AuthenticationBloc>(context).dispatch(ClickedLogout()),
-                      configBloc.dispatch(RestartApp())
+                      onPressed: ()  => {BlocProvider.of<AuthenticationBloc>(context).add(ClickedLogout()),
+                      configBloc.add(RestartApp())
                       },
                       shape: RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(30.0))),
@@ -311,7 +311,8 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future pickImage() async {
-    profileImageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
-    configBloc.dispatch(UpdateProfilePicture(profileImageFile));
+    final filePath = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    profileImageFile = File(profileImageFile.path);
+    configBloc.add(UpdateProfilePicture(profileImageFile));
   }
 }

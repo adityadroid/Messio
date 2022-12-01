@@ -54,7 +54,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                           for (int i = 0; i < chatList.length; i++) {
                             if (startContact.username == chatList[i].username) {
                               BlocProvider.of<ChatBloc>(context)
-                                  .dispatch(PageChangedEvent(i, chatList[i]));
+                                  .add(PageChangedEvent(i, chatList[i]));
                               pageController.jumpToPage(i);
                             }
                           }
@@ -68,7 +68,7 @@ class _ConversationPageSlideState extends State<ConversationPageSlide>
                               controller: pageController,
                               itemCount: chatList.length,
                               onPageChanged: (index) =>
-                                  BlocProvider.of<ChatBloc>(context).dispatch(
+                                  BlocProvider.of<ChatBloc>(context).add(
                                       PageChangedEvent(index, chatList[index])),
                               itemBuilder: (bc, index) =>
                                   ConversationPage(chat:chatList[index]));
