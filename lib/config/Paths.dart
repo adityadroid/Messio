@@ -17,9 +17,9 @@ class Paths{
   static const String messagesPath = 'messages';
 
   static String getAttachmentPathByFileType(FileType fileType){
-    if(fileType == FileType.IMAGE)
+    if(fileType == FileType.image)
       return imageAttachmentsPath;
-    else if(fileType == FileType.VIDEO)
+    else if(fileType == FileType.video)
       return videoAttachmentsPath;
     else
       return fileAttachmentsPath;
