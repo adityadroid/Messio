@@ -1,26 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:messio/utils/document_snapshot_extension.dart';
 
-class User{
+class MessioUser{
   String documentId;
   String name;
   String username;
   int age;
   String photoUrl;
 
-  User({this.documentId, this.name, this.username, this.age, this.photoUrl});
+  MessioUser({this.documentId, this.name, this.username, this.age, this.photoUrl});
 
-  factory User.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
-    return User(
-      documentId: doc.documentID,
+  factory MessioUser.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.dataAsMap;
+    return MessioUser(
+      documentId: doc.id,
       name: data['name'],
       username: data['username'],
       age: data['age'],
       photoUrl: data['photoUrl']
     );
   }
-  factory User.fromMap(Map data) {
-    return User(
+  factory MessioUser.fromMap(Map data) {
+    return MessioUser(
         documentId: data['uid'],
         name: data['name'],
         username: data['username'],

@@ -45,7 +45,7 @@ class ErrorState extends ChatState {
 }
 
 class FetchedContactDetailsState extends ChatState {
-  final User user;
+  final MessioUser user;
   final String username;
   FetchedContactDetailsState(this.user,this.username) : super([user,username]);
 

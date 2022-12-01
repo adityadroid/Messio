@@ -15,7 +15,7 @@ void main() {
   UserDataRepositoryMock userDataRepository;
   StorageRepositoryMock storageRepository;
   FirebaseUserMock firebaseUser;
-  User user;
+  MessioUser user;
   MockFile file;
   int age;
   String username;
@@ -26,7 +26,7 @@ void main() {
     authenticationRepository = AuthenticationRepositoryMock();
     storageRepository = StorageRepositoryMock();
     firebaseUser = FirebaseUserMock();
-    user = User();
+    user = MessioUser();
     file = MockFile();
     age = 23;
     username = 'johndoe';

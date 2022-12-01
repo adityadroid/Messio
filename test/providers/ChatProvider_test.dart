@@ -226,7 +226,7 @@ void main() {
   test('Verify createChatIdForContact creates the chatId and inserts it in both users documents',() async {
       //Takes a User as argument and creates the chatid for it and the current logged in user
       CollectionReferenceMock usersCollection =  CollectionReferenceMock(); //mock the user and the collecitons
-      User user = User(documentId: 'uid_steve',name:'Steve',username:'username_steve',photoUrl: 'http:/www.steve.com/img.jpg');
+      MessioUser user = MessioUser(documentId: 'uid_steve',name:'Steve',username:'username_steve',photoUrl: 'http:/www.steve.com/img.jpg');
       when(SharedObjects.prefs.getString(Constants.sessionUsername)).thenReturn('username_roger'); //mock the session
       when(SharedObjects.prefs.getString(Constants.sessionUid)).thenReturn('uid_roger');
       when(fireStore.collection(Paths.usersPath)).thenReturn(usersCollection);

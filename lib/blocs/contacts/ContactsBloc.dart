@@ -63,7 +63,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
     try {
       yield AddContactProgressState();
       await userDataRepository.addContact(username);
-      User user = await userDataRepository.getUser(username);
+      MessioUser user = await userDataRepository.getUser(username);
       await chatRepository.createChatIdForContact(user);
       yield AddContactSuccessState();
     } on MessioException catch (exception) {

@@ -8,10 +8,10 @@ import 'package:messio/repositories/BaseRepository.dart';
 class UserDataRepository extends BaseRepository {
   BaseUserDataProvider userDataProvider = UserDataProvider();
 
-  Future<User> saveDetailsFromGoogleAuth(FirebaseUser user) =>
+  Future<MessioUser> saveDetailsFromGoogleAuth(User user) =>
       userDataProvider.saveDetailsFromGoogleAuth(user);
 
-  Future<User> saveProfileDetails(
+  Future<MessioUser> saveProfileDetails(
           String uid, String profileImageUrl, int age, String username) =>
       userDataProvider.saveProfileDetails(profileImageUrl, age, username);
 
@@ -22,7 +22,7 @@ class UserDataRepository extends BaseRepository {
   Future<void> addContact(String username) =>
       userDataProvider.addContact(username);
 
-  Future<User> getUser(String username) => userDataProvider.getUser(username);
+  Future<MessioUser> getUser(String username) => userDataProvider.getUser(username);
   Future<void> updateProfilePicture(String profilePictureUrl)=> userDataProvider.updateProfilePicture(profilePictureUrl);
 
   @override

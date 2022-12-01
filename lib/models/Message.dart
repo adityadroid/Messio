@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messio/config/Constants.dart';
 import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/utils/document_snapshot_extension.dart';
 
 
 abstract class Message  {
@@ -12,7 +13,7 @@ abstract class Message  {
   Message(this.timeStamp, this.senderName, this.senderUsername);
 
   factory Message.fromFireStore(DocumentSnapshot doc) {
-    final int type = doc.data['type'];
+    final int type = doc.dataAsMap['type'];
     Message message;
     switch (type) {
       case 0:
@@ -29,7 +30,7 @@ abstract class Message  {
     }
     message.isSelf = SharedObjects.prefs.getString(Constants.sessionUsername) ==
         message.senderUsername;
-    message.documentId = doc.documentID;
+    message.documentId = doc.id;
     return message;
   }
 
@@ -62,7 +63,7 @@ class TextMessage extends Message {
       : super(timeStamp, senderName, senderUsername);
 
   factory TextMessage.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
+    Map data = doc.dataAsMap;
     return TextMessage.fromMap(data);
   }
   factory TextMessage.fromMap(Map data) {
@@ -93,7 +94,7 @@ class ImageMessage extends Message {
       : super(timeStamp, senderName, senderUsername);
 
   factory ImageMessage.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
+    Map data = doc.dataAsMap;
       return ImageMessage.fromMap(data);
   }
   factory ImageMessage.fromMap(Map data) {
@@ -126,7 +127,7 @@ class VideoMessage extends Message {
       : super(timeStamp, senderName, senderUsername);
 
   factory VideoMessage.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
+    Map data = doc.dataAsMap;
    return VideoMessage.fromMap(data);
   }
   factory VideoMessage.fromMap(Map data) {
@@ -158,7 +159,7 @@ class FileMessage extends Message {
       : super(timeStamp, senderName, senderUsername);
 
   factory FileMessage.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
+    Map data = doc.dataAsMap;
    return FileMessage.fromMap(data);
   }
   factory FileMessage.fromMap(Map data) {

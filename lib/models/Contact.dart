@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:messio/models/Conversation.dart';
+import 'package:messio/utils/document_snapshot_extension.dart';
 
 class Contact {
   String username;
@@ -10,8 +11,8 @@ class Contact {
   Contact(this.documentId, this.username, this.name,this.photoUrl, this.chatId);
 
   factory Contact.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data;
-    return Contact(doc.documentID, data['username'], data['name'],data['photoUrl'], data['chatId']);
+    Map data = doc.dataAsMap;
+    return Contact(doc.id, data['username'], data['name'],data['photoUrl'], data['chatId']);
   }
 
   @override

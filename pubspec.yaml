@@ -14,7 +14,7 @@ description: Messio is a modern messaging app
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
   flutter: 3.0.3
 
 dependencies:

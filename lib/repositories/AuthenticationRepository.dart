@@ -7,15 +7,14 @@ class AuthenticationRepository extends BaseRepository {
 
   BaseAuthenticationProvider authenticationProvider = AuthenticationProvider();
 
-  Future<FirebaseUser> signInWithGoogle() =>
+  Future<User> signInWithGoogle() =>
       authenticationProvider.signInWithGoogle();
 
   Future<void> signOutUser() => authenticationProvider.signOutUser();
 
-  Future<FirebaseUser> getCurrentUser() =>
-      authenticationProvider.getCurrentUser();
+  User getCurrentUser() => authenticationProvider.getCurrentUser();
 
-  Future<bool> isLoggedIn() => authenticationProvider.isLoggedIn();
+  bool isLoggedIn() => authenticationProvider.isLoggedIn();
 
   @override
   void dispose() {

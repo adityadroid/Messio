@@ -33,7 +33,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty,
           true); //no data is saved for this user.
-      User user =
+      MessioUser user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
       expect(await documentReference.snapshots().isEmpty,
           false); // data is saved. snapshots has one snapshot
@@ -56,7 +56,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty,
           true); //no data is saved, fresh user
-      User user =
+      MessioUser user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
       expect(user.name, 'John Doe');
       expect(user.photoUrl,
@@ -75,7 +75,7 @@ void main() {
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty,
           false); // snapshots are not empty because existing user
-      User user =
+      MessioUser user =
           await userDataProvider.saveDetailsFromGoogleAuth(FirebaseUserMock());
       expect(await documentReference.snapshots().isEmpty, false);
       expect(user.name, 'John Doe');
@@ -92,7 +92,7 @@ void main() {
       when(fireStore.collection(any)).thenReturn(collectionReference);
       when(collectionReference.document(any)).thenReturn(documentReference);
       expect(await documentReference.snapshots().isEmpty, true);
-      User user = await userDataProvider.saveProfileDetails('http://www.github.com', 18, 'johndoe');
+      MessioUser user = await userDataProvider.saveProfileDetails('http://www.github.com', 18, 'johndoe');
       expect(await documentReference.snapshots().isEmpty, false);
       expect(user.age, 18); // checking if passed data is saved
       expect(user.username, 'johndoe');
@@ -273,7 +273,7 @@ void main() {
       });
       when(fireStore.collection(Paths.usersPath)).thenReturn(usersCollection);
       when(usersCollection.document('roger_uid')).thenReturn(userRef);
-      User user = await userDataProvider.getUser('roger');
+      MessioUser user = await userDataProvider.getUser('roger');
       expect(user.name, 'Roger');
       expect(user.username, 'roger');
       expect(user.photoUrl,'http://adityag.me');

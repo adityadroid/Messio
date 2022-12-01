@@ -8,15 +8,16 @@ import 'package:messio/models/Conversation.dart';
 import 'package:messio/models/Message.dart';
 import 'package:messio/models/User.dart';
 import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/utils/document_snapshot_extension.dart';
 
 import 'BaseProviders.dart';
 
 class ChatProvider extends BaseChatProvider {
-  final Firestore fireStoreDb;
+  final FirebaseFirestore fireStoreDb;
   StreamController<List<Conversation>> conversationStreamController;
-  ChatProvider({Firestore fireStoreDb})
-      : fireStoreDb = fireStoreDb ?? Firestore.instance
-    ..settings(persistenceEnabled: true);
+  ChatProvider({FirebaseFirestore fireStoreDb})
+      : fireStoreDb = fireStoreDb ?? FirebaseFirestore.instance
+    ..settings = Settings(persistenceEnabled: true);
 
   @override
   Stream<List<Conversation>> getConversations()  {
@@ -36,7 +37,7 @@ class ChatProvider extends BaseChatProvider {
 
     void mapQueryToConversation(QuerySnapshot querySnapshot,EventSink<List<Conversation>> sink){
     List<Conversation> conversations = List();
-    querySnapshot.documents.forEach((document){
+    querySnapshot.docs.forEach((document){
       conversations.add(Conversation.fromFireStore(document));
     });
     sink.add(conversations);
@@ -48,7 +49,7 @@ class ChatProvider extends BaseChatProvider {
     String uId = SharedObjects.prefs.getString(Constants.sessionUid);
     return fireStoreDb
         .collection(Paths.usersPath)
-        .document(uId)
+        .doc(uId)
         .snapshots()
         .transform(StreamTransformer<DocumentSnapshot, List<Chat>>.fromHandlers(
         handleData: (DocumentSnapshot documentSnapshot,
@@ -58,7 +59,7 @@ class ChatProvider extends BaseChatProvider {
   void mapDocumentToChat(DocumentSnapshot documentSnapshot,
       EventSink sink) async {
     List<Chat> chats = List();
-    Map data = documentSnapshot.data['chats'];
+    Map data = documentSnapshot.dataAsMap['chats'];
     if (data != null) {
       data.forEach((key, value) => chats.add(Chat(key, value)));
       sink.add(chats);
@@ -69,7 +70,7 @@ class ChatProvider extends BaseChatProvider {
   @override
   Stream<List<Message>> getMessages(String chatId) {
     DocumentReference chatDocRef =
-    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
     chatDocRef.collection(Paths.messagesPath);
     return messagesCollection
@@ -84,7 +85,7 @@ class ChatProvider extends BaseChatProvider {
 
   void mapDocumentToMessage(QuerySnapshot querySnapshot, EventSink sink) async {
     List<Message> messages = List();
-    for (DocumentSnapshot document in querySnapshot.documents) {
+    for (DocumentSnapshot document in querySnapshot.docs) {
       messages.add(Message.fromFireStore(document));
     }
     sink.add(messages);
@@ -97,36 +98,36 @@ class ChatProvider extends BaseChatProvider {
   Future<List<Message>> getPreviousMessages(String chatId,
       Message prevMessage) async {
     DocumentReference chatDocRef =
-    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
     chatDocRef.collection(Paths.messagesPath);
     DocumentSnapshot prevDocument;
     prevDocument = await messagesCollection
-        .document(prevMessage.documentId)
+        .doc(prevMessage.documentId)
         .get(); // gets a reference to the last message in the existing list
     final querySnapshot = await messagesCollection
         .startAfterDocument(
         prevDocument) // Start reading documents after the specified document
         .orderBy('timeStamp', descending: true) // order them by timestamp
         .limit(20) // limit the read to 20 items
-        .getDocuments();
+        .get();
     List<Message> messageList = List();
-    querySnapshot.documents
+    querySnapshot.docs
         .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
     return messageList;
   }
 
   @override
   Future<List<Message>> getAttachments(String chatId, int type) async {
-    DocumentReference chatDocRef = fireStoreDb.collection(Paths.chatsPath).document(chatId); //get reference to the chat documents
+    DocumentReference chatDocRef = fireStoreDb.collection(Paths.chatsPath).doc(chatId); //get reference to the chat documents
     CollectionReference messagesCollection =
     chatDocRef.collection(Paths.messagesPath);   //get reference to all teh messages in the chat
     final querySnapshot = await messagesCollection
         .where('type', isEqualTo: type)  // filter the messages based on type
         .orderBy('timeStamp', descending: true) // order them by timestamp
-        .getDocuments();
+        .get();
     List<Message> messageList = List();
-    querySnapshot.documents
+    querySnapshot.docs
         .forEach((doc) => messageList.add(Message.fromFireStore(doc)));
     return messageList;
   }
@@ -135,11 +136,11 @@ class ChatProvider extends BaseChatProvider {
   @override
   Future<void> sendMessage(String chatId, Message message) async {
     DocumentReference chatDocRef =
-    fireStoreDb.collection(Paths.chatsPath).document(chatId);
+    fireStoreDb.collection(Paths.chatsPath).doc(chatId);
     CollectionReference messagesCollection =
     chatDocRef.collection(Paths.messagesPath);
     messagesCollection.add(message.toMap());
-    await chatDocRef.updateData({'latestMessage': message.toMap()});
+    await chatDocRef.update({'latestMessage': message.toMap()});
   }
 
   @override
@@ -148,12 +149,12 @@ class ChatProvider extends BaseChatProvider {
     String selfUsername =
     SharedObjects.prefs.getString(Constants.sessionUsername);
     DocumentReference userRef =
-    fireStoreDb.collection(Paths.usersPath).document(uId);
+    fireStoreDb.collection(Paths.usersPath).doc(uId);
     DocumentSnapshot documentSnapshot = await userRef.get();
-    String chatId = documentSnapshot.data['chats'][username];
+    String chatId = documentSnapshot.dataAsMap['chats'][username];
     if (chatId == null) {
       chatId = await createChatIdForUsers(selfUsername, username);
-      userRef.updateData({
+      userRef.update({
         'chats': {username: chatId}
       });
     }
@@ -161,7 +162,7 @@ class ChatProvider extends BaseChatProvider {
   }
 
   @override
-  Future<void> createChatIdForContact(User user) async {
+  Future<void> createChatIdForContact(MessioUser user) async {
     String contactUid = user.documentId;
     String contactUsername = user.username;
     String uId = SharedObjects.prefs.getString(Constants.sessionUid);
@@ -169,18 +170,18 @@ class ChatProvider extends BaseChatProvider {
     SharedObjects.prefs.getString(Constants.sessionUsername);
     CollectionReference usersCollection =
     fireStoreDb.collection(Paths.usersPath);
-    DocumentReference userRef = usersCollection.document(uId);
-    DocumentReference contactRef = usersCollection.document(contactUid);
+    DocumentReference userRef = usersCollection.doc(uId);
+    DocumentReference contactRef = usersCollection.doc(contactUid);
     DocumentSnapshot userSnapshot = await userRef.get();
-    if (userSnapshot.data['chats'] == null ||
-        userSnapshot.data['chats'][contactUsername] == null) {
+    if (userSnapshot.dataAsMap['chats'] == null ||
+        userSnapshot.dataAsMap['chats'][contactUsername] == null) {
       String chatId = await createChatIdForUsers(selfUsername, contactUsername);
-      await userRef.setData({
+      await userRef.set({
         'chats': {contactUsername: chatId}
-      }, merge: true);
-      await contactRef.setData({
+      },SetOptions( merge: true));
+      await contactRef.set({
         'chats': {selfUsername: chatId}
-      }, merge: true);
+      }, SetOptions(merge: true));
     }
   }
 
@@ -189,16 +190,16 @@ class ChatProvider extends BaseChatProvider {
     CollectionReference chatCollection = fireStoreDb.collection(Paths.chatsPath);
     CollectionReference  userUidMapCollection = fireStoreDb.collection(Paths.usernameUidMapPath);
     CollectionReference usersCollection = fireStoreDb.collection(Paths.usersPath);
-     String selfUid  =(await  userUidMapCollection.document(selfUsername).get()).data['uid'];
-    String contactUid  = (await userUidMapCollection.document(contactUsername).get()).data['uid'];
+     String selfUid  =(await  userUidMapCollection.doc(selfUsername).get()).dataAsMap['uid'];
+    String contactUid  = (await userUidMapCollection.doc(contactUsername).get()).dataAsMap['uid'];
     print('self $selfUid , contact $contactUid');
-    DocumentSnapshot selfDocRef = await usersCollection.document(selfUid).get();
-    DocumentSnapshot contactDocRef = await usersCollection.document(contactUid).get();
+    DocumentSnapshot selfDocRef = await usersCollection.doc(selfUid).get();
+    DocumentSnapshot contactDocRef = await usersCollection.doc(contactUid).get();
     DocumentReference documentReference = await chatCollection.add({
       'members': [selfUsername, contactUsername],
       'membersData': [selfDocRef.data, contactDocRef.data]
     });
-    return documentReference.documentID;
+    return documentReference.id;
   }
 
   @override

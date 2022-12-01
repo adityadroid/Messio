@@ -26,7 +26,7 @@ class ChatRepository extends BaseRepository{
   Future<String> getChatIdByUsername(String username) =>
       chatProvider.getChatIdByUsername(username);
 
-  Future<void> createChatIdForContact(User user) =>
+  Future<void> createChatIdForContact(MessioUser user) =>
       chatProvider.createChatIdForContact(user);
 
   @override

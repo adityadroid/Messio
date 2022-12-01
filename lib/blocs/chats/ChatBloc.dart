@@ -131,7 +131,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Stream<ChatState> mapFetchConversationDetailsEventToState(
       FetchConversationDetailsEvent event) async* {
     print('fetching details fro ${event.chat.username}');
-    User user = await userDataRepository.getUser(event.chat.username);
+    MessioUser user = await userDataRepository.getUser(event.chat.username);
     yield FetchedContactDetailsState(user, event.chat.username);
     dispatch(FetchMessagesEvent(event.chat));
   }

@@ -13,18 +13,18 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
         firebaseAuth= firebaseAuth ?? FirebaseAuth.instance, googleSignIn = googleSignIn ?? GoogleSignIn();
 
   @override
-  Future<FirebaseUser> signInWithGoogle() async {
+  Future<User> signInWithGoogle() async {
     final GoogleSignInAccount account =
         await googleSignIn.signIn(); //show the goggle login prompt
     final GoogleSignInAuthentication authentication =
         await account.authentication; //get the authentication object
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
         //retreive the authentication credentials
         idToken: authentication.idToken,
         accessToken: authentication.accessToken);
     await firebaseAuth.signInWithCredential(
         credential); //sign in to firebase using the generated credentials
-    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    final firebaseUser  = firebaseAuth.currentUser;
     await SharedObjects.prefs.setString(Constants.sessionUid, firebaseUser.uid);
     print('Session UID1 ${SharedObjects.prefs.getString(Constants.sessionUid)}');
     return firebaseUser; //return the firebase user created
@@ -38,13 +38,13 @@ class AuthenticationProvider extends BaseAuthenticationProvider {
   }
 
   @override
-  Future<FirebaseUser> getCurrentUser() async {
-    return await firebaseAuth.currentUser(); //retrieve the current user
+  User getCurrentUser() {
+    return firebaseAuth.currentUser; //retrieve the current user
   }
 
   @override
-  Future<bool> isLoggedIn() async {
-    final user = await firebaseAuth.currentUser(); //check if user is logged in or not
+  bool isLoggedIn() {
+    final user = firebaseAuth.currentUser; //check if user is logged in or not
     return user != null;
   }
 
