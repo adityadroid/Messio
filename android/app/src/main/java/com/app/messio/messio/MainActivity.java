@@ -11,18 +11,20 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.flutter.app.FlutterActivity;
+import io.flutter.plugins.GeneratedPluginRegistrant;
+import androidx.annotation.NonNull;
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
 public class MainActivity extends FlutterActivity {
   private static String TAG = "Android Platform";
   private static final int HIGH_QUALITY_MIN_VAL = 70;
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    GeneratedPluginRegistrant.registerWith(this);
-    new MethodChannel(getFlutterView(), "app.messio.channel").setMethodCallHandler(
+    @Override
+    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
+    GeneratedPluginRegistrant.registerWith(flutterEngine);
+    new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "app.messio.channel").setMethodCallHandler(
             (call, result) -> {
               final Map<String, Object> args = call.arguments();
 
