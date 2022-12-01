@@ -41,7 +41,7 @@ class ContactRowWidget extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 30, top: 10, bottom: 10),
                   child: RichText(
                     text: TextSpan(
-                      style: Theme.of(context).textTheme.body2,
+                      style: Theme.of(context).textTheme.bodyText1,
                       children: <TextSpan>[
                         TextSpan(text: contact.getFirstName()),
                         TextSpan(

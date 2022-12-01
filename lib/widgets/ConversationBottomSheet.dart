@@ -26,7 +26,7 @@ class _ConversationBottomSheetState extends State<ConversationBottomSheet> {
                     children: <Widget>[
                       NavigationPillWidget(),
                       Center(
-                          child: Text('Messages', style: Theme.of(context).textTheme.title)),
+                          child: Text('Messages', style: Theme.of(context).textTheme.headline6)),
                       SizedBox(
                         height: 20,
                       ),

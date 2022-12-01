@@ -127,11 +127,11 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               Text(_name,
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .title),
+                                                      .headline6),
                                               Text("@" + _username,
                                                   style: Theme.of(context)
                                                       .textTheme
-                                                      .subtitle)
+                                                      .subtitle2)
                                             ],
                                           );
                                         }))),
@@ -160,7 +160,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
                                                       this.contact.chatId,
-                                                      FileType.IMAGE))),
+                                                      FileType.image))),
                                         ),
                                         VerticalDivider(
                                           width: 30,
@@ -181,7 +181,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
                                                       this.contact.chatId,
-                                                      FileType.VIDEO))),
+                                                      FileType.video))),
                                         ),
                                         VerticalDivider(
                                           width: 30,
@@ -202,7 +202,7 @@ class _ChatAppBarState extends State<ChatAppBar> {
                                               SlideLeftRoute(
                                                   page: AttachmentPage(
                                                       this.contact.chatId,
-                                                      FileType.ANY))),
+                                                      FileType.any))),
                                         )
                                       ],
                                     ))),
@@ -234,15 +234,15 @@ class _ChatAppBarState extends State<ChatAppBar> {
                 ListTile(
                     leading: Icon(Icons.image),
                     title: Text('Image'),
-                    onTap: () => showFilePicker(FileType.IMAGE)),
+                    onTap: () => showFilePicker(FileType.image)),
                 ListTile(
                     leading: Icon(Icons.videocam),
                     title: Text('Video'),
-                    onTap: () => showFilePicker(FileType.VIDEO)),
+                    onTap: () => showFilePicker(FileType.video)),
                 ListTile(
                   leading: Icon(Icons.insert_drive_file),
                   title: Text('File'),
-                  onTap: () => showFilePicker(FileType.ANY),
+                  onTap: () => showFilePicker(FileType.any),
                 ),
               ],
             ),
@@ -250,16 +250,26 @@ class _ChatAppBarState extends State<ChatAppBar> {
         });
   }
 
+  //TODO: Verify if this migration works properly
   showFilePicker(FileType fileType) async {
     File file;
-    if (fileType == FileType.IMAGE && SharedObjects.prefs.getBool(Constants.configImageCompression))
-      file = await ImagePicker.pickImage(
+    if (fileType == FileType.image && SharedObjects.prefs.getBool(Constants.configImageCompression)){
+      final pickedFile = await ImagePicker.platform.pickImage(
           source: ImageSource.gallery, imageQuality: 70);
-    else
-      file = await FilePicker.getFile(type: fileType);
-    
+    file = File(pickedFile.path);
+    }else {
+      final pickedFiles = await FilePicker.platform.pickFiles(type: fileType);
+      if(pickedFiles.isSinglePick){
+        file = File(pickedFiles.files.first.path);
+      }else if (pickedFiles.count==0){
+        return;
+      }else{
+        GradientSnackBar.showMessage(context, 'Multiple files not supported yet!');
+        return;
+      }
+    }
     if (file == null) return;
-    chatBloc.dispatch(SendAttachmentEvent(chat.chatId, file, fileType));
+    chatBloc.add(SendAttachmentEvent(chat.chatId, file, fileType));
     Navigator.pop(context);
     GradientSnackBar.showMessage(context, 'Sending attachment..');
   }

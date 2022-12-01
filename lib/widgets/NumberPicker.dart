@@ -302,7 +302,7 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _decimalListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
+    TextStyle defaultStyle = themeData.textTheme.bodyText2;
     TextStyle selectedStyle = Styles.numberPickerHeading;
 
     int decimalItemCount =
@@ -360,7 +360,7 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerInfiniteListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
+    TextStyle defaultStyle = themeData.textTheme.bodyText2;
     TextStyle selectedStyle = Styles.numberPickerHeading;
 
     return Listener(

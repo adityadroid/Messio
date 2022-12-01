@@ -109,7 +109,7 @@ class _QuickScrollBarState extends State<QuickScrollBar> {
       child: Center(
         child: Text(
           "${scrollBarText ?? "${alphabetList.first}"}",
-          style:Theme.of(context).textTheme.body1,
+          style:Theme.of(context).textTheme.bodyText2,
         ),
       ),
     );

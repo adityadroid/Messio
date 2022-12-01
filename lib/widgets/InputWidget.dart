@@ -31,7 +31,7 @@ class _InputWidgetState extends State<InputWidget>{
                       child: IconButton(
                         icon: Icon(Icons.face),
                         color: Theme.of(context).accentColor,
-                        onPressed: () =>chatBloc.dispatch(ToggleEmojiKeyboardEvent(!showEmojiKeyboard)),
+                        onPressed: () =>chatBloc.add(ToggleEmojiKeyboardEvent(!showEmojiKeyboard)),
                       ),
                     ),
                     color: Theme.of(context).primaryColor,
@@ -43,7 +43,7 @@ class _InputWidgetState extends State<InputWidget>{
                         child: Container(
                           color: Theme.of(context).primaryColor,
                       child: TextField(
-                        style: Theme.of(context).textTheme.body2,
+                        style: Theme.of(context).textTheme.bodyText1,
                         controller: textEditingController,
                         autofocus: true,
                         decoration: InputDecoration.collapsed(
@@ -99,7 +99,7 @@ class _InputWidgetState extends State<InputWidget>{
   void sendMessage(context) {
     if(textEditingController.text.isEmpty)
       return;
-    chatBloc.dispatch(SendTextMessageEvent(textEditingController.text));
+    chatBloc.add(SendTextMessageEvent(textEditingController.text));
     textEditingController.clear();
   }
 }

@@ -155,7 +155,7 @@ Future<T> showModalBottomSheetApp<T>({
   assert(builder != null);
   return Navigator.push(context,  _ModalBottomSheetRoute<T>(
     builder: builder,
-    theme: Theme.of(context, shadowThemeOnly: true),
+    theme: Theme.of(context),
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
     resizeToAvoidBottomPadding: resizeToAvoidBottomPadding,
     dismissOnTap: dismissOnTap,
