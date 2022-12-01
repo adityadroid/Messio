@@ -6,7 +6,10 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ChatState extends Equatable {
-  ChatState([List props = const <dynamic>[]]) : super(props);
+  ChatState([List props = const <dynamic>[]]);
+
+  @override
+  List<Object> get props => [];
 }
 
 class InitialChatState extends ChatState {}

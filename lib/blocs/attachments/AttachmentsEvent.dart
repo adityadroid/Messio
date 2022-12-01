@@ -4,7 +4,10 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class AttachmentsEvent extends Equatable {
-  AttachmentsEvent([List props = const <dynamic>[]]) : super(props);
+  AttachmentsEvent([List props = const <dynamic>[]]);
+
+  @override
+  List<Object> get props => [];
 }
 class FetchAttachmentsEvent extends AttachmentsEvent{
   final FileType fileType;

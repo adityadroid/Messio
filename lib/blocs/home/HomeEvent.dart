@@ -4,7 +4,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class HomeEvent extends Equatable {
-  HomeEvent([List props = const <dynamic>[]]) : super(props);
+  HomeEvent([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 class FetchHomeChatsEvent extends HomeEvent{
   @override

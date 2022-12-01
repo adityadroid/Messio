@@ -8,7 +8,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ChatEvent extends Equatable {
-  ChatEvent([List props = const <dynamic>[]]) : super(props);
+  ChatEvent([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 

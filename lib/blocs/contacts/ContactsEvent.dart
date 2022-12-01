@@ -4,7 +4,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ContactsEvent extends Equatable {
-  ContactsEvent([List props = const <dynamic>[]]) : super(props);
+  ContactsEvent([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 // Fetch the contacts from firebase

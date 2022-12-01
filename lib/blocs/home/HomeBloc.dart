@@ -4,11 +4,11 @@ import 'package:messio/repositories/ChatRepository.dart';
 import './Bloc.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  @override
-  HomeState get initialState => InitialHomeState();
   ChatRepository chatRepository;
 
-  HomeBloc({this.chatRepository}) : assert(chatRepository != null);
+  HomeBloc({this.chatRepository}):super(InitialHomeState()){
+    assert(chatRepository != null);
+  }
 
   @override
   Stream<HomeState> mapEventToState(
@@ -18,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event is FetchHomeChatsEvent) {
       yield FetchingHomeChatsState();
       chatRepository.getConversations().listen(
-            (conversations) => dispatch(ReceivedChatsEvent(conversations)));
+            (conversations) => add(ReceivedChatsEvent(conversations)));
     }
     if (event is ReceivedChatsEvent) {
       yield FetchingHomeChatsState();

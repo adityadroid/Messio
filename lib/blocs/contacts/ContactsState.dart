@@ -5,7 +5,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ContactsState extends Equatable {
-  ContactsState([List props = const <dynamic>[]]) : super(props);
+  ContactsState([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 class InitialContactsState extends ContactsState {

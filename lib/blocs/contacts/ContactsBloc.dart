@@ -12,12 +12,10 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   StreamSubscription subscription;
 
   ContactsBloc({this.userDataRepository, this.chatRepository})
-      : assert(userDataRepository != null),
-        assert(chatRepository != null);
-
-  @override
-  ContactsState get initialState => InitialContactsState();
-
+      : super(InitialContactsState()){
+    assert(userDataRepository != null);
+    assert(chatRepository != null);
+  }
   @override
   Stream<ContactsState> mapEventToState(
     ContactsEvent event,
@@ -28,7 +26,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
         subscription?.cancel();
         subscription = userDataRepository.getContacts().listen((contacts) => {
               print('dispatching $contacts'),
-              dispatch(ReceivedContactsEvent(contacts))
+              add(ReceivedContactsEvent(contacts))
             });
       } on MessioException catch (exception) {
         print(exception.errorMessage());
@@ -51,7 +49,7 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) => {
             print('dispatching $contacts'),
-            dispatch(ReceivedContactsEvent(contacts))
+            add(ReceivedContactsEvent(contacts))
           });
     } on MessioException catch (exception) {
       print(exception.errorMessage());
@@ -73,8 +71,8 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     subscription.cancel();
-    super.dispose();
+    return super.close();
   }
 }

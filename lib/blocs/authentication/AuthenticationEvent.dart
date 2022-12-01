@@ -5,7 +5,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class AuthenticationEvent extends Equatable {
-  AuthenticationEvent([List props = const <dynamic>[]]) : super(props);
+  AuthenticationEvent([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 class AppLaunched extends AuthenticationEvent {
@@ -19,7 +21,7 @@ class ClickedGoogleLogin extends AuthenticationEvent {
 }
 
 class LoggedIn extends AuthenticationEvent {
-  final FirebaseUser user;
+  final User user;
   LoggedIn(this.user): super([user]);
   @override
   String toString() => 'LoggedIn';

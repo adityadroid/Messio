@@ -11,10 +11,7 @@ import './Bloc.dart';
 class AttachmentsBloc extends Bloc<AttachmentsEvent, AttachmentsState> {
   final ChatRepository chatRepository;
 
-  AttachmentsBloc({this.chatRepository}) : assert(chatRepository != null);
-
-  @override
-  AttachmentsState get initialState => InitialAttachmentsState();
+  AttachmentsBloc({this.chatRepository}) :super(InitialAttachmentsState()){ assert(chatRepository != null);}
 
   @override
   Stream<AttachmentsState> mapEventToState(
@@ -31,7 +28,7 @@ class AttachmentsBloc extends Bloc<AttachmentsEvent, AttachmentsState> {
     int type = SharedObjects.getTypeFromFileType(event.fileType);
     List<Message> attachments =
         await chatRepository.getAttachments(event.chatId, type);
-    if (event.fileType != FileType.VIDEO) {
+    if (event.fileType != FileType.video) {
       yield FetchedAttachmentsState(event.fileType, attachments);
     } else {
       List<VideoWrapper> videos = List();

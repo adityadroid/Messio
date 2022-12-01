@@ -24,12 +24,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   ChatBloc(
       {this.chatRepository, this.userDataRepository, this.storageRepository})
-      : assert(chatRepository != null),
-        assert(userDataRepository != null),
-        assert(storageRepository != null);
+      : super(InitialChatState()){assert(chatRepository != null);
+        assert(userDataRepository != null);
+        assert(storageRepository != null);}
 
-  @override
-  ChatState get initialState => InitialChatState();
 
   @override
   Stream<ChatState> mapEventToState(
@@ -87,7 +85,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       chatsSubscription?.cancel();
       chatsSubscription = chatRepository
           .getChats()
-          .listen((chats) => dispatch(ReceivedChatsEvent(chats)));
+          .listen((chats) => add(ReceivedChatsEvent(chats)));
     } on MessioException catch (exception) {
       print(exception.errorMessage());
       yield ErrorState(exception);
@@ -104,7 +102,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       //  print('MessSubMap: $messagesSubscriptionMap');
       StreamSubscription messagesSubscription = messagesSubscriptionMap[chatId];
       messagesSubscription?.cancel();
-      messagesSubscription = chatRepository.getMessages(chatId).listen((messages) => dispatch(ReceivedMessagesEvent(messages, event.chat.username)));
+      messagesSubscription = chatRepository.getMessages(chatId).listen((messages) => add(ReceivedMessagesEvent(messages, event.chat.username)));
 
       messagesSubscriptionMap[chatId] = messagesSubscription;
     } on MessioException catch (exception) {
@@ -133,7 +131,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     print('fetching details fro ${event.chat.username}');
     MessioUser user = await userDataRepository.getUser(event.chat.username);
     yield FetchedContactDetailsState(user, event.chat.username);
-    dispatch(FetchMessagesEvent(event.chat));
+    add(FetchMessagesEvent(event.chat));
   }
 
   Future mapSendAttachmentEventToState(SendAttachmentEvent event) async {
@@ -145,10 +143,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     String name = SharedObjects.prefs.getString(Constants.sessionName);
     print('File Name: $fileName');
     Message message;
-    if (event.fileType == FileType.IMAGE)
+    if (event.fileType == FileType.image)
       message = ImageMessage(
           url, fileName, DateTime.now().millisecondsSinceEpoch, name, username);
-    else if (event.fileType == FileType.VIDEO)
+    else if (event.fileType == FileType.video)
       message = VideoMessage(
           url, fileName, DateTime.now().millisecondsSinceEpoch, name, username);
     else
@@ -158,8 +156,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   @override
-  void dispose() {
+  Future<void> close() {
     messagesSubscriptionMap.forEach((_, subscription) => subscription.cancel());
-    super.dispose();
+    return super.close();
   }
 }

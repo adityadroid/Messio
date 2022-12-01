@@ -11,11 +11,9 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   StorageRepository storageRepository;
 
   ConfigBloc({this.userDataRepository, this.storageRepository})
-      : assert(userDataRepository != null),
-        assert(storageRepository != null);
+      : super(UnConfigState()){assert(userDataRepository != null);
+        assert(storageRepository != null);}
 
-  @override
-  ConfigState get initialState => UnConfigState();
 
   @override
   Stream<ConfigState> mapEventToState(

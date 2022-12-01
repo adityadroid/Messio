@@ -4,7 +4,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class ConfigState extends Equatable {
-  ConfigState([List props = const <dynamic>[]]) : super(props);
+  ConfigState([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 class ConfigChangeState extends ConfigState{

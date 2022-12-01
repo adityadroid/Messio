@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messio/config/Paths.dart';
-import 'package:messio/models/User.dart';
 import 'package:messio/repositories/AuthenticationRepository.dart';
 import 'package:messio/repositories/StorageRepository.dart';
 import 'package:messio/repositories/UserDataRepository.dart';
@@ -18,13 +17,12 @@ class AuthenticationBloc
   AuthenticationBloc(
       {this.authenticationRepository,
       this.userDataRepository,
-      this.storageRepository})
-      : assert(authenticationRepository != null),
-        assert(userDataRepository != null),
-        assert(storageRepository != null);
+      this.storageRepository}) : super(Uninitialized()){
+    assert(authenticationRepository != null);
+    assert(userDataRepository != null);
+    assert(storageRepository != null);
+  }
 
-  @override
-  AuthenticationState get initialState => Uninitialized();
 
   @override
   Stream<AuthenticationState> mapEventToState(
@@ -65,7 +63,7 @@ class AuthenticationBloc
           yield ProfileUpdated();
         } else {
           yield Authenticated(user); // else yield the authenticated state and redirect to profile page to complete profile.
-          dispatch(LoggedIn(user)); // also disptach a login event so that the data from gauth can be prefilled
+          add(LoggedIn(user)); // also disptach a login event so that the data from gauth can be prefilled
         }
       } else {
         yield UnAuthenticated(); // is not signed in then show the home page
@@ -79,7 +77,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> mapClickedGoogleLoginToState() async* {
     yield AuthInProgress();  //show progress bar
     try {
-      FirebaseUser firebaseUser =
+      User firebaseUser =
           await authenticationRepository.signInWithGoogle(); // show the google auth prompt and wait for user selection, retrieve the selected account
       bool isProfileComplete =
           await userDataRepository.isProfileComplete(); // check if the user's profile is complete
@@ -88,7 +86,7 @@ class AuthenticationBloc
         yield ProfileUpdated(); //if profile is complete go to home page
       } else {
         yield Authenticated(firebaseUser); // else yield the authenticated state and redirect to profile page to complete profile.
-        dispatch(LoggedIn(firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
+        add(LoggedIn(firebaseUser)); // also dispatch a login event so that the data from gauth can be prefilled
       }
     } catch (_, stacktrace) {
       print(stacktrace);
@@ -97,10 +95,9 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> mapLoggedInToState(
-      FirebaseUser firebaseUser) async* {
+      User firebaseUser) async* {
     yield ProfileUpdateInProgress(); // shows progress bar
-    User user =
-        await userDataRepository.saveDetailsFromGoogleAuth(firebaseUser); // save the gAuth details to firestore database
+    final user = await userDataRepository.saveDetailsFromGoogleAuth(firebaseUser); // save the gAuth details to firestore database
     yield PreFillData(user); // prefill the gauth data in the form
   }
 
@@ -109,7 +106,7 @@ class AuthenticationBloc
     yield ProfileUpdateInProgress(); // shows progress bar
     String profilePictureUrl = await storageRepository.uploadFile(
         profileImage, Paths.profilePicturePath); // upload image to firebase storage
-    FirebaseUser user = await authenticationRepository.getCurrentUser(); // retrieve user from firebase
+    final user = authenticationRepository.getCurrentUser(); // retrieve user from firebase
     await userDataRepository.saveProfileDetails(
         user.uid, profilePictureUrl, age, username); // save profile details to firestore
     yield ProfileUpdated(); //redirect to home page

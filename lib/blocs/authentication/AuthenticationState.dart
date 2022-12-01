@@ -6,7 +6,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class AuthenticationState extends Equatable {
-  AuthenticationState([List props = const <dynamic>[]]) : super(props);
+  AuthenticationState([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 class Uninitialized extends AuthenticationState{

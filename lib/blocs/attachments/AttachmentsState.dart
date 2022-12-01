@@ -6,7 +6,9 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class AttachmentsState extends Equatable {
-  AttachmentsState([List props = const <dynamic>[]]) : super(props);
+  AttachmentsState([List props = const <dynamic>[]]);
+  @override
+  List<Object> get props => [];
 }
 
 class InitialAttachmentsState extends AttachmentsState {}
