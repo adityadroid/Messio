@@ -1,23 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:messio/blocs/attachments/AttachmentsBloc.dart';
-import 'package:messio/blocs/chats/Bloc.dart';
-import 'package:messio/blocs/config/Bloc.dart';
-import 'package:messio/blocs/contacts/Bloc.dart';
-import 'package:messio/blocs/home/Bloc.dart';
-import 'package:messio/config/Constants.dart';
-import 'package:messio/config/Themes.dart';
-import 'package:messio/pages/HomePage.dart';
-import 'package:messio/repositories/AuthenticationRepository.dart';
-import 'package:messio/repositories/ChatRepository.dart';
-import 'package:messio/repositories/StorageRepository.dart';
-import 'package:messio/repositories/UserDataRepository.dart';
-import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/blocs/attachments/attachments_bloc.dart';
+import 'package:messio/blocs/chats/bloc.dart';
+import 'package:messio/blocs/config/bloc.dart';
+import 'package:messio/blocs/contacts/bloc.dart';
+import 'package:messio/blocs/home/bloc.dart';
+import 'package:messio/config/constants.dart';
+import 'package:messio/config/themes.dart';
+import 'package:messio/pages/home_page.dart';
+import 'package:messio/repositories/authentication_repository.dart';
+import 'package:messio/repositories/chat_repository.dart';
+import 'package:messio/repositories/storage_repository.dart';
+import 'package:messio/repositories/user_data_repository.dart';
+import 'package:messio/utils/shared_objects.dart';
 import 'package:path_provider/path_provider.dart';
-import 'blocs/authentication/Bloc.dart';
-import 'pages/RegisterPage.dart';
+import 'blocs/authentication/bloc.dart';
+import 'pages/register_page.dart';
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
   //create instances of the repositories to supply them to the app
   final AuthenticationRepository authRepository = AuthenticationRepository();
   final UserDataRepository userDataRepository = UserDataRepository();
@@ -30,31 +35,31 @@ void main() async {
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
-        builder: (context) => AuthenticationBloc(
+        create: (context) => AuthenticationBloc(
             authenticationRepository: authRepository,
             userDataRepository: userDataRepository,
             storageRepository: storageRepository)
-          ..dispatch(AppLaunched()),
+          ..add(AppLaunched()),
       ),
       BlocProvider<ContactsBloc>(
-        builder: (context) => ContactsBloc(
+        create: (context) => ContactsBloc(
             userDataRepository: userDataRepository,
             chatRepository: chatRepository),
       ),
       BlocProvider<ChatBloc>(
-        builder: (context) => ChatBloc(
+        create: (context) => ChatBloc(
             userDataRepository: userDataRepository,
             storageRepository: storageRepository,
             chatRepository: chatRepository),
       ),
       BlocProvider<AttachmentsBloc>(
-        builder: (context) => AttachmentsBloc(chatRepository: chatRepository),
+        create: (context) => AttachmentsBloc(chatRepository: chatRepository),
       ),
       BlocProvider<HomeBloc>(
-        builder: (context) => HomeBloc(chatRepository: chatRepository),
+        create: (context) => HomeBloc(chatRepository: chatRepository),
       ),
       BlocProvider<ConfigBloc>(
-        builder: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
+        create: (context) => ConfigBloc(storageRepository: storageRepository,userDataRepository: userDataRepository),
       )
     ],
     child: Messio(),
@@ -63,7 +68,6 @@ void main() async {
 
 
 
-// ignore: must_be_immutable
 class Messio extends StatefulWidget {
   @override
   _MessioState createState() => _MessioState();
@@ -97,7 +101,7 @@ class _MessioState extends State<Messio> {
               return RegisterPage();
             } else if (state is ProfileUpdated) {
               if(SharedObjects.prefs.getBool(Constants.configMessagePaging))
-                BlocProvider.of<ChatBloc>(context).dispatch(FetchChatListEvent());
+                BlocProvider.of<ChatBloc>(context).add(FetchChatListEvent());
               return HomePage();
             } else {
               return RegisterPage();

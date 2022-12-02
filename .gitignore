@@ -4,6 +4,7 @@
 *.pyc
 *.swp
 .DS_Store
+.flutter-plugins-dependencies
 .atom/
 .buildlog/
 .history
@@ -31,7 +32,16 @@
 
 #Platform specific
 /android/app/google-services.json
+/android/**/gradle-wrapper.jar
+/android/.gradle
+/android/captures/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java
+/android/keystore.properties
 /ios/
 
 #Firebase setup related
 /server/.firebaserc
+/android/.gradle/
