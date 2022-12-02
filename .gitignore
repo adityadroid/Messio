@@ -31,6 +31,14 @@
 
 #Platform specific
 /android/app/google-services.json
+/android/**/gradle-wrapper.jar
+/android/.gradle
+/android/captures/
+/android/gradlew
+/android/gradlew.bat
+/android/local.properties
+/android/**/GeneratedPluginRegistrant.java
+/android/keystore.properties
 /ios/
 
 #Firebase setup related

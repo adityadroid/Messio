@@ -5,7 +5,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-
+import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -91,7 +91,7 @@ public class MainActivity extends FlutterActivity {
     return stream.toByteArray();
   }
 
-  private String buildThumbnailFile(String vidPath, String path, int format, int maxhow, int quality) {
+  private String buildThumbnailFile(String vidPath, String path, int format, int maxhow, int quality)  {
     Log.d(TAG, String.format("buildThumbnailFile( format:%d, maxhow:%d, quality:%d )", format, maxhow, quality));
     final byte bytes[] = buildThumbnailData(vidPath, format, maxhow, quality);
     final String ext = formatExt(format);
@@ -150,6 +150,8 @@ public class MainActivity extends FlutterActivity {
     } finally {
       try {
         retriever.release();
+      } catch (IOException ex) {
+        ex.printStackTrace();
       } catch (RuntimeException ex) {
         ex.printStackTrace();
       }

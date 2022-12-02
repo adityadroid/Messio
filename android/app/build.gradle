@@ -34,8 +34,9 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.app.messio.messio"
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion 19
+        targetSdkVersion 33
+        compileSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

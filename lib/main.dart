@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messio/blocs/attachments/attachments_bloc.dart';
@@ -18,6 +20,9 @@ import 'package:path_provider/path_provider.dart';
 import 'blocs/authentication/bloc.dart';
 import 'pages/register_page.dart';
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
   //create instances of the repositories to supply them to the app
   final AuthenticationRepository authRepository = AuthenticationRepository();
   final UserDataRepository userDataRepository = UserDataRepository();
@@ -63,7 +68,6 @@ void main() async {
 
 
 
-// ignore: must_be_immutable
 class Messio extends StatefulWidget {
   @override
   _MessioState createState() => _MessioState();

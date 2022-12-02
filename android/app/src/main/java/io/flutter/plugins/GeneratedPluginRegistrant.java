@@ -90,7 +90,7 @@ public final class GeneratedPluginRegistrant {
     try {
       flutterEngine.getPlugins().add(new io.flutter.plugins.videoplayer.VideoPlayerPlugin());
     } catch(Exception e) {
-      Log.e(TAG, "Error registering plugin video_player, io.flutter.plugins.videoplayer.VideoPlayerPlugin", e);
+      Log.e(TAG, "Error registering plugin video_player_android, io.flutter.plugins.videoplayer.VideoPlayerPlugin", e);
     }
   }
 }

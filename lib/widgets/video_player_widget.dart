@@ -52,7 +52,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
               Container(
                 color: Theme.of(context).primaryColor,
                 constraints: BoxConstraints(maxHeight: 400),
-                child: videoPlayerController.value.initialized
+                child: videoPlayerController.value.isInitialized
                     ? AspectRatio(
                         aspectRatio: videoPlayerController.value.aspectRatio,
                         child: VideoPlayer(videoPlayerController),

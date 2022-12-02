@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.17.0
   cupertino_icons: ^1.0.5
   infinite_listview: ^1.1.0
+  firebase_core: ^2.3.0
   firebase_auth: ^4.1.5   #to auth with firebase
   google_sign_in: ^5.4.2  #to auth with google account
   flutter_bloc: ^8.1.1  #heedelps in implementing blocs
@@ -34,7 +35,7 @@ dependencies:
   shared_preferences: ^0.5.5
   file_picker: ^5.2.3
   emoji_picker: ^0.1.0
-  video_player: ^0.10.4+2
+  video_player: ^2.4.8
   flutter_downloader: ^1.9.1
   downloads_path_provider: ^0.1.0
   flushbar: ^1.10.4
