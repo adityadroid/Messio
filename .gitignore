@@ -4,6 +4,7 @@
 *.pyc
 *.swp
 .DS_Store
+.flutter-plugins-dependencies
 .atom/
 .buildlog/
 .history
@@ -43,3 +44,4 @@
 
 #Firebase setup related
 /server/.firebaserc
+/android/.gradle/

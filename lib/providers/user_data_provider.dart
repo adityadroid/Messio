@@ -109,7 +109,7 @@ class UserDataProvider extends BaseUserDataProvider {
     DocumentReference ref =
         userRef.doc(SharedObjects.prefs.getString(Constants.sessionUid));
     return ref.snapshots().transform(
-        StreamTransformer<DocumentSnapshot, List<Contact>>.fromHandlers(
+        StreamTransformer<DocumentSnapshot<Map<String,dynamic>>, List<Contact>>.fromHandlers(
             handleData: (documentSnapshot, sink) =>
                 mapDocumentToContact(userRef, ref, documentSnapshot, sink)));
   }

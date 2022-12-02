@@ -29,7 +29,7 @@ class ChatProvider extends BaseChatProvider {
         'members', arrayContains: username)  //get all the chats the user is part of
         .orderBy('latestMessage.timeStamp',descending: true)  //order them by timestamp always. latest on top
         .snapshots()
-        .transform(StreamTransformer<QuerySnapshot, List<Conversation>>.fromHandlers(
+        .transform(StreamTransformer<QuerySnapshot<Map<String,dynamic>>, List<Conversation>>.fromHandlers(
         handleData: (QuerySnapshot querySnapshot,
             EventSink<List<Conversation>> sink) =>
             mapQueryToConversation(querySnapshot, sink)));
@@ -51,7 +51,7 @@ class ChatProvider extends BaseChatProvider {
         .collection(Paths.usersPath)
         .doc(uId)
         .snapshots()
-        .transform(StreamTransformer<DocumentSnapshot, List<Chat>>.fromHandlers(
+        .transform(StreamTransformer<DocumentSnapshot<Map<String,dynamic>>, List<Chat>>.fromHandlers(
         handleData: (DocumentSnapshot documentSnapshot,
             EventSink<List<Chat>> sink) =>
             mapDocumentToChat(documentSnapshot, sink)));
@@ -77,7 +77,7 @@ class ChatProvider extends BaseChatProvider {
         .orderBy('timeStamp', descending: true)
         .limit(20)
         .snapshots()
-        .transform(StreamTransformer<QuerySnapshot, List<Message>>.fromHandlers(
+        .transform(StreamTransformer<QuerySnapshot<Map<String,dynamic>>, List<Message>>.fromHandlers(
         handleData:
             (QuerySnapshot querySnapshot, EventSink<List<Message>> sink) =>
             mapDocumentToMessage(querySnapshot, sink)));
