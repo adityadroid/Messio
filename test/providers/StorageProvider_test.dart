@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:messio/providers/StorageProvider.dart';
-import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/providers/storage_provider.dart';
+import 'package:messio/utils/shared_objects.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mock/FirebaseMock.dart';

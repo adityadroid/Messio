@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:messio/blocs/authentication/AuthenticationBloc.dart';
-import 'package:messio/blocs/authentication/AuthenticationEvent.dart';
-import 'package:messio/blocs/authentication/AuthenticationState.dart';
-import 'package:messio/models/User.dart';
+import 'package:messio/blocs/authentication/authentication_bloc.dart';
+import 'package:messio/blocs/authentication/authentication_event.dart';
+import 'package:messio/blocs/authentication/authentication_state.dart';
+import 'package:messio/models/messio_user.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mock/FirebaseMock.dart';

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:messio/config/Constants.dart';
-import 'package:messio/config/Paths.dart';
-import 'package:messio/models/Contact.dart';
-import 'package:messio/models/User.dart';
-import 'package:messio/providers/UserDataProvider.dart';
-import 'package:messio/utils/Exceptions.dart';
-import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/config/constants.dart';
+import 'package:messio/config/paths.dart';
+import 'package:messio/models/contact.dart';
+import 'package:messio/models/messio_user.dart';
+import 'package:messio/providers/user_data_provider.dart';
+import 'package:messio/utils/exceptions.dart';
+import 'package:messio/utils/shared_objects.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mock/FirebaseMock.dart';

@@ -1,6 +1,6 @@
-import 'package:messio/repositories/AuthenticationRepository.dart';
-import 'package:messio/repositories/StorageRepository.dart';
-import 'package:messio/repositories/UserDataRepository.dart';
+import 'package:messio/repositories/authentication_repository.dart';
+import 'package:messio/repositories/storage_repository.dart';
+import 'package:messio/repositories/user_data_repository.dart';
 import 'package:mockito/mockito.dart';
 
 class AuthenticationRepositoryMock extends Mock implements AuthenticationRepository{}

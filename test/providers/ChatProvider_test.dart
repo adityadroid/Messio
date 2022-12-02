@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:messio/config/Constants.dart';
-import 'package:messio/config/Paths.dart';
-import 'package:messio/models/Chat.dart';
-import 'package:messio/models/Conversation.dart';
-import 'package:messio/models/Message.dart';
-import 'package:messio/models/User.dart';
-import 'package:messio/providers/ChatProvider.dart';
-import 'package:messio/utils/SharedObjects.dart';
+import 'package:messio/config/constants.dart';
+import 'package:messio/config/paths.dart';
+import 'package:messio/models/chat.dart';
+import 'package:messio/models/conversation.dart';
+import 'package:messio/models/message.dart';
+import 'package:messio/models/messio_user.dart';
+import 'package:messio/providers/chat_provider.dart';
+import 'package:messio/utils/shared_objects.dart';
 import 'package:mockito/mockito.dart';
 
 import '../mock/DataMock.dart';
