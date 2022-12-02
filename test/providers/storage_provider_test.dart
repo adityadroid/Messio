@@ -3,9 +3,9 @@ import 'package:messio/providers/storage_provider.dart';
 import 'package:messio/utils/shared_objects.dart';
 import 'package:mockito/mockito.dart';
 
-import '../mock/FirebaseMock.dart';
-import '../mock/IOMock.dart';
-import '../mock/SharedObjectsMock.dart';
+import '../mock/firebase_mock.dart';
+import '../mock/io_mock.dart';
+import '../mock/shared_objects_mock.dart';
 void main() {
   group('StorageProvider', () {
     FirebaseStorageMock firebaseStorage = FirebaseStorageMock(); //Create the mock objects required

@@ -5,9 +5,9 @@ import 'package:messio/blocs/authentication/authentication_state.dart';
 import 'package:messio/models/messio_user.dart';
 import 'package:mockito/mockito.dart';
 
-import '../mock/FirebaseMock.dart';
-import '../mock/IOMock.dart';
-import '../mock/RepositoryMock.dart';
+import '../mock/firebase_mock.dart';
+import '../mock/io_mock.dart';
+import '../mock/repository_mock.dart';
 
 void main() {
   AuthenticationBloc authenticationBloc;
@@ -53,7 +53,7 @@ void main() {
       ];
       expectLater(authenticationBloc.state, emitsInOrder(expectedStates));
 
-      authenticationBloc.dispatch(AppLaunched());
+      authenticationBloc.add(AppLaunched());
     });
     test('emits [Uninitialized -> ProfileUpdated] when user is logged in and profile is complete', () {
       when(authenticationRepository.isLoggedIn())

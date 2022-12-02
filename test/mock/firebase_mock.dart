@@ -27,7 +27,7 @@ class GoogleSignInAuthenticationMock extends Mock implements GoogleSignInAuthent
 
 class AuthCredentialMock extends Mock implements AuthCredential{}
 
-class FirebaseUserMock extends Mock implements FirebaseUser{
+class FirebaseUserMock extends Mock implements User{
   @override
   String get displayName => 'John Doe';
   @override
@@ -35,7 +35,7 @@ class FirebaseUserMock extends Mock implements FirebaseUser{
   @override
   String get email => 'johndoe@mail.com';
   @override
-  String get photoUrl => 'http://www.adityag.me';
+  String get photoURL => 'http://www.adityag.me';
 }
 
 /*
@@ -43,22 +43,22 @@ StorageProvider Mocks
  */
 
 class FirebaseStorageMock extends Mock implements FirebaseStorage{}
-class StorageReferenceMock extends Mock implements StorageReference{
+class StorageReferenceMock extends Mock implements Reference{
   StorageReferenceMock childReference;
   StorageReferenceMock({this.childReference});
   @override
-  StorageReference child(String path) {
+  Reference child(String path) {
     // TODO: implement child
     return childReference;
   }
 }
-class StorageUploadTaskMock extends Mock implements StorageUploadTask{}
-class StorageTaskSnapshotMock extends Mock implements StorageTaskSnapshot{}
+class StorageUploadTaskMock extends Mock implements UploadTask{}
+class StorageTaskSnapshotMock extends Mock implements TaskSnapshot{}
 
 /*
 UserDataProvider Mocks
  */
-class FireStoreMock extends Mock implements Firestore{}
+class FireStoreMock extends Mock implements FirebaseFirestore{}
 
 
 class DocumentReferenceMock extends Mock implements DocumentReference{
@@ -107,6 +107,7 @@ class DocumentReferenceMock extends Mock implements DocumentReference{
 class DocumentSnapshotMock extends Mock implements DocumentSnapshot{
   Map mockData = Map<String,dynamic>();
   DocumentSnapshotMock({this.mockData});
+
   set data(Map data)  => this.mockData = data;
   @override
   Map<String,dynamic > get data => mockData;

@@ -10,8 +10,8 @@ import 'package:messio/utils/exceptions.dart';
 import 'package:messio/utils/shared_objects.dart';
 import 'package:mockito/mockito.dart';
 
-import '../mock/FirebaseMock.dart';
-import '../mock/SharedObjectsMock.dart';
+import '../mock/firebase_mock.dart';
+import '../mock/shared_objects_mock.dart';
 
 void main() {
 
