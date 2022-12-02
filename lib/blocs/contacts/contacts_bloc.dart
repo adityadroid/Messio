@@ -15,37 +15,16 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
       : super(InitialContactsState()){
     assert(userDataRepository != null);
     assert(chatRepository != null);
+    on<FetchContactsEvent>(mapFetchContactsEventToState);
+    on<ReceivedContactsEvent>(mapReceivedContactsEventToState);
+    on<AddContactEvent>(mapAddContactEventToState);
   }
-  @override
-  Stream<ContactsState> mapEventToState(
-    ContactsEvent event,
-  ) async* {
-    if (event is FetchContactsEvent) {
-      try {
-        yield FetchingContactsState();
-        subscription?.cancel();
-        subscription = userDataRepository.getContacts().listen((contacts) => {
-              print('dispatching $contacts'),
-              add(ReceivedContactsEvent(contacts))
-            });
-      } on MessioException catch (exception) {
-        print(exception.errorMessage());
-        yield ErrorState(exception);
-      }
-    }
-    if (event is ReceivedContactsEvent) {
-      yield FetchedContactsState(event.contacts);
-    }
-    if (event is AddContactEvent) {
-      userDataRepository.getUser(event.username);
-      yield* mapAddContactEventToState(event.username);
-    }
-  
+  Future<void> mapReceivedContactsEventToState(ReceivedContactsEvent event, Emitter<ContactsState> emit)async{
+    emit(FetchedContactsState(event.contacts));
   }
-
-  Stream<ContactsState> mapFetchContactsEventToState() async* {
+  Future<void> mapFetchContactsEventToState(FetchContactsEvent event, Emitter<ContactsState> emit) async {
     try {
-      yield FetchingContactsState();
+      emit(FetchingContactsState());
       subscription?.cancel();
       subscription = userDataRepository.getContacts().listen((contacts) => {
             print('dispatching $contacts'),
@@ -53,20 +32,21 @@ class ContactsBloc extends Bloc<ContactsEvent, ContactsState> {
           });
     } on MessioException catch (exception) {
       print(exception.errorMessage());
-      yield ErrorState(exception);
+      emit(ErrorState(exception));
     }
   }
 
-  Stream<ContactsState> mapAddContactEventToState(String username) async* {
+  Future<void> mapAddContactEventToState(AddContactEvent event,Emitter<ContactsState> emit) async {
+    userDataRepository.getUser(event.username);
     try {
-      yield AddContactProgressState();
-      await userDataRepository.addContact(username);
-      MessioUser user = await userDataRepository.getUser(username);
+      emit(AddContactProgressState());
+      await userDataRepository.addContact(event.username);
+      MessioUser user = await userDataRepository.getUser(event.username);
       await chatRepository.createChatIdForContact(user);
-      yield AddContactSuccessState();
+      emit(AddContactSuccessState());
     } on MessioException catch (exception) {
       print(exception.errorMessage());
-      yield AddContactFailedState(exception);
+      emit( AddContactFailedState(exception));
     }
   }
 

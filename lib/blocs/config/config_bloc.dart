@@ -12,30 +12,26 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
 
   ConfigBloc({this.userDataRepository, this.storageRepository})
       : super(UnConfigState()){assert(userDataRepository != null);
-        assert(storageRepository != null);}
-
-
-  @override
-  Stream<ConfigState> mapEventToState(
-    ConfigEvent event,
-  ) async* {
-    if (event is ConfigValueChanged) {
-      SharedObjects.prefs.setBool(event.key, event.value);
-      yield ConfigChangeState(event.key, event.value);
-    }
-    if (event is UpdateProfilePicture) {
-      yield* mapUpdateProfilePictureToState(event);
-    }
-    if (event is RestartApp){
-      yield RestartedAppState();
-    }
+        assert(storageRepository != null);
+    on<ConfigValueChanged>(mapConfigValueChangedToState);
+    on<UpdateProfilePicture>(mapUpdateProfilePictureToState);
+    on<RestartApp>(mapRestartAppToState);
   }
 
-  Stream<ConfigState> mapUpdateProfilePictureToState(
-      UpdateProfilePicture event) async* {
-    yield UpdatingProfilePictureState();
+   Future<void> mapUpdateProfilePictureToState(
+      UpdateProfilePicture event,Emitter<ConfigState> emit) async {
+    emit(UpdatingProfilePictureState());
     final  profilePictureUrl = await storageRepository.uploadFile(event.file, Paths.profilePicturePath);
     await userDataRepository.updateProfilePicture(profilePictureUrl);
-    yield ProfilePictureChangedState(profilePictureUrl);
+    emit(ProfilePictureChangedState(profilePictureUrl));
+  }
+
+  Future<void> mapConfigValueChangedToState(ConfigValueChanged event, Emitter<ConfigState> emit) async {
+    SharedObjects.prefs.setBool(event.key, event.value);
+    emit(ConfigChangeState(event.key, event.value));
+  }
+
+  Future<void> mapRestartAppToState(RestartApp event, Emitter<ConfigState> emit)async {
+    emit(RestartedAppState());
   }
 }
